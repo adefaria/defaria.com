@@ -1,0 +1,31 @@
+---
+- name: Configure postfix
+  blockinfile:
+    dest: /etc/postfix/main.cf
+    backup: yes
+    marker: "# Modifications for DeFaria.com {mark}"
+    insertafter: EOF
+    content: |
+       smtpd_sasl_auth_enable = yes 
+       broken_sasl_auth_clients = yes 
+       smtpd_sasl_type = dovecot
+       smtpd_sasl_path = private/auth
+       smtpd_sasl_security_options = noanonymous
+       smtpd_tls_security_level = may 
+       smtpd_recipient_restrictions =
+         permit_mynetworks,
+         permit_sasl_authenticated,
+         reject_unauth_destination
+       inet_interfaces = all 
+  notify: Restart Postfix
+
+# Perl no longer allows setuid/setgid execution so the quick solution is to just
+# open up the permissions on the mailbox. I should solve this better.
+
+- name: Fix maildrop
+  file: 
+    path=/var/mail/andrew
+    state=touch
+    owner=andrew
+    group=mail
+    mode=0666

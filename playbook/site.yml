@@ -22,7 +22,7 @@
   roles:
     - db
 
-- name: Configure Dovecot
+- name: Configure Dovecot/Postfix/etc
   hosts: all
   become: true
 

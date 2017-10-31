@@ -4,25 +4,40 @@
   with_items:
     - gcc
     - git
+    - mailx
     - vim
 
-#- group:
-#    name: defaria
-#    state: absent
 - name: Create defaria group
   group: name=defaria
-  
-# Seems to fail if the user already exists. Dumb.
-#- user:
-#    name: andrew
-#    group: defaria
-#    state: absent
 
 - name: Create my user
   user: name=andrew group=defaria
 
-# Get code from github
-# Food for thought - create pre-shared keys to access github for root user
+# How do you do this really when Ansible requires ssh access in the first place?
+
+- name: Set up ssh (private key)
+  copy:
+    src=/home/andrew/.ssh/id_ecdsa
+    dest=/home/andrew/.ssh/id_ecdsa
+    owner=andrew
+    group=defaria
+    mode=0400
+
+- name: Set up ssh (puplic key)
+  copy:
+    src=/home/andrew/.ssh/id_ecdsa.pub
+    dest=/home/andrew/.ssh/id_ecdsa.pub
+    owner=andrew
+    group=defaria
+    mode=0644
+
+- name: Set up ssh (authorized_keys)
+  copy:
+    src=/home/andrew/.ssh/id_ecdsa.pub
+    dest=/home/andrew/.ssh/authorized_keys
+    owner=andrew
+    group=defaria
+    mode=0400
 
 - name: Pull repos from github
   git: repo=https://github.com/adefaria/{{item}}.git dest=/opt/{{item}}
@@ -39,3 +54,19 @@
     - defaria.com
     - media
     - songbook
+
+- name: Link RC
+  file: src=/opt/clearscm/rc dest=/home/andrew/.rc state=link
+
+- name: Set up RC
+  shell: HOME=/home/andrew .rc/setup_rc
+  args:
+    chdir: /home/andrew
+
+- name: Set up sudo
+  copy:
+    src=../templates/10-andrew
+    dest=/etc/sudoers.d/10-andrew
+    owner=root
+    group=root
+    mode=0440
