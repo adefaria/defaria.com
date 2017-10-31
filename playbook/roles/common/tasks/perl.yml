@@ -1,0 +1,19 @@
+---
+- name: Install Perl
+  yum: name={{ item }} state=present
+  with_items:
+    - perl-CPAN
+    - perl-DBD-MySQL
+    - readline-devel   # For Term::ReadLine::Gnu
+
+# This is currently dependent on cpanm which is not by default installed
+# and which installs funny.
+
+- name: Install Perl Modules
+  cpanm: name={{item}}
+  with_items:
+    - YAML
+    - MIME::Entity
+    - Term::ReadLine::Gnu
+
+#  cpanm: YAML MIME::Entity Term::ReadLine::Gnu

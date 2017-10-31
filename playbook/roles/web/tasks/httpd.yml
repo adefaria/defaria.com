@@ -1,0 +1,23 @@
+---
+- name: Install Apache and various support modules
+  yum: name={{ item }} state=latest
+  with_items:
+   - gitweb
+   - httpd
+   - mod_ssl
+
+- name: Configure Apache
+  template: src={{item.src}} dest={{item.dest}}
+  with_items:
+    - {src: 'defaria.conf',  dest: '/etc/httpd/conf.d/defaria.conf'}
+    - {src: 'clearscm.conf', dest: '/etc/httpd/conf.d/clearscm.conf'}
+    - {src: 'maps.conf',     dest: '/etc/httpd/conf.d/maps.conf'}
+    - {src: 'songbook.conf', dest: '/etc/httpd/conf.d/songbook.conf'}
+  notify: Restart httpd
+
+- name: Configure symlinks
+  file: src=/opt/defaria.com dest=/var/www/html state=link
+  notify: Restart httpd
+
+- name: Enable Apache
+  service: name=httpd state=started enabled=yes

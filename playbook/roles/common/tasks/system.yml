@@ -1,0 +1,41 @@
+---
+- name: Install system modules
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - git
+    - vim
+
+#- group:
+#    name: defaria
+#    state: absent
+- name: Create defaria group
+  group: name=defaria
+  
+# Seems to fail if the user already exists. Dumb.
+#- user:
+#    name: andrew
+#    group: defaria
+#    state: absent
+
+- name: Create my user
+  user: name=andrew group=defaria
+
+# Get code from github
+# Food for thought - create pre-shared keys to access github for root user
+
+- name: Pull repos from github
+  git: repo=https://github.com/adefaria/{{item}}.git dest=/opt/{{item}}
+  with_items:
+    - clearscm
+    - defaria.com
+    - media
+    - songbook
+
+- name: Set ownership
+  file: dest=/opt/{{item}} owner=andrew group=defaria recurse=yes
+  with_items:
+    - clearscm
+    - defaria.com
+    - media
+    - songbook

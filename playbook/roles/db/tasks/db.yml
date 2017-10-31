@@ -1,0 +1,11 @@
+---
+- name: Install Mariadb
+  become: true
+  become_user: root
+  yum: name={{ item }} state=present
+  with_items:
+    - mariadb
+    - mariadb-server
+
+- name: Enable Mariadb
+  service: name=mariadb state=started enabled=yes

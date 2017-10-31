@@ -1,0 +1,9 @@
+---
+- name: Install Dovecot
+  yum: name={{ item }} state=present
+  with_items:
+    - dovecot
+
+# Note: I suspect there's much more I'll need to do to get dovecot working
+- name: Enable Dovecot
+  service: name=dovecot state=started enabled=yes

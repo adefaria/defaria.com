@@ -1,0 +1,30 @@
+---
+# This playbook deploys the defaria.com web site
+
+- name: Apply common configuration to all nodes
+  hosts: all
+  become: true
+
+  roles:
+    - common
+
+- name: Configure web server
+  hosts: all
+  become: true
+
+  roles:
+    - web
+
+- name: Configure MariaDB
+  hosts: all
+  become: true
+
+  roles:
+    - db
+
+- name: Configure Dovecot
+  hosts: all
+  become: true
+
+  roles:
+    - email
