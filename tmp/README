@@ -1,0 +1,5 @@
+This is a temporary directory in my website so I can throw files here and point
+people to them so as to easily share things. Root's crontab cleans out things
+from here when they become more than a week old. This README file only exists
+because git doesn't version control directories really. Interestingly, it'll
+be removed in a week!

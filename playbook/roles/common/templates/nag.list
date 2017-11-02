@@ -1,0 +1,24 @@
+#   Field 1: Email addres to send to
+#   Field 2: Subject
+#   Field 3: When: Sun, Mon, Tue, Wed, Thu, Fri, Sat or Daily
+#   Field 4: Message file to send
+#   Field 5: Number of times message was sent
+#   Field 6: Date last sent
+
+# Daily
+
+# Sun
+
+# Mon
+
+# Tue
+
+# Wed
+
+# Thu
+
+# Fri
+
+# Sat
+
+# Active Followup

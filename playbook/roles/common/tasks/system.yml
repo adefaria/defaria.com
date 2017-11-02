@@ -63,6 +63,34 @@
   args:
     chdir: /home/andrew
 
+- name: Create ~andrew/.nag directory
+  file:
+    path:  /home/andrew/.nag
+    owner: andrew
+    group: defaria
+    state: directory
+
+- name: Set up nag list
+  template:
+    src:   nag.list
+    dest: /home/andrew/.nag/list
+    owner: andrew
+    group: defaria
+
+- name: Set up user crontab
+  template:
+    src:   crontab.andrew
+    dest:  /var/spool/cron/crontabs/andrew
+    owner: andrew
+    group: crontab
+
+- name: Set up user crontab
+  template:
+    src:   crontab.root
+    dest:  /var/spool/cron/crontabs/root
+    owner: root
+    group: crontab
+
 - name: Set up sudo
   copy:
     src=../templates/10-andrew

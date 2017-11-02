@@ -1,4 +1,4 @@
 ---
-- include: perl.yml
-- include: php.yml
-- include: system.yml
+- import_tasks: perl.yml
+- import_tasks: php.yml
+- import_tasks: system.yml

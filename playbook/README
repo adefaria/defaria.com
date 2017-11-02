@@ -11,6 +11,11 @@ defaria.com servers, rather it serves more as codified version of the
 configuration steps needed to set up a single defaria.com and as a vehicle for
 learning ansible.
 
+This playbook is designed to be run from root. This way we should just need to
+establish a secure, pre-shared key ssh login from root@laptop ->
+root@newdefaria.com. Then Ansible can do the rest. Look at how we can best use
+this like setting up ssh keys for the andrew user.
+
 To do list:
 
 . Need to figure out how to best get cpanm installed
@@ -20,11 +25,5 @@ To do list:
     . MAPSDeliver is unable to deliver email when whitelisted
     . MAPSDeliver seems to not add a terminating newline when it does deliver
       something that was already whitelisted.
-  to deliver messages
 . Decide how to implement clearscm as a VirtualHost
-. Might want to change Dovecot to use local config file instead of blockinfile
-. Changed playbook to be run from root. This way we should just need to 
-  establish a secure, pre-shared key ssh login from root@laptop -> 
-  root@newdefaria.com. Then Ansible can do the rest. Look at how we can best
-  use this like setting up ssh keys for the andrew user.
-. Seems MAPSDeliver is unabler 
+. nag.pl and crontab stuff.
