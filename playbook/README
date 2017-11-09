@@ -19,11 +19,22 @@ this like setting up ssh keys for the andrew user.
 To do list:
 
 . Need to figure out how to best get cpanm installed
-. Setting ownership on git repos is always run
-. Setup RC is always run
 . Verify that MAPS/Email is working properly.
     . MAPSDeliver is unable to deliver email when whitelisted
     . MAPSDeliver seems to not add a terminating newline when it does deliver
       something that was already whitelisted.
 . Decide how to implement clearscm as a VirtualHost
-. nag.pl and crontab stuff.
+
+Let's Encrypt:
+
+The current package obtained from https://github.com/thefinn93/ansible-letsencrypt
+has not been tested on CentOS 7 so I need to make some changes. So far I changed:
+
+  . Change include -> import_tasks as newer version of ansible complains that
+    include is deprecated.
+
+Still not working. 
+
+Python PIP:
+  I believe I managed to fix the Python PIP installation by installing
+  epel-release first. This needs to be tested.

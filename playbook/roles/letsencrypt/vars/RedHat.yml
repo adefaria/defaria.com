@@ -12,7 +12,7 @@ letsencrypt_depends:
       - libffi
       - libffi-devel
       - ca-certificates
-      - python-pip
+#      - python-pip
       - git
 
 virtualenv_package_name: "python-virtualenv"

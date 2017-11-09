@@ -25,7 +25,6 @@
 - name: Fix maildrop
   file: 
     path=/var/mail/andrew
-    state=touch
     owner=andrew
     group=mail
     mode=0666

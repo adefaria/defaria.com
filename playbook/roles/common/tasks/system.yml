@@ -40,15 +40,9 @@
     mode=0400
 
 - name: Pull repos from github
+  become: yes
+  become_user: andrew
   git: repo=https://github.com/adefaria/{{item}}.git dest=/opt/{{item}}
-  with_items:
-    - clearscm
-    - defaria.com
-    - media
-    - songbook
-
-- name: Set ownership
-  file: dest=/opt/{{item}} owner=andrew group=defaria recurse=yes
   with_items:
     - clearscm
     - defaria.com
@@ -58,10 +52,17 @@
 - name: Link RC
   file: src=/opt/clearscm/rc dest=/home/andrew/.rc state=link
 
+- name: Check setup_rc
+  become_user: andrew
+  command: /home/andrew/.rc/setup_rc
+  register: setup_rc
+  changed_when: False
+
 - name: Set up RC
-  shell: HOME=/home/andrew .rc/setup_rc
-  args:
-    chdir: /home/andrew
+  become_user: andrew
+  command: /home/andrew/.rc/setup_rc
+  changed_when: True
+  when: setup_rc.stdout != ''
 
 - name: Create ~andrew/.nag directory
   file:
@@ -80,16 +81,16 @@
 - name: Set up user crontab
   template:
     src:   crontab.andrew
-    dest:  /var/spool/cron/crontabs/andrew
+    dest:  /var/spool/cron/andrew
     owner: andrew
-    group: crontab
+    group: defaria
 
 - name: Set up user crontab
   template:
     src:   crontab.root
-    dest:  /var/spool/cron/crontabs/root
+    dest:  /var/spool/cron/root
     owner: root
-    group: crontab
+    group: root
 
 - name: Set up sudo
   copy:
