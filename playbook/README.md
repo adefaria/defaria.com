@@ -1,3 +1,4 @@
+# Ansible Playbook for DeFaria.com 
 This is an Ansible playbook to set up the defaria.com web site. I choose Ansible
 over other configuration management tools like Puppet, Chef of Salt is that 
 those tools require installation of a client and require a server. Ansible, on
@@ -16,25 +17,26 @@ establish a secure, pre-shared key ssh login from root@laptop ->
 root@newdefaria.com. Then Ansible can do the rest. Look at how we can best use
 this like setting up ssh keys for the andrew user.
 
-To do list:
+## To do list:
 
-. Need to figure out how to best get cpanm installed
-. Verify that MAPS/Email is working properly.
-    . MAPSDeliver is unable to deliver email when whitelisted
-    . MAPSDeliver seems to not add a terminating newline when it does deliver
-      something that was already whitelisted.
-. Decide how to implement clearscm as a VirtualHost
+- [ ] Need to figure out how to best get cpanm installed
+- [ ] Verify that MAPS/Email is working properly.
+  . [ ] MAPSDeliver is unable to deliver email when whitelisted
+  . [ ] MAPSDeliver seems to not add a terminating newline when it does deliver
+    something that was already whitelisted.
+. [ ] Decide how to implement clearscm as a VirtualHost
 
-Let's Encrypt:
+## Let's Encrypt:
 
 The current package obtained from https://github.com/thefinn93/ansible-letsencrypt
 has not been tested on CentOS 7 so I need to make some changes. So far I changed:
 
-  . Change include -> import_tasks as newer version of ansible complains that
-    include is deprecated.
+* Change include -> import_tasks as newer version of Ansible complains that
+  include is deprecated.
 
-Still not working. 
+## Still not working 
 
-Python PIP:
-  I believe I managed to fix the Python PIP installation by installing
-  epel-release first. This needs to be tested.
+### Python PIP:
+
+I believe I managed to fix the Python PIP installation by installing
+epel-release first. This needs to be tested.
