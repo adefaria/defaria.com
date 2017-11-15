@@ -6,6 +6,7 @@
     - git
     - mailx
     - vim
+    - dos2unix
 
 - name: Create defaria group
   group: name=defaria
@@ -39,7 +40,7 @@
     group=defaria
     mode=0400
 
-- name: Pull repos from github
+- name: Pull my repos from github
   become: yes
   become_user: andrew
   git: repo=https://github.com/adefaria/{{item}}.git dest=/opt/{{item}}
@@ -48,6 +49,11 @@
     - defaria.com
     - media
     - songbook
+
+- name: Pull getssl repo from github
+  git: 
+    repo: https://github.com/srvrco/getssl.git
+    dest: /opt/getssl
 
 - name: Link RC
   file: src=/opt/clearscm/rc dest=/home/andrew/.rc state=link

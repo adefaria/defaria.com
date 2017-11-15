@@ -7,12 +7,15 @@
    - mod_ssl
 
 - name: Configure Apache
-  template: src={{item.src}} dest={{item.dest}}
+  file: src=/opt/defaria.com/playbook/roles/web/files/{{item}} dest={{item.dest}} state=link
   with_items:
     - {src: 'defaria.conf',  dest: '/etc/httpd/conf.d/defaria.conf'}
     - {src: 'clearscm.conf', dest: '/etc/httpd/conf.d/clearscm.conf'}
     - {src: 'maps.conf',     dest: '/etc/httpd/conf.d/maps.conf'}
     - {src: 'songbook.conf', dest: '/etc/httpd/conf.d/songbook.conf'}
+    - {src: 'cert.pem',      dest: '/etc/letsencrypt/live/defaria.com/cert.pem'}
+    - {src: 'privkey.pem',   dest: '/etc/letsencrypt/live/defaria.com/privkey.pem'}
+    - {src: 'chain.pem',     dest: '/etc/letsencrypt/live/defaria.com/chain.pem'}
   notify: Restart httpd
 
 - name: Configure symlinks
