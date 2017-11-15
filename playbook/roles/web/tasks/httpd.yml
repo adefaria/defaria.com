@@ -7,7 +7,7 @@
    - mod_ssl
 
 - name: Configure Apache
-  file: src=/opt/defaria.com/playbook/roles/web/files/{{item}} dest={{item.dest}} state=link
+  file: src=/opt/defaria.com/playbook/roles/web/files/{{item.src}} dest={{item.dest}} state=link
   with_items:
     - {src: 'defaria.conf',  dest: '/etc/httpd/conf.d/defaria.conf'}
     - {src: 'clearscm.conf', dest: '/etc/httpd/conf.d/clearscm.conf'}
