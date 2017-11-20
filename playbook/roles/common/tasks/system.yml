@@ -1,12 +1,19 @@
 ---
 - name: Install system modules
-  yum: name={{ item }} state=present
+  yum: name={{item}} state=present
   with_items:
+    - dos2unix
     - gcc
     - git
     - mailx
+    - ntp
     - vim
-    - dos2unix
+
+- name: Enable NTP
+  service: name=ntp state=started enabled=yes
+
+- name: Set timezone
+  command: timedatectl set-timezone America/Los_Angeles
 
 - name: Create defaria group
   group: name=defaria

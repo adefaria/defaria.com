@@ -1,6 +1,6 @@
 ---
 - name: Install Apache and various support modules
-  yum: name={{ item }} state=latest
+  yum: name={{item}} state=latest
   with_items:
    - gitweb
    - httpd
