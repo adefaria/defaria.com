@@ -15,7 +15,7 @@
 - name: Set MySQL root password
   register: mysql_root
   command: mysqladmin -uroot -p{{mysql_root_password}} password {{mysql_root_password}}
-#  changed_when: False
+  changed_when: False
 
 - name: Check MySQL root password
   command: mysqladmin -uroot password {{mysql_root_password}}

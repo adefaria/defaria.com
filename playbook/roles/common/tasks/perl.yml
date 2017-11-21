@@ -14,7 +14,7 @@
 - name: Download cpanm
   get_url:
     url: http://cpanmin.us
-    dest: /usr/local/bin/cpanm
+    dest: /usr/bin/cpanm
     mode: 555
 
 - name: Install cpanm module
@@ -28,7 +28,7 @@
   when: install_cpanm.stdout.find('cpanminus is up to date') == -1
 
 - name: Install Perl Modules
-  command: /usr/local/bin/cpanm {{item}}
+  cpanm: name={{item}}
   with_items:
     - YAML
     - MIME::Entity
