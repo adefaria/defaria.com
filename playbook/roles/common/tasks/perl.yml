@@ -18,17 +18,17 @@
     mode: 555
 
 - name: Install cpanm module
-  command: cpanm App::cpanminus
+  command: /usr/local/bin/cpanm App::cpanminus
   register: install_cpanm
   changed_when: False
 
 - name: Install cpanm
-  command: cpanm App::cpanminus
+  command: /usr/local/bin/cpanm App::cpanminus
   changed_when: True
   when: install_cpanm.stdout.find('cpanminus is up to date') == -1
 
 - name: Install Perl Modules
-  cpanm: name={{item}}
+  command: /usr/local/bin/cpanm {{item}}
   with_items:
     - YAML
     - MIME::Entity

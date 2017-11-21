@@ -1,4 +1,6 @@
 ---
+- include_vars: secrets.yml
+
 - name: Install Mariadb
   become: true
   become_user: root
@@ -9,3 +11,22 @@
 
 - name: Enable Mariadb
   service: name=mariadb state=started enabled=yes
+
+- name: Set MySQL root password
+  register: mysql_root
+  command: mysqladmin -uroot -p{{mysql_root_password}} password {{mysql_root_password}}
+#  changed_when: False
+
+- name: Check MySQL root password
+  command: mysqladmin -uroot password {{mysql_root_password}}
+  changed_when: True
+  when: mysql_root.stdout != ''
+
+- name: Set MySQL password for andrew
+  command: mysql -uroot -p{{mysql_root_password}} -e "grant all privileges on *.* to 'andrew'@'localhost' identified by '{{mysql_andrew_password}}'" mysql
+
+- name: Set up ~/.my.cfg
+  template: src=my.cnf dest=/home/andrew/.my.cnf
+
+- name: Create MAPS database
+  command: mysql -uroot -p{{mysql_root_password}} -e "source /opt/clearscm/maps/bin/MAPSDB.sql"

@@ -6,6 +6,9 @@
    - httpd
    - mod_ssl
 
+- name: Create Let's Encrypt directories
+  file: path=/etc/letsencrypt/live/defaria.com recurse=true
+
 - name: Configure Apache
   file: src=/opt/defaria.com/playbook/roles/web/files/{{item.src}} dest={{item.dest}} state=link
   with_items:
@@ -18,9 +21,22 @@
     - {src: 'chain.pem',     dest: '/etc/letsencrypt/live/defaria.com/chain.pem'}
   notify: Restart httpd
 
+- name: Remove /var/www/html
+  file:
+    path: /var/www/html
+    state: absent
+
 - name: Configure symlinks
-  file: src=/opt/defaria.com dest=/var/www/html state=link
+  file: src={{item.src}} dest={{item.dest}} state=link
+  with_items:
+    - {src: /opt/defaria.com, dest: '/var/www/html'}
+    - {src: /opt/defaria.com, dest: '/web'}
   notify: Restart httpd
 
 - name: Enable Apache
   service: name=httpd state=started enabled=yes
+
+- name: Fix up /etc/php.ini
+  file:
+    src: defaria.ini
+    dest: /etc/php.d/defaria.ini

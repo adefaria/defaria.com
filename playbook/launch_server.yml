@@ -1,0 +1,7 @@
+---
+- name: Configure server instance
+  hosts: all
+  become: true
+
+  roles:
+    - genasys
