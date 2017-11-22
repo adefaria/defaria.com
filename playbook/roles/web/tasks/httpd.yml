@@ -21,10 +21,15 @@
     - {src: 'chain.pem',     dest: '/etc/letsencrypt/live/defaria.com/chain.pem'}
   notify: Restart httpd
 
+- stat: path=/var/www/html
+  register: links
+
 - name: Remove /var/www/html
   file:
     path: /var/www/html
     state: absent
+  when:
+    links.stat.islink == False
 
 - name: Configure symlinks
   file: src={{item.src}} dest={{item.dest}} state=link
