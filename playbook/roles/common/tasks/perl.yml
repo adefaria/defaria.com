@@ -18,7 +18,7 @@
     mode: 555
 
 - name: Install cpanm module
-  command: /usr/local/bin/cpanm App::cpanminus
+  command: /usr/bin/cpanm App::cpanminus
   register: install_cpanm
   changed_when: False
 
