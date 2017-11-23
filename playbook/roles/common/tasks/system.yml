@@ -6,6 +6,7 @@
     - gcc
     - git
     - mailx
+    - MySQL-python
     - ntp
     - readline-devel
     - telnet
@@ -14,15 +15,28 @@
 - name: Enable NTP
   service: name=ntpd state=started enabled=yes
 
-- name: Check Timezone
+# Why is setting timezone so complicated?!? We have /etc/timezone, which should
+# be linked to the appropriate timezone under /usr/share/zoneinfo, which I guess
+# is used for when the machine reboots. Then there's the timezone variable TZ, 
+# which doesn't seem like it's used anymore. PHP, of course, needs to have 
+# timezone set in php.ini (or dirivative) and finally there's the timedatectl
+# command which is new and seems to set the current timezone. Geeze guys, please
+# settle on one method! 
+- name: Check Current Timezone
   register: timezone
   command: timedatectl
   changed_when: False
 
-- name: Set timezone
+- name: Set Current Timezone
   command: timedatectl set-timezone America/Los_Angeles
   changed_when: True
-  when: timezone.stdout == "America/Los_Angeles"
+  when: timezone.stdout != "America/Los_Angeles"
+
+- name: Set TZ variable
+  lineinfile:
+    path: /etc/environment
+    regexp: '^TZ='
+    line: 'TZ=America/Los_Angeles'
 
 - name: Create defaria group
   group: name=defaria
@@ -37,8 +51,6 @@
     group: defaria
     state: directory
     mode: 0700
-
-# How do you do this really when Ansible requires ssh access in the first place?
 
 - name: Set up ssh (private key)
   copy:
@@ -88,16 +100,19 @@
     dest: /opt/getssl
 
 - name: Link RC
+  become: yes
   become_user: andrew
   file: src=/opt/clearscm/rc dest=/home/andrew/.rc state=link
 
 - name: Check setup_rc (user)
+  become: yes
   become_user: andrew
   command: /home/andrew/.rc/setup_rc
   register: setup_rc
   changed_when: False
 
 - name: Set up RC (user)
+  become: yes
   become_user: andrew
   command: /home/andrew/.rc/setup_rc
   changed_when: True
@@ -114,7 +129,7 @@
 - name: Set up RC (root)
   command: /root/.rc/setup_rc
   changed_when: True
-  when: setup_rc.stdout != ''  
+  when: setup_rc.stdout != ''
 
 - name: Create ~andrew/.nag directory
   file:

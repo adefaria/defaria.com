@@ -1,7 +1,7 @@
 ---
 - include_vars: secrets.yml
 
-- name: Install Mariadb
+- name: Install MariaDB
   become: true
   become_user: root
   yum: name={{item}} state=present
@@ -9,24 +9,54 @@
     - mariadb
     - mariadb-server
 
-- name: Enable Mariadb
+- name: Enable MariaDB
   service: name=mariadb state=started enabled=yes
 
+# Secure MySQL root
 - name: Set MySQL root password
-  register: mysql_root
-  command: mysqladmin -uroot -p{{mysql_root_password}} password {{mysql_root_password}}
-  changed_when: False
+  mysql_user:
+    login_user: root
+    login_password: '{{mysql_root_password}}'
+    name: root
+    password: '{{mysql_root_password}}'
+    check_implicit_admin: yes
 
-- name: Check MySQL root password
-  command: mysqladmin -uroot password {{mysql_root_password}}
-  changed_when: True
-  when: mysql_root.stdout != ''
+- name: Setup ~root.my.cnf
+  template: src=root.my.cnf dest=/root/.my.cnf mode=0400
 
-- name: Set MySQL password for andrew
-  command: mysql -uroot -p{{mysql_root_password}} -e "grant all privileges on *.* to 'andrew'@'localhost' identified by '{{mysql_andrew_password}}'" mysql
+- mysql_user:
+    login_user: root
+    login_password: '{{mysql_root_password}}'
+    name: andrew
+    password: '{{mysql_andrew_password}}'
+    priv: '*.*:ALL'
+    state: present
+    check_implicit_admin: yes
 
-- name: Set up ~/.my.cfg
-  template: src=my.cnf dest=/home/andrew/.my.cnf
+- name: Set up ~andrew/.my.cnf
+  template: src=andrew.my.cnf dest=/home/andrew/.my.cnf owner=andrew group=defaria mode=0400
+
+- mysql_user:
+    login_user: root
+    login_password: '{{mysql_root_password}}'
+    name: maps
+    password: '{{mysql_maps_password}}'
+    priv: 'MAPS.*:ALL'
+    state: present
+    check_implicit_admin: yes
+
+- name: Dump current MAPS database
+  become_user: andrew
+  become: yes
+  shell: ssh defaria.com mysqldump -p{{mysql_andrew_password}} -B MAPS > /tmp/maps.dump
 
 - name: Create MAPS database
-  command: mysql -uroot -p{{mysql_root_password}} -e "source /opt/clearscm/maps/bin/MAPSDB.sql"
+  mysql_db:
+    login_user: maps
+    login_password: '{{mysql_maps_password}}'
+    name: MAPS
+    state: import
+    target: /tmp/maps.dump
+
+- name: Cleanup maps.dump
+  file: path=tmp/maps.dump state=absent
