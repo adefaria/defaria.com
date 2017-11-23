@@ -24,7 +24,8 @@
 
   <ul>
 
-  <li><a href="General/">General</a>: A blog about general things</li>
+  <li><a href="https://defaria-general.blogspot.com/">General</a>: A blog about 
+  general things</li>
 
   <li><a href="Personal/">Personal</a>: This blog is indeed personal
   and you'll need me to assign you a username and password if you want
