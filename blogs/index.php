@@ -27,18 +27,18 @@
   <li><a href="https://defaria-general.blogspot.com/">General</a>: A blog about 
   general things</li>
 
-  <li><a href="Personal/">Personal</a>: This blog is indeed personal
+  <li><a href="https://defaria-personal.blogspot.com/">Personal</a>: This blog is indeed personal
   and you'll need me to assign you a username and password if you want
   to read it.</li>
 
-  <li><a href="Danielle/">Danielle</a>: A blog dedicated to my
+  <li><a href="https://defaria-danielle.blogspot.com/">Danielle</a>: A blog dedicated to my
   daughter, <a href="/Family">Danielle</a></li>
 
-  <li><a href="MAPS/">MAPS</a>: A blog about about the development of
+  <li><a href="https://defaria-maps.blogspot.com/">MAPS</a>: A blog about about the development of
   <a href="/maps">MAPS</a>, a Mail Authorization and Permission System
   for fighting Spam</li>
 
-  <li><a href="Status/">Status</a>: A blog dedicated to reporting my
+  <li><a href="https://defaria-status.blogspot.com/">Status</a>: A blog dedicated to reporting my
   status at work. I figured this blogging is pretty cool and I could
   use it to track my status so why not?</li>
 
