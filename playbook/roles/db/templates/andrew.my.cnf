@@ -1,6 +1,4 @@
 [mysql]
 no_auto_rehash
 password={{mysql_andrew_password}}
-
-[client]
 pager = less

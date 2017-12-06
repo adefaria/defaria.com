@@ -1,5 +1,4 @@
 ---
-
 - name: Set up ~/mail
   become_user: andrew
   become: yes

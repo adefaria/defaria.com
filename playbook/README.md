@@ -37,11 +37,12 @@ to run the playbook against this IP address.
 
 I envision a 3 step process here:
 
-* Run ansible-playbook roles/genasys/launch_server.yml to provision the CentOS
+* Run ansible-playbook roles/genasys/taskslaunch_server.yml to provision the CentOS
   instance. This should take about a minute. When finished log into DreamCompute
   to obtain it's public IP address.
 
-* Run ansible-playbook -i<IP>, --key-file ~/.ssh/dreamcompute.pem site.yml to 
-  configure this new instance. This should take about 10 minutes.
+* Run ansible-playbook -i&lt;IP&gt;, --key-file ~/.ssh/dreamcompute.pem site.yml to 
+  configure this new instance. This should take about 10 minutes. Don't forget
+  the comma after the IP address!
 
 * Test new server. When satisfied point defaria.com to new IP address.

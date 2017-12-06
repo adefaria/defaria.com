@@ -34,7 +34,7 @@
     check_implicit_admin: yes
 
 - name: Set up ~andrew/.my.cnf
-  template: src=andrew.my.cnf dest=/home/andrew/.my.cnf owner=andrew group=defaria mode=0400
+  template: src=andrew.my.cnf dest=/home/andrew/.my.cnf owner=andrew group=defaria mode=0600
 
 - mysql_user:
     login_user: root
