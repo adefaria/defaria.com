@@ -1,3 +1,4 @@
 ---
 - import_tasks: dovecot.yml
 - import_tasks: postfix.yml
+- import_tasks: setup_email.yml
