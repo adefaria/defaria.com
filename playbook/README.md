@@ -4,18 +4,13 @@ over other configuration management tools like Puppet, Chef of Salt is that
 those tools require installation of a client and require a server. Ansible, on
 the other hand, is more of a push technology in that all you need to set up is
 ssh with pre-shared keys. So no server is involved. This is handy in that I can
-keep this playbook on my laptop and my laptop cannot generally server as a 
+keep this playbook on my laptop and my laptop cannot generally serve as a 
 server in that it will probably have a dynamically assigned IP address, etc.
 
 Also this playbook isn't really intended to be used to produce hundreds of
 defaria.com servers, rather it serves more as codified version of the 
 configuration steps needed to set up a single defaria.com and as a vehicle for
-learning ansible.
-
-This playbook is designed to be run from root. This way we should just need to
-establish a secure, pre-shared key ssh login from root@laptop ->
-root@newdefaria.com. Then Ansible can do the rest. Look at how we can best use
-this like setting up ssh keys for the andrew user.
+learning Ansible.
 
 ## Let's Encrypt
 
@@ -42,11 +37,12 @@ to run the playbook against this IP address.
 
 I envision a 3 step process here:
 
-* Run ansible-playbook roles/genasys/launch_server.yml to provision the CentOS
+* Run ansible-playbook roles/genasys/taskslaunch_server.yml to provision the CentOS
   instance. This should take about a minute. When finished log into DreamCompute
   to obtain it's public IP address.
 
-* Run ansible-playbook -i<IP>, --key-file ~/.ssh/dreamcompute.pem site.yml to 
-  configure this new instance. This should take about 10 minutes.
+* Run ansible-playbook -i&lt;IP&gt;, --key-file ~/.ssh/dreamcompute.pem site.yml to 
+  configure this new instance. This should take about 10 minutes. Don't forget
+  the comma after the IP address!
 
 * Test new server. When satisfied point defaria.com to new IP address.

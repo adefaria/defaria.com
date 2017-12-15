@@ -1,0 +1,5 @@
+---
+- name: Set up ~/mail
+  become_user: andrew
+  become: yes
+  shell: rsync --quiet -r defaria.com:/home/andrew/mail /home/andrew

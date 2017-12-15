@@ -25,13 +25,16 @@
 # m h  dom mon dow   command
 
 # Scrub MAPS
-00 00 * * * /opt/clearscm/maps/bin/mapsscrub
+00 00 * * *     /opt/clearscm/maps/bin/mapsscrub
 
 # Clean up /web/tmp
-00 00 * * * find /web/tmp -mtime +7 -exec rm -f {} +
+00 00 * * *     find /web/tmp -mtime +7 -exec rm -f {} +
 
 # Update system
-30 00 * * * 	/usr/local/bin/update-system
+30 00 * * *     /usr/local/bin/update-system
 
 # Update certificates
-30 0 * * 0 /usr/local/bin/update_certs
+30 00 * * 0     /usr/local/bin/update_certs
+
+# Complain about illegal access attempts
+01 00 * * *     /opt/clearscm/bin/bice.pl
