@@ -119,7 +119,7 @@
 
     <li>
       <address>
-        <a href="https://goo.gl/X8GPbE">
+        <a href="https://goo.gl/Bor4KG">
           2800 Madison Ave #C5<br>
           Fullerton, California 92831-2231</a><br>
           May 2004 - December 2004
