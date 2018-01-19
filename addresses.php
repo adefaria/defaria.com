@@ -83,7 +83,7 @@
 
     <li>
       <address>
-        <a href="https://goo.gl/maps/ghhB6">
+        <a href="https://goo.gl/5o6Z1X">
         19465 42nd Avenue Southeast #28E<br>
         Bothell, Washington 98012-5446<br></a>
         January 2010 - October 2010
@@ -92,7 +92,7 @@
 
     <li>
       <address>
-        <a href="https://g.co/maps/4xg7a">
+        <a href="https://goo.gl/piH53o">
         1250 West Grove Parkway #1178<br>
         Tempe, Arizona 85283-4449<br></a>
         June 2007 - January 2010
@@ -101,7 +101,7 @@
 
     <li>
       <address>
-        <a href="https://g.co/maps/4xg7a">
+        <a href="https://goo.gl/Raicxa">
         12500 Merit Dr #6312<br>
         Dallas, Texas 75251-1933<br></a>
         October 2006 - June 2007
@@ -113,23 +113,25 @@
         <a href="https://goo.gl/maps/Eqzg1">
         6265 Kelez Ct<br>
         San Jose, California 95120-2819<br></a>
-	December 2004 - October 2006
+        December 2004 - October 2006
       </address>
     </li>
 
     <li>
       <address>
-        <a href="#">
-	2800 Madison Ave #C5<br>
-	Fullerton, California 92831-2231</a><br>
-	May 2004 - December 2004
+        <a href="https://goo.gl/X8GPbE">
+          2800 Madison Ave #C5<br>
+          Fullerton, California 92831-2231</a><br>
+          May 2004 - December 2004
+        </address>
+      </li>
 
     <li>
       <address>
         <a href="https://goo.gl/maps/w1uZC">
         6168 Camino Verde Way #???<br>
         San Jose, California 95119-1407<br></a>
-	July 2003 - May 2004
+        July 2003 - May 2004
       </address>
     </li>
 
@@ -138,22 +140,22 @@
         <a href="https://goo.gl/maps/nnyJq">
         6187 Ellerbrook Way<br>
         San Jose, California 95123-5012<br></a>
-	November 2001 - July 2003
+        November 2001 - July 2003
       </address>
     </li>
 
     <li>
       <address>
-        <a href="">
+        <a href="https://goo.gl/TNsEPH">
         5485 Eagles Lane #3<br>
         San Jose, California 95123-1869<br></a>
-	November 2000 - November 2001
+        November 2000 - November 2001
       </address>
     </li>
 
     <li>
       <address>
-        <a href="">
+        <a href="https://goo.gl/TNsEPH">
         5475 Eagles Lane #4<br>
         San Jose, California 95123-1868<br></a>
       </address>
@@ -161,7 +163,7 @@
 
     <li>
       <address>
-        <a href="">
+        <a href="https://goo.gl/TLyAHc">
         1901 Halford Ave<br>
         Santa Clara, California 95051<br></a>
       </address>
