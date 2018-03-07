@@ -25,9 +25,9 @@
 
   <blockquote>
     <address>
-      Andrew DeFaria<br><a href="https://goo.gl/maps/xeiEF3hCQ6F2">
-      11727 Stoney Peak Drive #65<br>
-      San Diego, California 92128-6440<br></a>
+      Andrew DeFaria<br><a href="https://goo.gl/Jp596u">
+      14435 S. 48th Street #2083<br>
+      Phoenix, Arizona 85044<br></a>
     </address>
   </blockquote>
 
@@ -42,16 +42,16 @@
   
   <blockquote><p>
     <address>
-      <a href="http://broadcom.com">
-      <img src="http://clearscm.com/Resumes/Andrew/Broadcom.gif" align=right>
-      Broadcom</a><br><a href="https://goo.gl/kzWjJT">
-      16340 W Bernardo Drive<br>
-      San Diego, California 92127<br></a>
+      <a href="https://gdmissionsystems.com/">
+      <img src="http://clearscm.com/Resumes/Andrew/General_Dynamics_Mission_Systems.png" align=right>
+      General Dynamics Mission Systems</a><br><a href="https://goo.gl/7TKPFF">
+      8201 E McDowell Road<br>
+      Scottsdale, Arizona 85257<br></a>
     </address>
   </blockquote>
 
   <blockquote><p>
-    <span class="standout">Email:</span> <a href="mailto:Andrew.DeFaria@Broadcom.com">Andrew.DeFaria@Broadcom.com</a><br>
+    <span class="standout">Email:</span> <a href="mailto:Andrew.DeFaria@abs-consulting.com">Andrew.DeFaria@abs-consulting.com</a><br>
     <span class="standout">Phone:</span> <i>What's a phone? :-)</i><br>
   </p></blockquote>
 

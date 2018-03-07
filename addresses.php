@@ -32,10 +32,18 @@
   <ol>
     <li>
       <address>
+        <a href="https://goo.gl/Jp596u">
+	14435 S. 48th Street #2083<br>
+	Phoenix, Arizona 85044<br></a>
+	March 2018 - Present
+      </address>
+    </li>
+    <li>
+      <address>
         <a href="https://goo.gl/maps/xeiEF3hCQ6F2">
         11727 Stoney Peak Drive #65<br>
         San Diego, California 92128-6440<br></a>
-        August 2016 - present
+        August 2016 - March 2018
       </address>
     </li>
     <li>
