@@ -1,48 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<opml version="1.1">
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<opml version="1.0">
   <head>
-    <title>BeyondPod Feeds</title>
-    <dateCreated>Thu, 15 Jun 2017 11:33:11 PDT</dateCreated>
-    <dateModified>Thu, 15 Jun 2017 11:33:11 PDT</dateModified>
+    <title>PodcastAddict registration feeds</title>
+    <dateCreated>Apr 1, 2019 18:52:35</dateCreated>
+    <dateModified>Apr 1, 2019 18:52:35</dateModified>
   </head>
   <body>
-    <outline text="Uncategorized" />
-    <outline text="Misc">
-      <outline text="Real Time with Bill Maher" xmlUrl="http://www.hbo.com/podcasts/billmaher/podcast.xml" type="rss" />
-    </outline>
-    <outline text="Science &amp; Technology">
-      <outline text="TWiT Live Specials MP3" xmlUrl="http://leo.am/podcasts/ces" type="rss" />
-      <outline text="FLOSS Weekly" xmlUrl="http://leoville.tv/podcasts/floss.xml" type="rss" />
-      <outline text="Security Now!" xmlUrl="http://leoville.tv/podcasts/sn.xml" type="rss" />
-      <outline text="All About Android" xmlUrl="http://leoville.tv/podcasts/aaa" type="rss" />
-      <outline text="This Week in Google (MP3)" xmlUrl="http://leoville.tv/podcasts/twig.xml" type="rss" />
-      <outline text="StarTalk Radio" xmlUrl="http://feeds.soundcloud.com/users/soundcloud:users:38128127/sounds.rss" type="rss" />
-      <outline text="This Week in Tech (MP3)" xmlUrl="http://feeds.twit.tv/twit.xml" type="rss" />
-      <outline text="Triangulation (MP3)" xmlUrl="http://feeds.twit.tv/tri.xml" type="rss" />
-      <outline text="The Internet of Things podcast" xmlUrl="http://iotpodcast.com/feed/podcast/" type="rss" />
-    </outline>
-    <outline text="Business &amp; Finance">
-      <outline text="Money, Markets &amp; More" xmlUrl="http://feeds.marketwatch.com/marketwatch/podcasts/moneymarketsmore" type="rss" />
-      <outline text="APM: Marketplace Morning Report – First Cast" xmlUrl="http://marketplace.publicradio.org/podcast/podcast_mmr_first.php" type="rss" />
-      <outline text="Freakonomics Radio" xmlUrl="http://feeds.feedburner.com/freakonomicsradio" type="rss" />
-      <outline text="The Art of Charm | Confidence | Relationship &amp; Dating Advice | Biohacking | Productivity" xmlUrl="http://theartofcharmpodcast.theartofcharm.libsynpro.com/rss" type="rss" />
-    </outline>
-    <outline text="Skeptism">
-      <outline text="Skeptoid: Critical Analysis of Pop Phenomena" xmlUrl="http://skeptoid.com/podcast.xml" type="rss" />
-      <outline text="The Skeptics' Guide to th..." xmlUrl="http://www.theskepticsguide.org/feed/rss.aspx?feed=SGU" type="rss" />
-      <outline text="NPR: Intelligence Squared..." xmlUrl="http://www.npr.org/rss/podcast.php?id=510184" type="rss" />
-      <outline text="Penn’s Sunday School" xmlUrl="http://feeds.feedburner.com/PennSundaySchool" type="rss" />
-      <outline text="The Atheist Experience" xmlUrl="http://www.atheist-experience.com/podcast.php" type="rss" />
-      <outline text="The Non Prophets" xmlUrl="http://www.nonprophetsradio.com/nonprophets.xml" type="rss" />
-      <outline text="Tell Me Something I Don't Know" xmlUrl="http://feeds.podtrac.com/5EZzzED0uv_k" type="rss" />
-    </outline>
-    <outline text="Religion">
-      <outline text="TheThinkingAtheist | Blog Talk Radio Feed" xmlUrl="http://www.blogtalkradio.com/thethinkingatheist.rss" type="rss" />
-    </outline>
-    <outline text="Music">
-      <outline text="No Guitar Is Safe" xmlUrl="http://feeds.soundcloud.com/users/soundcloud:users:162332893/sounds.rss" type="rss" />
-      <outline text="Modern Fingerstyle Guitar" xmlUrl="http://www.modernfingerstyleguitar.com/?feed=podcast" type="rss" />
-      <outline text="Guitar Speak Podcast" xmlUrl="http://guitarspeakpodcast.libsyn.com/rss" type="rss" />
-    </outline>
+    <outline text="All About Android (MP3)" type="rss" xmlUrl="http://leoville.tv/podcasts/aaa" htmlUrl="https://twit.tv/shows/all-about-android" />
+    <outline text="Command Line Heroes" type="rss" xmlUrl="https://feeds.pacific-content.com/commandlineheroes" htmlUrl="https://www.redhat.com/en/command-line-heroes" />
+    <outline text="FLOSS Weekly (MP3)" type="rss" xmlUrl="http://leoville.tv/podcasts/floss.xml" htmlUrl="https://twit.tv/shows/floss-weekly" />
+    <outline text="Freakonomics Radio" type="rss" xmlUrl="https://rss.art19.com/freakonomics-radio" htmlUrl="http://freakonomics.com/" />
+    <outline text="Intelligence Squared U.S. Debates" type="rss" xmlUrl="https://feeds.megaphone.fm/PNP1207584390" htmlUrl="http://intelligencesquaredus.org/" />
+    <outline text="Marketplace Morning Report with David Brancaccio" type="rss" xmlUrl="https://feeds.publicradio.org/public_feeds/apm-marketplace-morning-report/rss/rss" htmlUrl="http://www.marketplace.org/shows/marketplace-morning-report" />
+    <outline text="MarketWatch Money, Markets &amp; More" type="rss" xmlUrl="http://feeds.marketwatch.com/marketwatch/podcasts/moneymarketsmore" htmlUrl="http://www.marketwatch.com/podcasts/default.aspx?dist=rsspodcast&amp;siteid=mktw" />
+    <outline text="No Guitar Is Safe" type="rss" xmlUrl="http://feeds.soundcloud.com/users/soundcloud:users:162332893/sounds.rss" htmlUrl="http://www.guitarplayer.com" />
+    <outline text="Security Now (MP3)" type="rss" xmlUrl="http://leoville.tv/podcasts/sn.xml" htmlUrl="https://twit.tv/shows/security-now" />
+    <outline text="Skeptoid" type="rss" xmlUrl="https://skeptoid.com/podcast.xml" htmlUrl="https://skeptoid.com" />
+    <outline text="StarTalk Radio" type="rss" xmlUrl="https://rss.art19.com/startalk-radio" htmlUrl="https://art19.com/shows/startalk-radio" />
+    <outline text="Tell Me Something I Don't Know" type="rss" xmlUrl="https://rss.art19.com/tell-me-something-i-don-t-know" htmlUrl="http://www.tmsidk.com" />
+    <outline text="The Atheist Experience" type="rss" xmlUrl="http://www.atheist-experience.com/podcast.php" htmlUrl="http://www.atheist-experience.com/" />
+    <outline text="The Cloudcast - Weekly Cloud Computing" type="rss" xmlUrl="https://feeds.buzzsprout.com/3195.rss" htmlUrl="http://thecloudcast.net" />
+    <outline text="The Internet of Things Podcast - Stacey On IoT" type="rss" xmlUrl="https://iotpodcast.com/feed/podcast/" htmlUrl="https://iotpodcast.com" />
+    <outline text="The Jordan Harbinger Show" type="rss" xmlUrl="http://www.podcastone.com/podcast?categoryID2=1237" htmlUrl="https://www.podcastone.com/the-jordan-harbinger-show" />
+    <outline text="The Non-Prophets" type="rss" xmlUrl="https://www.spreaker.com/show/3254964/episodes/feed" htmlUrl="https://www.spreaker.com/show/thenonprophets" />
+    <outline text="The Skeptics' Guide to the Universe" type="rss" xmlUrl="https://feed.theskepticsguide.org/feed/rss.aspx?feed=SGU" htmlUrl="http://www.theskepticsguide.org/podcast/sgu" />
+    <outline text="TheThinkingAtheist" type="rss" xmlUrl="https://www.spreaker.com/show/3270347/episodes/feed" htmlUrl="https://www.spreaker.com/show/thethinkingatheist_1" />
+    <outline text="This Week in Google (MP3)" type="rss" xmlUrl="http://leoville.tv/podcasts/twig.xml" htmlUrl="https://twit.tv/shows/this-week-in-google" />
+    <outline text="This Week in Tech (MP3)" type="rss" xmlUrl="http://feeds.twit.tv/twit.xml" htmlUrl="https://twit.tv/shows/this-week-in-tech" />
+    <outline text="Triangulation (MP3)" type="rss" xmlUrl="http://feeds.twit.tv/tri.xml" htmlUrl="https://twit.tv/shows/triangulation" />
+    <outline text="TWiT Specials (MP3)" type="rss" xmlUrl="http://leo.am/podcasts/ces" htmlUrl="https://twit.tv/shows/twit-live-specials" />
+    <outline text="Valley of Genius (MP3)" type="rss" xmlUrl="http://feeds.twit.tv/vog.xml" htmlUrl="https://twit.tv/shows/valley-of-genius" />
   </body>
 </opml>
