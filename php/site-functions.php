@@ -68,8 +68,10 @@ function copyright ($start_year	= "",
   // Handle user home web pages
   if (preg_match ("/\/\~/", $this_file)) {
     $this_file= preg_replace ("/\/\~(\w+)\/(\s*)/", "/home/$1/web$2/", $this_file);
-  } else {
+  } elseif (file_exists("/web" . $this_file)) {
     $this_file = "/web" . $this_file;
+  } elseif (file_exists("/opt/clearscm" . $this_file)) {
+    $this_file = "/opt/clearscm" . $this_file;
   } // if
 
   $mod_time  = date ("F d Y @ g:i a", filemtime ($this_file));
