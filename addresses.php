@@ -31,7 +31,6 @@
 
   <ol>
     <li>
-    <li>
       <address>
         <a href="https://goo.gl/maps/QCVsY4gmmczsu13F6">
 	807 Soft Wind Road #4<br>
