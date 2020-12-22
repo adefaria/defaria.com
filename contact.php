@@ -25,9 +25,9 @@
 
   <blockquote>
     <address>
-      Andrew DeFaria<br><a href="https://goo.gl/Jp596u">
-      14435 S. 48th Street #2083<br>
-      Phoenix, Arizona 85044-6448<br></a>
+      Andrew DeFaria<br><a href="https://goo.gl/maps/QCVsY4gmmczsu13F6">
+      870 Soft Wind Road #4<br>
+      Vista, California 92081<br></a>
     </address>
   </blockquote>
 

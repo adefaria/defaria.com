@@ -31,11 +31,20 @@
 
   <ol>
     <li>
+    <li>
+      <address>
+        <a href="https://goo.gl/maps/QCVsY4gmmczsu13F6">
+	807 Soft Wind Road #4<br>
+	Vista, California 92081<br></a>
+	January 2021 - Present
+      </address>
+    </li>
+    <li>
       <address>
         <a href="https://goo.gl/Jp596u">
 	14435 S. 48th Street #2083<br>
 	Phoenix, Arizona 85044-6448<br></a>
-	March 2018 - Present
+	March 2018 - January 2021
       </address>
     </li>
     <li>
