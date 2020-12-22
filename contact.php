@@ -25,7 +25,7 @@
 
   <blockquote>
     <address>
-      Andrew DeFaria<br><a href="https://goo.gl/maps/QCVsY4gmmczsu13F6">
+      Andrew DeFaria<br><a href="https://goo.gl/maps/mBk76yahhLM4ri7x8">
       870 Soft Wind Road #4<br>
       Vista, California 92081<br></a>
     </address>
