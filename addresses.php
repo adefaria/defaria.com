@@ -33,7 +33,7 @@
     <li>
       <address>
         <a href="https://goo.gl/maps/6f1hokvFMTUa2fq8A">
-	807 Soft Wind Road #4<br>
+	870 Soft Wind Road #4<br>
 	Vista, California 92081<br></a>
 	January 2021 - Present
       </address>
