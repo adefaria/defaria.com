@@ -7,7 +7,7 @@
   <title>Danielle Rosemary DeFaria</title>
   <link rel="stylesheet" type="text/css" media="screen" href="/css/Default.css">
   <link rel="stylesheet" type="text/css" media="print" href="/css/Print.css">
-  <link rel="SHORTCUT ICON" href="http://defaria.com/favicon.ico" type="image/png">
+  <link rel="SHORTCUT ICON" href="https://defaria.com/favicon.ico" type="image/png">
   <?php include "site-functions.php"?>
 </head>
 <body>
