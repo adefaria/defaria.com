@@ -43,7 +43,7 @@
   <blockquote><p>
     <address>
       <a href="https://gdmissionsystems.com/">
-      <img src="http://clearscm.com/Resumes/Andrew/General_Dynamics_Mission_Systems.png" align=right>
+      <img src="https://clearscm.com/Resumes/Andrew/General_Dynamics_Mission_Systems.png" align=right>
       General Dynamics Mission Systems</a><br><a href="https://goo.gl/7TKPFF">
       8201 E McDowell Road<br>
       Scottsdale, Arizona 85257<br></a>
