@@ -9,7 +9,11 @@
 </head>
 
 <body>
-<iframe width="854" height="480" src="https://www.youtube.com/embed/fPoT24YdoJE" frameborder="0" allowfullscreen></iframe>
+<center>
+<h1>Wells Fargo Security and treatment of their customers</h1>
+</center>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fPoT24YdoJE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <h2>And they cashed the check!</h2>
 <img src="Check.jpg" />
