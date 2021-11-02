@@ -38,20 +38,20 @@
     <span class="standout">Page:</span> <a href="/">https://defaria.com</a><br>
   </p></blockquote>
 
-  <h2>Current $Client:</h2>
-  
+  <h2>Current Employer:</h2>
+
   <blockquote><p>
     <address>
-      <a href="https://gdmissionsystems.com/">
-      <img src="https://clearscm.com/Resumes/Andrew/General_Dynamics_Mission_Systems.png" align=right>
-      General Dynamics Mission Systems</a><br><a href="https://goo.gl/7TKPFF">
-      8201 E McDowell Road<br>
-      Scottsdale, Arizona 85257<br></a>
+      <a href="https://cpanel.net/">
+      <img src="/Images/cPanel.png"><br>
+      cPanel LLC</a><br>
+      2550 North Loop W., Suite 4006<br>
+      Houston, Texas 77092<br></a>
     </address>
   </blockquote>
 
   <blockquote><p>
-    <span class="standout">Email:</span> <a href="mailto:Andrew.DeFaria@abs-consulting.com">Andrew.DeFaria@abs-consulting.com</a><br>
+    <span class="standout">Email:</span> <a href="mailto:Andrew.DeFaria@webpros.com">Andrew.DeFaria@webpros.com</a><br>
     <span class="standout">Phone:</span> <i>What's a phone? :-)</i><br>
   </p></blockquote>
 
@@ -69,7 +69,7 @@
     <span class="standout">Skype:</span> adefaria</br>
     <span class="standout">Skype (Work):</span> adefariaWork</br>
     <span class="standout">Google Talk:</span> adefaria@gmail.com</br>
-  </p></blockquote>                                    
+  </p></blockquote>
 
   <h2>Social Networks</h2>
 
