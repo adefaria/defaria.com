@@ -1,16 +1,19 @@
 /|<img src="/Icons/HomeSmall.gif" alt="Home">&nbsp;Home
 /Band|Band
 http://clearscm.com|ClearSCM Inc.
-/Computers|Computers
+/Computers/|Computers
 /contact.php|Contact
 /addresses.php|Addresses
-/Family|Family
-/Jokes|Jokes
+/Family/|Family
+/Jokes/|Jokes
 /libertarian.php|Quotes
-/maps|MAPS
-http://clearscm.com/Resumes/Andrew|Resume
-/Vette|Vette
-/blogs|Weblogs
-/songbook|Songbook
-/bluegrass|Bluegrass
-/xmas|XMAS
+/maps/|MAPS
+/resume|Resume
+/Vette/|Vette
+/blogs/|Weblogs
+/songbook/|Songbook
+/bluegrass/|Bluegrass
+/xmas/|XMAS
+https://sonarr.defariahome.com|Sonarr
+https://tautulli.defariahome.com|Tautulli
+https://cloud.defariahome.com|Nextcloud
