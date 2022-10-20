@@ -25,9 +25,9 @@
 
   <blockquote>
     <address>
-      Andrew DeFaria<br><a href="https://goo.gl/maps/mBk76yahhLM4ri7x8">
-      870 Soft Wind Road #4<br>
-      Vista, California 92081<br></a>
+      Andrew DeFaria<br><a href="https://www.google.com/maps/place/2010+W+San+Marcos+Blvd,+San+Marcos,+CA+92078/@33.1349147,-117.2193893,1205m/data=!3m1!1e3!4m13!1m7!3m6!1s0x80dc75212f3c9fff:0x103842edc2818238!2s2010+W+San+Marcos+Blvd+UNIT+33,+San+Marcos,+CA+92078!3b1!8m2!3d33.1349147!4d-117.2172006!3m4!1s0x80dc752128c85183:0x191a5e07f6d59b1a!8m2!3d33.1349083!4d-117.2172925">
+      2010 West San Marcos Blvd, Unit 33<br>
+      San Marcos, California 92078<br></a>
     </address>
   </blockquote>
 
