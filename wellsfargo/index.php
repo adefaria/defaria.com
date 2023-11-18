@@ -13,8 +13,7 @@
 <h1>Wells Fargo Security and treatment of their customers</h1>
 </center>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/fPoT24YdoJE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<a href="https://www.youtube.com/watch?v=fPoT24YdoJE">Watch this</a>.
 <h2>And they cashed the check!</h2>
 <img src="Check.jpg" />
 
