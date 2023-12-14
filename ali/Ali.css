@@ -1,0 +1,18 @@
+body {
+  background-color: #b00040;
+  color: white;
+  font-size: 20px;
+}
+a:link {
+  color: #ff0;
+  text-decoration: none;
+}
+a:visited {
+  color:#ff3;
+}
+a:hover {
+  color: white;
+}
+a:active {
+  color: yellow;
+}
