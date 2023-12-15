@@ -17,16 +17,13 @@
 </audio>
 
 <center>
-  <p style="font-size:10pt">Crafted lovingly by hand</p>
+  <p style="font-size:10pt">Crafted lovingly by hand for a <b>special</b> person</p>
 </center>
 
-
-<h2 id="songTitle">&nbsp;</h2>
-</center>
-
-<p style="font-size:12pt">This is a mixtape, in the tradition of the past when mixtapes were actually tapes,
-but with the modern twist of the web. I made this mixtape for you and decided to put
-it here so you can easily listen to the songs and remember our first date.
+<p style="font-size:12pt">This is a <a href="https://en.wikipedia.org/wiki/Mixtape">mixtape</a>,
+in the tradition of the past when mixtapes were actually tapes, but with the modern
+twist of the web. I made this mixtape for you and decided to put it here so you
+can easily listen to the songs and reminisce.
 </p>
 <table>
   <tr>
@@ -68,9 +65,6 @@ it here so you can easily listen to the songs and remember our first date.
 <ul>
 
 <div id='story'>
-<p>Click on a song title to hear the song and see more info about the song and why
-I selected it.
-</p>
 </div>
 <script src="Ali.js"></script>
 </body>

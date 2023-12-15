@@ -1,6 +1,6 @@
 const player = document.getElementById("player");
 const links = document.querySelectorAll("a[data-song-url]");
-const title = document.getElementById("songTitle");
+//const title = document.getElementById("songTitle");
 const story = document.getElementById("story");
 const songsList = document.getElementById("songs");
 const songs = Array.from(songsList.querySelectorAll("a"));
@@ -14,7 +14,7 @@ function displayStoryAndPlay(songUrl) {
   // Format songName
   extensionIndex = songUrl.lastIndexOf(".");
   songName = songUrl.substring(6, extensionIndex);
-  title.innerHTML = songName;
+  //title.innerHTML = songName;
 
   // Set story for song - look for songName.html
   const songsStory = "Stories/" + songName + ".html";
