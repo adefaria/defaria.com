@@ -16,15 +16,26 @@
 <source src="" style="padding:0; margin:0" type='audio/mp3'>
 </audio>
 
-<center>
-  <p style="font-size:10pt">Crafted lovingly by hand for a <b>special</b> person</p>
-</center>
+<table width="500">
+  <tbody>
+    <tr>
+      <td>
+        <p style="font-size:12pt">This is a <a href="https://en.wikipedia.org/wiki/Mixtape">mixtape</a>,
+        in the tradition of the past when mixtapes were actually tapes, but with the modern
+        twist of the web. I made this mixtape for you and decided to put it here so you
+        can easily listen to the songs and reminisce.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <center>
+        <p style="font-size:10pt">Crafted lovingly by hand for a <a href="https://www.facebook.com/allison.myska"><b>special</b> person</a></p>
+        </center></td>
+    </tr>
+  </tbody>
+</table>
 
-<p style="font-size:12pt">This is a <a href="https://en.wikipedia.org/wiki/Mixtape">mixtape</a>,
-in the tradition of the past when mixtapes were actually tapes, but with the modern
-twist of the web. I made this mixtape for you and decided to put it here so you
-can easily listen to the songs and reminisce.
-</p>
 <table>
   <tr>
     <td valign="top">
