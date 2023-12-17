@@ -13,7 +13,7 @@ const images = [
   { url: "Images/Ali7.jpg" },
 ];
 
-nextSong = 0;
+nextSong = Math.floor(Math.random() * songs.length);
 
 player.addEventListener("ended", playNext);
 
