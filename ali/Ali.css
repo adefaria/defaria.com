@@ -1,5 +1,5 @@
 body {
-  background-color: #b00040;
+  background-color: #a00000;
   color: white;
   font-size: 18px;
 }
@@ -15,4 +15,50 @@ a:hover {
 }
 a:active {
   color: yellow;
+}
+.random-image {
+  /* width: 340px;
+  height: 227px; */
+}
+
+ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+li {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+.heart {
+  background-color: red;
+  display: inline-block;
+  height: 10px;
+  margin: 0 10px;
+  position: relative;
+  top: 0;
+  transform: rotate(-45deg);
+  width: 10px;
+}
+
+.heart:before,
+.heart:after {
+  content: "";
+  background-color: red;
+  border-radius: 50%;
+  height: 10px;
+  position: absolute;
+  width: 10px;
+}
+
+.heart:before {
+  top: -5px;
+  left: 0;
+}
+
+.heart:after {
+  left: 5px;
+  top: 0;
 }
