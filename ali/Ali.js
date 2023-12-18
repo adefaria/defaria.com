@@ -4,13 +4,9 @@ const story = document.getElementById("story");
 const songsList = document.getElementById("songs");
 const songs = Array.from(songsList.querySelectorAll("a"));
 const images = [
-  { url: "Images/Ali1.jpg" },
-  { url: "Images/Ali2.jpg" },
-  { url: "Images/Ali3.jpg" },
-  { url: "Images/Ali4.jpg" },
-  { url: "Images/Ali5.jpg" },
-  { url: "Images/Ali6.jpg" },
-  { url: "Images/Ali7.jpg" },
+  { url: "Images/Date1.jpg" },
+  { url: "Images/Date2.jpg" },
+  { url: "Images/Date3.jpg" },
 ];
 
 nextSong = Math.floor(Math.random() * songs.length);

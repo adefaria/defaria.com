@@ -17,7 +17,7 @@
 <table width="100%">
   <tr>
     <td valign="top">
-      <img src="" id="leftImage_off"/ class="random-image">
+      <img src="" id="leftImage"/ class="random-image">
     </td>
     <td width="500" valign="top" align="center">
       <p style="font-size:12pt">This is a <a href="https://en.wikipedia.org/wiki/Mixtape">mixtape</a>,
@@ -31,7 +31,7 @@
       <p style="font-size:10pt">Crafted lovingly by hand for a <a href="https://www.facebook.com/allison.myska"><b>special</b> person</a></p>
     </td>
     <td align="right" valign="top">
-      <img src="" id="rightImage_off" class="random-image"/>
+      <img src="" id="rightImage" class="random-image"/>
     </td>
 </table>
 
