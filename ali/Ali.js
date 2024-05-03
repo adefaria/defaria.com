@@ -7,6 +7,11 @@ const images = [
   { url: "Images/Date1.jpg" },
   { url: "Images/Date2.jpg" },
   { url: "Images/Date3.jpg" },
+  { url: "Images/Date4.jpg" },
+  { url: "Images/Date5.jpg" },
+  { url: "Images/Ali1.jpg" },
+  { url: "Images/Ali3.jpg" },
+  { url: "Images/Ali5.jpg" },
 ];
 
 nextSong = Math.floor(Math.random() * songs.length);
