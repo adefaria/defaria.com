@@ -6,6 +6,8 @@ const binaryImg = '/icons/binary.gif';
 const imageImg = '/icons/image2.gif';
 const dirImg = '/icons/dir.gif';
 const documentRoot = '/web/';
+const realDocumentRoot = '/opt/defaria.com';
+const tmpDirectory = '/web/tmp/';
 
 function debug($message)
 {
@@ -63,13 +65,13 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Unicode Example</title>
 <style>
   .button-container {
     display: flex;
     justify-content: center;
     gap: 20px; /* Space between buttons */
     margin-top: 5px;
+    width: 100%; /* Make the button container take full width */
   }
 
   .button {
@@ -83,6 +85,9 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
     align-items: center;
     justify-content: center;
     gap: 10px; /* Space between icon and text */
+    width: auto; /* Make the buttons take only the width they need */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    white-space: nowrap; /* Prevent text from wrapping */
   }
 
   .open-button {
@@ -119,6 +124,42 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
     text-decoration: none;
     color: inherit;
   }
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f0f0f0;
+    }
+    /* Make the Actions column wider */
+    .actions-column {
+        width: 300px; /* Increased width to accommodate buttons */
+        text-align: center;
+    }
+    /* Center the Type column */
+    .type-column {
+        text-align: center;
+        width: 50px;
+    }
+    /* Center the Size column */
+    .size-column {
+        text-align: center;
+        width: 75px;
+    }
+    /* Center the Expires In column */
+    .expires-column {
+        text-align: center;
+        width: 100px;
+    }
     </style>
     <script>
 function logmsg(msg) {
@@ -139,11 +180,9 @@ function logmsg(msg) {
 
 function downloadFile(url, filename) {
     logmsg('File: ' + filename);
-
     // Create a temporary link and trigger a click to start the download
     const link = document.createElement('a');
-    link.href = '/php/monitorFile.php?download=1&url=' + encodeURIComponent(url);
-    link.download = filename; // Suggest a filename
+    link.href = '/php/monitorFile.php?download="' + filename + '"&url=' + encodeURIComponent(url);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -152,29 +191,43 @@ function downloadFile(url, filename) {
 </head>    
 EOF;
 
+    // Normalize the directory path
+    $directory = realpath($directory);
+
     // Start the HTML output.
     echo "<h2>Directory: $directoryName</h2>";
     echo "<table border='1'>";
-    echo "<thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Last Modified</th><th>Actions</th></tr></thead>";
+    // Conditionally add the "Expires In" column header
+
+    if ($directory === tmpDirectory) {
+        echo "<thead><tr><th>Name</th><th class='type-column'>Type</th><th class='size-column'>Size</th><th class='expires-column'>Expires In</th><th class='actions-column'>Actions</th></tr></thead>";
+    } else {
+        echo "<thead><tr><th>Name</th><th class='type-column'>Type</th><th class='size-column'>Size</th><th class='actions-column'>Actions</th></tr></thead>";
+    }
     echo "<tbody>";
 
-    if ($directory == documentRoot) {
+    if ($directory == realpath(documentRoot)) {
         echo "Can't view root directory";
         exit;
     }
 
-    // Handle parent directory link if not at the root.
-    if ($directory != documentRoot) {
+    // Handle parent directory link if not to the root.
+    if ($directory != realpath(documentRoot)) {
         $parentDir = dirname($directory);
-        $parentUrl = dirname($baseUrl);
-        echo "<tr>";
-        echo "<td><a href='?dir=" . urlencode(substr($parentDir, strlen(documentRoot))) . "'>..</a></td>";
-        echo "<td style=\"text-align: center;\"><img src=\"" . dirImg . "\"></td>";
-        echo "<td></td>";
-        echo "<td></td>";
-        echo "<td></td>";
-        echo "</tr>";
-    }
+
+        if (!empty(substr($parentDir, strlen(realDocumentRoot)))) {
+            echo "<tr>";
+            echo "<td><a href='?dir=" . urlencode(substr($parentDir, strlen(realDocumentRoot))) . "'>..</a></td>";
+            echo "<td class='type-column'><img src=\"" . dirImg . "\"></td>";
+            echo "<td class='size-column'></td>";
+            // Conditionally add an empty cell for "Expires In"
+            if ($directory === tmpDirectory) {
+                echo "<td class='expires-column'></td>";
+            } // IF
+            echo "<td class='actions-column'></td>";
+            echo "</tr>";
+        } // if
+    } // if
 
     // Scan the directory.
     $items = scandir($directory);
@@ -186,41 +239,45 @@ EOF;
             continue;
         }
 
+        // Skip the index.php file.
+        if ($item == 'index.php') {
+            continue;
+        }
+
         // Construct the full path and URL.
         $fullPath = $directory . '/' . $item;
 
         // Get file/directory information.
         $isDir = is_dir($fullPath);
         $size = $isDir ? '' : formatSize(filesize($fullPath));
-        $lastModified = date('Y-m-d H:i:s', filemtime($fullPath));
+        $expiresIn = $isDir ? '' : timeUntilExpiration($fullPath); // Calculate expiration time
+        $itemPath = substr($fullPath, strlen(realDocumentRoot));
+        $dirPath = substr($fullPath, strlen(realDocumentRoot));
 
-        // Determine the links
-        $openLink = "/php/monitorFile.php?url=" . urlencode(substr($fullPath, strlen(documentRoot)));
-        $downloadLink = "/php/monitorFile.php?download=1&url=" . urlencode(substr($fullPath, strlen(documentRoot)));
+        $openLink = "/php/monitorFile.php?url=" . urlencode($itemPath);
 
-        // Start the row.
         echo "<tr>";
-
-        // Display the name with a link if it's a directory.
         echo "<td>";
         if ($isDir) {
-            echo "<a href='?dir=" . urlencode(substr($fullPath, strlen(documentRoot))) . "'>$item</a>";
+            echo '<a href=/php/downloaddir.php?dir=' . urlencode($dirPath) . ">$item</a>";
         } else {
             echo "<a href='" . $openLink . "'>" . $item . "</a>";
         }
         echo "</td>";
 
         // Display the type.
-        echo "<td  style=\"text-align: center;\"><img src=\"" . determineType($fullPath) . "\"></td>";
+        echo "<td class='type-column'><img src=\"" . determineType($fullPath) . "\"></td>";
 
         // Display the size.
-        echo "<td>$size</td>";
+        echo "<td class='size-column'>$size</td>";
 
-        // Display the last modified date.
-        echo "<td>$lastModified</td>";
+        // Conditionally display the expiration time
+        if ($directory === tmpDirectory) {
+            echo "<td class='expires-column'>$expiresIn</td>";
+        }
 
         // Display the actions.
-        echo "<td>";
+        echo "<td class='actions-column'>";
         if (!$isDir) {
             echo "<div class=\"button-container\">";
 
@@ -231,7 +288,9 @@ EOF;
             echo "</button>";
 
             echo '<button class="button download-button">';
-            echo "<a href=\"#\" onclick=\"downloadFile('" . substr($fullPath, strlen(documentRoot)) . "', '$item'); return false;\">";
+            echo "<a href=\"#\" onclick=\"downloadFile('" . $_SERVER['REQUEST_URI'] . '/'
+                . str_replace("'", "\\'", $item) . "', '" . urlencode($item) . "', '"
+                . str_replace("'", "\\'", $item) . "'); return false;\">";
             echo '<span class="icon download-icon"><font size=+2>&#x1F4E5;</font></span> Download';
             echo "</a>";
             echo "</button>";
@@ -266,32 +325,81 @@ function formatSize(int $bytes, int $precision = 2): string
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
 
-// Set the default directory to the document root.
-$directory = documentRoot;
-
-// Get the requested directory from the query string.
-if (!isset($_GET['dir']) || empty($_GET['dir'])) {
-    $_GET['dir'] = '/tmp';
-}
-
-if ($_GET['dir'] == '/') {
-    echo "Unable to browse the root directory";
-    exit;
-}
-
-if ($_GET['dir'] == '/' || $_GET['dir'] == substr(documentRoot, 1)) {
-    echo "Unable to browse the root directory";
-    exit;
-}
-
-if (isset($_GET['dir'])) {
-    $requestedDir = documentRoot . '/' . ltrim($_GET['dir'], '/');
-    if (strpos($requestedDir, documentRoot) === 0) {
-        $directory = $requestedDir;
-    } else {
-        echo "<p>Error: Invalid directory requested.</p>";
-        exit;
+/**
+ * Calculates the time until a file expires, assuming a 7-day expiration from the last access.
+ *
+ * @param string $filePath The path to the file.
+ * @return string A string representing the time until expiration (e.g., "5 days", "1 hour", "Expired").
+ */
+function timeUntilExpiration(string $filePath): string
+{
+    // Check if the file exists
+    if (!file_exists($filePath)) {
+        return "File not found";
     }
+
+    // Get the last access time of the file.
+    $lastAccessTime = fileatime($filePath);
+
+    // If fileatime fails, use filemtime as a fallback
+    if ($lastAccessTime === false) {
+        $lastAccessTime = filemtime($filePath);
+    }
+
+    // Calculate the expiration time (7 days from last access).
+    $expirationTime = $lastAccessTime + (7 * 24 * 60 * 60); // 7 days in seconds
+
+    // Get the current time.
+    $currentTime = time();
+
+    // Calculate the time difference.
+    $timeDifference = $expirationTime - $currentTime;
+
+    // Handle expired files.
+    if ($timeDifference <= 0) {
+        return "Expired";
+    }
+
+    // Format the time difference into a human-readable string.
+    $days = floor($timeDifference / (60 * 60 * 24));
+    $hours = floor(($timeDifference % (60 * 60 * 24)) / (60 * 60));
+    $minutes = floor(($timeDifference % (60 * 60)) / 60);
+
+    $formattedTime = "Expires in ";
+    if ($days > 0) {
+        $formattedTime .= $days . " day" . ($days > 1 ? "s" : "");
+    } elseif ($hours > 0) {
+        $formattedTime .= $hours . " hour" . ($hours > 1 ? "s" : "");
+    } elseif ($minutes > 0) {
+        $formattedTime .= $minutes . " minute" . ($minutes > 1 ? "s" : "");
+    } else {
+        $formattedTime .= "less than a minute";
+    }
+
+    return $formattedTime;
+}
+
+// Main
+if (isset($_GET['dir'])) {
+    $directory = $_GET['dir'];
+} else {
+    $directory = documentRoot;
+
+    $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
+
+    // Check if parsing was successful and if a path exists
+    if ($parsedUrl !== false && isset($parsedUrl['path'])) {
+        $directory .= substr($parsedUrl['path'], 1);
+    }
+} // if
+
+if (strpos($directory, documentRoot) !== 0) {
+    $directory = realpath(documentRoot . '/' . $directory);
+} // 
+
+if ($directory === realpath(documentRoot)) {
+    echo "Unable to browse the root directory";
+    exit;
 }
 
 // Handle file downloads.
@@ -319,8 +427,8 @@ if (isset($_GET['download'])) {
 // Construct the base URL.
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
 $baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'];
-if (isset($_GET['dir'])) {
-    $baseUrl .= '/' . ltrim($_GET['dir'], '/');
+if (isset($directory)) {
+    $baseUrl .= '/' . ltrim($directory, '/');
 }
 
 ?>
@@ -329,31 +437,26 @@ if (isset($_GET['dir'])) {
 <html>
 
 <head>
-    <title>Directory</title>
-    <style>
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
+    <title>
+        <?php
+        // Strip realDocumentRoot if present
+        if (strpos($directory, realDocumentRoot) === 0) {
+            echo "Directory: " . substr($directory, strlen(realDocumentRoot));
+        } elseif (strpos($directory, '/web//') === 0) {
+            echo "Directory: " . substr($directory, strlen('/web//'));
+        } else if ($directory === '/web//tmp/' || $directory === '/web/tmp/') {
+            echo "Root Directory";
+        } else {
+            echo "Directory: {$directory}";
         }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-    </style>
+        ?>
+    </title>
+    <meta charset="utf-8">
 </head>
 
 <body>
 
     <?php
-    // Generate the directory listing.
     generateDirectoryListing($directory, $baseUrl);
     ?>
 

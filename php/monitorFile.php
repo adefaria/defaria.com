@@ -2,6 +2,11 @@
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
 
+function debug($message)
+{
+    echo "<font color='red'>$message</font><br>";
+}
+
 /**
  * Gets the HTTP address (URL) of the document root.
  *
@@ -77,35 +82,49 @@ function getFullUrl(string $relativeUrl): ?string
     } // if
 }
 
+// Main
 $URL = "";
 
 if (isset($_GET['url'])) {
     $URL = $_GET['url'];
-    if (strpos($URL, '/') !== 0) {
-        $URL = $_SERVER['HTTP_REFERER'] . $URL;
-        $IPAddr = $_SERVER["REMOTE_ADDR"];
-    } else {
-        $fullURL = getFullUrl($URL);
+    debug("URL: $URL");
 
-        // Validate that the url is in the same domain
-        $parsedUrl = parse_url($fullURL);
-        $host = $_SERVER['HTTP_HOST'];
-        if (!isset($parsedUrl['host']) || $parsedUrl['host'] !== $host) {
-            echo "Invalid URL";
-            exit();
-        }
+    $fullURL = getFullUrl($URL);
+    debug("Full URL: $fullURL");
+    // Validate that the url is in the same domain
+    $parsedUrl = parse_url($fullURL);
 
-        $path = $_SERVER['DOCUMENT_ROOT'] . $parsedUrl['path'];
+    $host = $_SERVER['HTTP_HOST'];
+    if (!isset($parsedUrl['host']) || $parsedUrl['host'] !== $host) {
+        echo "Invalid URL";
+        exit();
     }
+    $path = $_SERVER['DOCUMENT_ROOT'] . $parsedUrl['path'];
+    debug("Path: $path");
 } else {
     echo "No URL passed in";
     exit;
 } // if
 
+if (!file_exists($path)) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
+// Check if the download parameter is set in $_GET
 if (isset($_GET['download'])) {
-    $download = true;
-} else {
-    $download = false;
+    debug("download parameter set");
+    // Set headers for file download.
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . $_GET['download'] . '');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($path));
+    debug("path: {$path}");
+    readfile($path);
+    exit; // Important: Stop further execution after sending the file
 }
 
 $msg = '<html><body>';
@@ -135,19 +154,6 @@ foreach ($_SERVER as $key => $value) {
         } // if
     } // if
 } // foreach
-
-
-if ($download) {
-    // Set headers for file download.
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($path));
-    readfile($path);
-} // if
 
 if (!$me) {
     $histfile = fopen('/web/pm/.history', 'a');
@@ -184,18 +190,16 @@ if (!$me) {
     mail("andrew@defaria.com", $subject, $msg, $headers);
 } // if
 
-if (!$download) {
-    // Determine if it's a video or audio file based on extension
-    $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
+// Determine if it's a video or audio file based on extension
+$fileExtension = pathinfo($path, PATHINFO_EXTENSION);
 
-    if (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg', 'mkv'])) {
-        header("Location: /php/videoplayback.php?video=$URL");
-    } elseif (in_array(strtolower($fileExtension), ['m4a', 'mp3', 'wav', 'ogg'])) {
-        header("Location: /php/audioplayback.php?audio=$URL");
-    } else {
-        header("Location: $URL");
-    } // if
-}
+if (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg', 'mkv'])) {
+    header("Location: /php/videoplayback.php?video=$URL");
+} elseif (in_array(strtolower($fileExtension), ['m4a', 'mp3', 'wav', 'ogg'])) {
+    header("Location: /php/audioplayback.php?audio=$URL");
+} else {
+    header("Location: $URL");
+} // if
 
 exit;
 
