@@ -58,3 +58,4 @@ Disallow: /blogs/Status
 Disallow: /IBM
 Disallow: /Broadcom
 Disallow: /Resumes/Andrew
+Disallow: /tmp
