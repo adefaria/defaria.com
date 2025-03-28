@@ -25,6 +25,16 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
             width: 100vw;
             object-fit: contain;
         }
+
+        #resumeButton {
+            display: none;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -66,12 +76,9 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
         window.addEventListener('resize', setVideoDimensions);
 
         videoID.addEventListener('canplay', () => {
-            debug('canplay @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
             let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-            debug('canplay lastCurrentTime: ' + lastCurrentTime);
             // Check if the video has been re-initialized (currentTime reset to 0)
             if (videoID.currentTime === 0 && lastCurrentTime > 0) {
-                debug('Video was re-initialized. Attempting to resume from ' + Math.round(lastCurrentTime) + ' seconds');
                 videoID.currentTime = lastCurrentTime; // Reset the currentTime
                 videoID.play().catch(error => {
                     logmsg('Error attempting to resume playback: ' + error);
@@ -79,30 +86,8 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
             }
         });
 
-        videoID.addEventListener('canplaythrough', () => {
-            debug('canplaythrough @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
-        });
-
-        videoID.addEventListener('waiting', () => {
-            debug('waiting @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
-        });
-
-        videoID.addEventListener('stalled', () => {
-            debug('stalled @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
-        });
-
-        videoID.addEventListener('error', () => {
-            debug('error @ ' + Math.round(videoID.currentTime) + ' seconds, code: ' + videoID.error.code + ', message: ' + videoID.error.message + ', readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
-        });
-
-        videoID.addEventListener('ratechange', () => {
-            videoID.currentTime;
-            debug('ratechange @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
-        });
-
         videoID.addEventListener('play', () => {
             isPlaying = true;
-            debug('play - currentTime: ' + Math.round(videoID.currentTime) + ', readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
             if (!videoStarted) {
                 videoStarted = true;
                 logmsg('Started for the first time @ ' + Math.round(startTime) + ' seconds');
@@ -110,24 +95,21 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
                 logmsg('Resumed @ ' + Math.round(videoID.currentTime) + ' seconds');
             }
             localStorage.setItem('lastCurrentTime', videoID.currentTime);
-            debug('setItem localStorage.lastCurrentTime: ' + localStorage.getItem('lastCurrentTime'));
+            resumeButton.style.display = 'none';
         });
 
         videoID.addEventListener('pause', () => {
-            debug('pause - currentTime: ' + Math.round(videoID.currentTime) + ', readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
             if (isPlaying && !isSeeking && !videoEnded) {
                 totalTimeWatched = videoID.currentTime - startTime;
                 logmsg('Paused  @ ' + Math.round(totalTimeWatched) + ' seconds');
             }
             localStorage.setItem('lastCurrentTime', videoID.currentTime);
-            debug('setItem localStorage.lastCurrentTime: ' + localStorage.getItem('lastCurrentTime'));
             isPlaying = false;
         });
 
         videoID.addEventListener('seeking', () => {
             isSeeking = true;
             clearTimeout(seekTimeout);
-            debug('seeking @ ' + Math.round(videoID.currentTime) + ' seconds, readyState: ' + videoID.readyState + ', networkState: ' + videoID.networkState + ', paused: ' + videoID.paused + ', ended: ' + videoID.ended + ', seeking: ' + videoID.seeking + ', duration: ' + videoID.duration);
         });
 
         videoID.addEventListener('seeked', () => {
@@ -149,21 +131,17 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
         });
 
         document.addEventListener('visibilitychange', () => {
-            debug("visibilityState: " + document.visibilityState);
             if (document.visibilityState === 'hidden') {
                 //localStorage.setItem('lastCurrentTime', videoID.currentTime);
                 //debug('setItem localStorage.lastCurrentTime: ' + localStorage.getItem('lastCurrentTime'));
-                debug('visibilitychange - hidden');
                 videoID.pause();
             } else if (document.visibilityState === 'visible') {
                 let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-                debug('visibilitychange - visible - localStorage.lastCurrentTime: ' + lastCurrentTime);
                 if (lastCurrentTime > 0) {
                     videoID.currentTime = lastCurrentTime;
-                    debug('calling play with currentTime set to ' + videoID.currentTime);
-                    videoID.play().catch(error => {
-                        logmsg('Error attempting to resume playback: ' + error);
-                    });
+                    if (lastCurrentTime > 0) {
+                        resumeButton.style.display = 'block';
+                    }
                 }
             }
         });
@@ -197,7 +175,6 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
                 totalTimeWatched += videoID.currentTime - startTime;
                 logmsg('user bailed @ ' + Math.round(totalTimeWatched) + ' seconds');
             }
-            debug('removing item lastCurrentTime');
             localStorage.setItem('lastCurrentTime', 0);
         });
 
