@@ -7,7 +7,7 @@ const imageImg = '/icons/image2.gif';
 const dirImg = '/icons/dir.gif';
 const documentRoot = '/web/';
 const realDocumentRoot = '/opt/defaria.com';
-const tmpDirectory = '/web/tmp/';
+const tmpDirectory = '/opt/defaria.com/tmp';
 
 function debug($message)
 {
@@ -198,7 +198,6 @@ EOF;
     echo "<h2>Directory: $directoryName</h2>";
     echo "<table border='1'>";
     // Conditionally add the "Expires In" column header
-
     if ($directory === tmpDirectory) {
         echo "<thead><tr><th>Name</th><th class='type-column'>Type</th><th class='size-column'>Size</th><th class='expires-column'>Expires In</th><th class='actions-column'>Actions</th></tr></thead>";
     } else {
@@ -343,6 +342,66 @@ function timeUntilExpiration(string $filePath): string
 
     // If fileatime fails, use filemtime as a fallback
     if ($lastAccessTime === false) {
+        function timeUntilExpiration(string $filePath): string
+        {
+            // ...
+            // Get the last access time of the file.
+            $lastAccessTime = fileatime($filePath);
+
+            // If fileatime fails, use filemtime as a fallback
+            if ($lastAccessTime === false) {
+                $lastAccessTime = filemtime($filePath);
+            }
+            // ...
+        }
+        function timeUntilExpiration(string $filePath): string
+        {
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                return "File not found";
+            }
+
+            // Get the last modification time of the file.
+            $lastModifiedTime = filemtime($filePath);
+
+            // If filemtime fails, return an error
+            if ($lastModifiedTime === false) {
+                return "Error getting modification time";
+            }
+
+            // Calculate the expiration time (7 days from last modification).
+            $expirationTime = $lastModifiedTime + (7 * 24 * 60 * 60); // 7 days in seconds
+
+            // Get the current time.
+            $currentTime = time();
+
+            // Calculate the time difference.
+            $timeDifference = $expirationTime - $currentTime;
+
+            // Handle expired files.
+            if ($timeDifference <= 0) {
+                return "Expired";
+            }
+
+            // Format the time difference into a human-readable string.
+            $days = floor($timeDifference / (60 * 60 * 24));
+            $hours = floor(($timeDifference % (60 * 60 * 24)) / (60 * 60));
+            $minutes = floor(($timeDifference % (60 * 60)) / 60);
+
+            $formattedTime = "Expires in ";
+            if ($days > 0) {
+                $formattedTime .= $days . " day" . ($days > 1 ? "s" : "");
+            } elseif ($hours > 0) {
+                $formattedTime .= $hours . " hour" . ($hours > 1 ? "s" : "");
+            } elseif ($minutes > 0) {
+                $formattedTime .= $minutes . " minute" . ($minutes > 1 ? "s" : "");
+            } else {
+                $formattedTime .= "less than a minute";
+            }
+
+            return $formattedTime;
+        }
+
         $lastAccessTime = filemtime($filePath);
     }
 
