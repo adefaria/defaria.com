@@ -19,7 +19,25 @@ app.post("/log-playback", (req, res) => {
   const file = req.body.file;
   const msg = req.body.msg;
 
-  const logEntry = `${new Date().toISOString()}: IP: ${IPAddr} ${fileType} ${file} ${msg}\n`;
+  const now = new Date();
+  const losAngelesDateTime = now.toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false, // Use 24-hour format
+  });
+
+  // Split the string into date and time parts
+  const [losAngelesDate, losAngelesTime] = losAngelesDateTime.split(", ");
+
+  // Join the parts with "@"
+  const formattedLosAngelesTime = `${losAngelesDate}@${losAngelesTime}`;
+
+  const logEntry = `${formattedLosAngelesTime}: IP: ${IPAddr} ${fileType} ${file} ${msg}\n`;
 
   fs.appendFile("/web/pm/playback.log", logEntry, (err) => {
     if (err) {

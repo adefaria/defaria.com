@@ -1,6 +1,7 @@
 <?php
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
+$download = isset($_GET['download']) ? $_GET['download'] : null;
 
 function debug($message)
 {
@@ -87,10 +88,8 @@ $URL = "";
 
 if (isset($_GET['url'])) {
     $URL = $_GET['url'];
-    debug("URL: $URL");
 
     $fullURL = getFullUrl($URL);
-    debug("Full URL: $fullURL");
     // Validate that the url is in the same domain
     $parsedUrl = parse_url($fullURL);
 
@@ -100,7 +99,6 @@ if (isset($_GET['url'])) {
         exit();
     }
     $path = $_SERVER['DOCUMENT_ROOT'] . $parsedUrl['path'];
-    debug("Path: $path");
 } else {
     echo "No URL passed in";
     exit;
@@ -112,8 +110,7 @@ if (!file_exists($path)) {
 }
 
 // Check if the download parameter is set in $_GET
-if (isset($_GET['download'])) {
-    debug("download parameter set");
+if (isset($download)) {
     // Set headers for file download.
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
@@ -122,7 +119,6 @@ if (isset($_GET['download'])) {
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
     header('Content-Length: ' . filesize($path));
-    debug("path: {$path}");
     readfile($path);
     exit; // Important: Stop further execution after sending the file
 }
