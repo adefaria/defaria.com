@@ -133,27 +133,25 @@ $myip = '75.80.5.95';
 
 foreach ($_SERVER as $key => $value) {
     if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
-        error_log("Processing {$key} = {$value}");
         $msg .= "$key: $value<br>";
 
         if ($key == 'REMOTE_ADDR') {
-            error_log("Processing REMOTE_ADDR = {$value}");
             // Skip me...
             if ($value == $myip) {
                 $me = true;
                 break;
             } // if
-            error_log("executing whois {$value}");
+
             exec("whois $value", $output, $result);
 
             foreach ($output as $line) {
-                error_log("line: {$line}");
+
                 $msg .= "$line<br>";
             } // foreach
         } // if
     } // if
 } // foreach
-error_log("msg: $msg");
+
 if (!$me) {
     $histfile = fopen('/web/pm/.history', 'a');
     $date = date(DATE_RFC822);
