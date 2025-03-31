@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Playback Log Viewer</title>
     <meta charset="utf-8">
@@ -12,18 +11,14 @@
             color: #eee;
             padding: 20px;
         }
-
         #log-container {
             border: 1px solid #555;
             padding: 10px;
             overflow-y: auto;
             max-height: 80vh;
             background-color: #000;
-            /* Black background */
             color: #0f0;
-            /* Green text */
         }
-
         #refresh-button {
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -34,30 +29,11 @@
         }
     </style>
 </head>
-
 <body>
     <h1>Playback Log</h1>
     <button id="refresh-button">Refresh Log</button>
-    <div id="log-container"><?php
-    $logFile = '/web/pm/playback.log';
-    $numLines = 25; // Number of lines to display
-    
-    // Check if the log file exists and is readable.
-    if (file_exists($logFile) && is_readable($logFile)) {
-        // Read the log file into an array of lines.
-        $lines = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        // Get the last $numLines lines.
-        $lastLines = array_slice($lines, -$numLines);
-
-        // Display the last lines.
-        foreach ($lastLines as $line) {
-            echo htmlspecialchars($line) . "<br>";
-        }
-    } else {
-        echo "Error: Log file '$logFile' does not exist or is not readable.";
-    }
-    ?>
+    <div id="log-container">
+        <!-- Log content will be loaded here -->
     </div>
 
     <script>
@@ -72,6 +48,7 @@
                 .then(data => {
                     if (data.error) {
                         console.error('Error fetching log data:', data.error);
+                        logContainer.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
                         return;
                     }
 
@@ -92,11 +69,14 @@
                 })
                 .catch(error => {
                     console.error('Error fetching log data:', error);
+                    logContainer.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
                 });
         }
+
+        // Initial load of log data
+        fetchLogData();
 
         refreshButton.addEventListener('click', fetchLogData);
     </script>
 </body>
-
 </html>
