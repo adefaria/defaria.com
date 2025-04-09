@@ -59,3 +59,4 @@ Disallow: /IBM
 Disallow: /Broadcom
 Disallow: /Resumes/Andrew
 Disallow: /tmp
+Disallow: /resume
