@@ -136,6 +136,12 @@ $myip = '75.80.5.95';
 // Load the IP mapping
 $ipMapping = loadIpMapping($ipMappingFile);
 
+if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+    $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
+} else {
+    $msg .= "HTTP_REFERER: URL Typed<br>";
+}
+
 foreach ($_SERVER as $key => $value) {
     if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
         // Replace IP with text if available
