@@ -179,10 +179,13 @@ function logmsg(msg) {
 }
 
 function downloadFile(url, filename) {
-    logmsg('File: ' + filename);
+    const filenameWithSpaces = filename.replace(/\+/g, ' ');
+    const decodedFilename = decodeURIComponent(filenameWithSpaces);
+    logmsg('File: ' + decodedFilename);
+
     // Create a temporary link and trigger a click to start the download
     const link = document.createElement('a');
-    link.href = '/php/monitorFile.php?download="' + filename + '"&url=' + encodeURIComponent(url);
+    link.href = '/php/monitorFile.php?download="' + decodedFilename + '"&url=' + encodeURIComponent(url);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

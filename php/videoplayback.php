@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-
 <?php
+require_once realpath(__DIR__ . '/ip_mapping.php');
+
 if (isset($_GET['video'])) {
     $video = $_GET['video'];
 } else {
@@ -10,7 +9,18 @@ if (isset($_GET['video'])) {
 }
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
+
+// Load the IP mapping
+error_log("ipMappingFile: {$ipMappingFile}");
+$ipMapping = loadIpMapping($ipMappingFile);
+
+// Replace IP with text if available
+error_log("IPAddr: {$IPAddr}");
+$displayIP = replaceIpWithText($IPAddr, $ipMapping);
+error_log("displayIP: {$displayIP}");
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
     <title><?php echo basename($video); ?></title>
@@ -149,7 +159,7 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
         function logmsg(msg) {
             const fileType = 'Video';
             const xhr = new XMLHttpRequest();
-            const IPAddr = "<?php echo $IPAddr; ?>";
+            const IPAddr = "<?php echo $displayIP; ?>";
             const data = {
                 IPAddr: IPAddr,
                 fileType: fileType,

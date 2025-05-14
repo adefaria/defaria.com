@@ -1,4 +1,6 @@
 <?php
+// Use __DIR__ and realpath() to construct the absolute path
+require_once realpath(__DIR__ . '/ip_mapping.php');
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
 $download = isset($_GET['download']) ? $_GET['download'] : null;
@@ -131,9 +133,24 @@ $msg .= "<p>Here's what I know about them:</p>";
 $me = false;
 $myip = '75.80.5.95';
 
+// Load the IP mapping
+$ipMapping = loadIpMapping($ipMappingFile);
+
+if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+    $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
+} else {
+    $msg .= "HTTP_REFERER: URL Typed<br>";
+}
+
 foreach ($_SERVER as $key => $value) {
-    if (preg_match("/^REMOTE/", $key)) {
-        $msg .= "$key: $value<br>";
+    if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
+        // Replace IP with text if available
+        if ($key == 'REMOTE_ADDR') {
+            $displayValue = replaceIpWithText($value, $ipMapping);
+        } else {
+            $displayValue = $value;
+        }
+        $msg .= "$key: $displayValue<br>";
 
         if ($key == 'REMOTE_ADDR') {
             // Skip me...
@@ -175,6 +192,11 @@ if (!$me) {
     } else {
         $subject = "Somebody just accessed $URL";
     } // if
+
+    // Replace IP address in the email subject and body with text from the mapping
+    $displayIP = replaceIpWithText($_SERVER["REMOTE_ADDR"], $ipMapping);
+    $subject = str_replace($_SERVER["REMOTE_ADDR"], $displayIP, $subject);
+    $msg = str_replace("REMOTE_ADDR: $_SERVER[REMOTE_ADDR]", "REMOTE_ADDR: $displayIP", $msg);
 
     mail("andrew@defaria.com", $subject, $msg, $headers);
 } else {

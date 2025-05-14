@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html>
-
 <?php
+// Use __DIR__ and realpath() to construct the absolute path
+require_once realpath(__DIR__ . '/ip_mapping.php');
+
 if (isset($_GET['audio'])) {
     $audio = $_GET['audio'];
 } else {
@@ -10,7 +10,15 @@ if (isset($_GET['audio'])) {
 }
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
+
+// Load the IP mapping
+$ipMapping = loadIpMapping($ipMappingFile);
+
+// Replace IP with text if available
+$displayIP = replaceIpWithText($IPAddr, $ipMapping);
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
     <title><?php echo basename($audio); ?></title>
@@ -143,7 +151,7 @@ $IPAddr = $_SERVER["REMOTE_ADDR"];
         function logmsg(msg) {
             const fileType = 'Audio';
             const xhr = new XMLHttpRequest();
-            const IPAddr = "<?php echo $IPAddr; ?>";
+            const IPAddr = "<?php echo $displayIP; ?>";
 
             const data = {
                 IPAddr: IPAddr,

@@ -23,9 +23,7 @@
             line-height: 1.2;
             /* Explicit line-height for better calculation consistency */
             background-color: #000;
-            /* Black background */
             color: #0f0;
-            /* Green text */
         }
 
         /* Common styles for action buttons */
