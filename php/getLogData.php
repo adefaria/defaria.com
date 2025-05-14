@@ -1,75 +1,25 @@
 <?php
-/**
- * getLogData.php
- *
- * This script fetches the last N lines from a log file and returns them as a JSON response.
- *
- * Parameters:
- *   - lines: The number of lines to retrieve (default: 10).
- *
- * Returns:
- *   - JSON object with the following structure:
- *     {
- *       "lines": [
- *         "line 1",
- *         "line 2",
- *         ...
- *       ],
- *       "error": null
- *     }
- *   - Or, if an error occurs:
- *     {
- *       "lines": null,
- *       "error": "Error message"
- *     }
- */
+header('Content-Type: application/json');
 
-// Set the log file path.
+// This path MUST match the log file path used in logviewer.php and clearLog.php
 $logFile = '/web/pm/playback.log';
 
-// Set the default number of lines to retrieve.
-$defaultLines = 10;
+$response = [];
 
-// Get the number of lines to retrieve from the query string.
-$numLines = isset($_GET['lines']) ? intval($_GET['lines']) : $defaultLines;
+if (file_exists($logFile) && is_readable($logFile)) {
+    // Read the log file into an array of lines.
+    // FILE_IGNORE_NEW_LINES: Do not add newline at the end of each array element
+    // FILE_SKIP_EMPTY_LINES: Skip empty lines
+    $lines = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-// Validate the number of lines.
-if ($numLines <= 0) {
-    $numLines = $defaultLines;
+    if ($lines === false) {
+        $response['error'] = "Failed to read log file: $logFile";
+    } else {
+        $response['lines'] = $lines;
+    }
+} else {
+    $response['error'] = "Log file '$logFile' does not exist or is not readable.";
 }
 
-// Check if the log file exists and is readable.
-if (!file_exists($logFile) || !is_readable($logFile)) {
-    // Return an error response.
-    header('Content-Type: application/json');
-    echo json_encode([
-        'lines' => null,
-        'error' => "Log file '$logFile' does not exist or is not readable.",
-    ]);
-    exit;
-}
-
-// Read the log file into an array of lines.
-$lines = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-// Check if file() returned false (error reading the file).
-if ($lines === false) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'lines' => null,
-        'error' => "Error reading log file '$logFile'.",
-    ]);
-    exit;
-}
-
-// Get the last N lines.
-$lastLines = array_slice($lines, -$numLines);
-
-// Return the lines as a JSON response.
-header('Content-Type: application/json');
-echo json_encode([
-    'lines' => $lastLines,
-    'error' => null,
-]);
-
+echo json_encode($response);
 ?>
