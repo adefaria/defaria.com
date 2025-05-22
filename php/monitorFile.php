@@ -5,6 +5,14 @@ require_once realpath(__DIR__ . '/ip_mapping.php');
 $IPAddr = $_SERVER["REMOTE_ADDR"];
 $download = isset($_GET['download']) ? $_GET['download'] : null;
 
+// Define the filesystem path to the web server's document root.
+$fsWebRoot = '/web'; // Set to your actual web root path
+
+if (!$fsWebRoot) {
+    // Fallback or error if $_SERVER['DOCUMENT_ROOT'] is not set or invalid
+    die("Error: Could not determine web root filesystem path.");
+}
+
 function debug($message)
 {
     echo "<font color='red'>$message</font><br>";
@@ -85,38 +93,56 @@ function getFullUrl(string $relativeUrl): ?string
     } // if
 }
 
-// Main
+// --- Main ---
 $URL = "";
+$path = null; // Initialize $path to null
 
 if (isset($_GET['url'])) {
     $URL = $_GET['url'];
 
-    $fullURL = getFullUrl($URL);
-    // Validate that the url is in the same domain
-    $parsedUrl = parse_url($fullURL);
-
-    $host = $_SERVER['HTTP_HOST'];
-    if (!isset($parsedUrl['host']) || $parsedUrl['host'] !== $host) {
-        echo "Invalid URL";
-        exit();
+    // The 'url' parameter is expected to be the web-relative path starting with '/'
+    if (empty($URL) || $URL[0] !== '/') {
+        header("HTTP/1.0 400 Bad Request");
+        echo "Invalid URL format.";
+        exit;
     }
-    $path = $_SERVER['DOCUMENT_ROOT'] . $parsedUrl['path'];
+
+    // Construct the potential filesystem path by prepending the document root
+    $potentialPath = $fsWebRoot . $URL;
+    debug("fsWebRoot: $fsWebRoot");
+    debug("Potential Path: $potentialPath");
+
+
+    // Resolve the real path and perform security check
+    $realPath = $potentialPath;
+    debug("realPath: $realPath");
+
+    // Security check: Ensure the resolved path exists, is a file, and is within the document root
+    if ($realPath === false || !is_file($realPath) || strpos($realPath, $fsWebRoot) !== 0) {
+        header("HTTP/1.0 404 Not Found");
+        echo "File not found or access denied.";
+        exit;
+    }
+
+    // Use the validated and resolved path
+    $path = $realPath;
+
+    // Now, $path holds the correct absolute filesystem path (e.g., /opt/defaria.com/web/tmp/Something.mp3)
+    // And $URL holds the correct web-relative path (e.g., /web/tmp/Something.mp3)
+    // The rest of the script can proceed using $path for file operations and $URL for display/logging.
+
 } else {
     echo "No URL passed in";
     exit;
 } // if
-
-if (!file_exists($path)) {
-    header("HTTP/1.0 404 Not Found");
-    exit;
-}
 
 // Check if the download parameter is set in $_GET
 if (isset($download)) {
     // Set headers for file download.
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $_GET['download'] . '');
+    // The filename should come from the 'download' parameter, which downloaddir.php passes as the item name
+    header('Content-Disposition: attachment; filename="' . $_GET['download'] . '"');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
@@ -209,16 +235,15 @@ if (!$me) {
 } // if
 
 // Determine if it's a video or audio file based on extension
-$fileExtension = pathinfo($path, PATHINFO_EXTENSION);
+$fileExtension = pathinfo($URL, PATHINFO_EXTENSION); // Use $URL for extension check as it's the web path
 
 if (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg', 'mkv'])) {
-    header("Location: /php/videoplayback.php?video=$URL");
+    header("Location: /php/videoplayback.php?video=" . urlencode($URL)); // urlencode the parameter
 } elseif (in_array(strtolower($fileExtension), ['m4a', 'mp3', 'wav', 'ogg'])) {
-    header("Location: /php/audioplayback.php?audio=$URL");
+    header("Location: /php/audioplayback.php?audio=" . urlencode($URL)); // urlencode the parameter
 } else {
-    header("Location: $URL");
+    header("Location: " . $URL); // Redirect directly to the file URL
 } // if
 
 exit;
-
 ?>

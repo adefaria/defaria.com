@@ -6,12 +6,12 @@ const binaryImg = '/icons/binary.gif';
 const imageImg = '/icons/image2.gif';
 const dirImg = '/icons/dir.gif';
 const documentRoot = '/web/';
-const realDocumentRoot = '/opt/defaria.com';
-const tmpDirectory = '/opt/defaria.com/tmp';
+const realDocumentRoot = '/web';
+const tmpDirectory = '/web/tmp';
 
 function debug($message)
 {
-    echo "<font color='red'>$message</font><br>";
+    echo "<font color='red'>DEBUG:</font> $message</font><br>";
 }
 
 function determineType(string $filename): ?string
@@ -111,7 +111,7 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
   .download-button:hover {
     background-color: #0077b3;
   }
-   
+
   .icon {
     font-size: 10px;
   }
@@ -191,15 +191,15 @@ function downloadFile(url, filename) {
     document.body.removeChild(link);
 }
 </script>
-</head>    
+</head>
 EOF;
 
-    // Normalize the directory path
-    $directory = realpath($directory);
+    $directory = rtrim($directory, '/');
 
-    // Start the HTML output.
+    // Start the HTML output
     echo "<h2>Directory: $directoryName</h2>";
     echo "<table border='1'>";
+
     // Conditionally add the "Expires In" column header
     if ($directory === tmpDirectory) {
         echo "<thead><tr><th>Name</th><th class='type-column'>Type</th><th class='size-column'>Size</th><th class='expires-column'>Expires In</th><th class='actions-column'>Actions</th></tr></thead>";
@@ -242,7 +242,7 @@ EOF;
         }
 
         // Skip the index.php file.
-        if ($item == 'index.php') {
+        if ($item == 'index.php' || $item == 'playback.log') {
             continue;
         }
 
@@ -252,7 +252,8 @@ EOF;
         // Get file/directory information.
         $isDir = is_dir($fullPath);
         $size = $isDir ? '' : formatSize(filesize($fullPath));
-        $expiresIn = $isDir ? '' : timeUntilExpiration($fullPath); // Calculate expiration time
+        $expiresIn = $isDir ? '' : timeUntilExpiration($fullPath);
+
         $itemPath = substr($fullPath, strlen(realDocumentRoot));
         $dirPath = substr($fullPath, strlen(realDocumentRoot));
 
@@ -456,8 +457,8 @@ if (isset($_GET['dir'])) {
 } // if
 
 if (strpos($directory, documentRoot) !== 0) {
-    $directory = realpath(documentRoot . '/' . $directory);
-} // 
+    $directory = '/web' . $directory;
+}
 
 if ($directory === realpath(documentRoot)) {
     echo "Unable to browse the root directory";
