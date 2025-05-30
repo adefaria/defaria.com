@@ -257,7 +257,7 @@ EOF;
         $itemPath = substr($fullPath, strlen(realDocumentRoot));
         $dirPath = substr($fullPath, strlen(realDocumentRoot));
 
-        $openLink = "/php/monitorFile.php?url=" . urlencode($itemPath);
+        $openLink = "/php/monitorFile.php?u=" . urlencode($itemPath);
 
         echo "<tr>";
         echo "<td>";

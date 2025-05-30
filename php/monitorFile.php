@@ -97,10 +97,10 @@ function getFullUrl(string $relativeUrl): ?string
 $URL = "";
 $path = null; // Initialize $path to null
 
-if (isset($_GET['url'])) {
-    $URL = $_GET['url'];
+if (isset($_GET['u'])) {
+    $URL = $_GET['u'];
 
-    // The 'url' parameter is expected to be the web-relative path starting with '/'
+    // The 'u' parameter is expected to be the web-relative path starting with '/'
     if (empty($URL) || $URL[0] !== '/') {
         header("HTTP/1.0 400 Bad Request");
         echo "Invalid URL format.";
@@ -109,13 +109,9 @@ if (isset($_GET['url'])) {
 
     // Construct the potential filesystem path by prepending the document root
     $potentialPath = $fsWebRoot . $URL;
-    debug("fsWebRoot: $fsWebRoot");
-    debug("Potential Path: $potentialPath");
-
 
     // Resolve the real path and perform security check
     $realPath = $potentialPath;
-    debug("realPath: $realPath");
 
     // Security check: Ensure the resolved path exists, is a file, and is within the document root
     if ($realPath === false || !is_file($realPath) || strpos($realPath, $fsWebRoot) !== 0) {
