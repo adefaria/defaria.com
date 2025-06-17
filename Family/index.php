@@ -42,7 +42,7 @@
 
   <li><a href="/gallery/main.php?g2_view=core.ShowItem&g2_itemId=5844">Photo Gallery</a></li>
 
-  <li><a href="/blogs/Danielle">Cute Stories</a></li>
+  <li><a href="https://defaria-danielle.blogspot.com/">Cute Stories</a></li>
 
   </ul>
 
