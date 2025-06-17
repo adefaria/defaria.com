@@ -53,29 +53,15 @@
         <button id="refresh-button" class="action-button">Refresh Log</button>
         <button id="clear-log-button" class="action-button">Empty Log</button>
     </div>
-    <div id="log-container"><?php
-    $logFile = '/web/pm/playback.log';
-    // Check if the log file exists and is readable.
-    if (file_exists($logFile) && is_readable($logFile)) {
-        // Read the log file into an array of lines.
-        $lines = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        // Display all lines, each in a div for consistent handling with JS
-        foreach ($lines as $line) {
-            // Wrap each line in a div. Ensure htmlspecialchars is used.
-            echo "<div>" . htmlspecialchars($line) . "</div>";
-        }
-    } else {
-        echo "Error: Log file '$logFile' does not exist or is not readable.";
-    }
-    ?>
-    </div>
+    <div id="log-container"></div> <!-- Initially empty, content loaded by JS -->
 
     <script>
         const logContainer = document.getElementById('log-container');
         const refreshButton = document.getElementById('refresh-button');
         const clearLogButton = document.getElementById('clear-log-button');
         const linesInViewport = 25; // Desired number of text lines in the viewport
+        let displayedLineCount = 0; // Still useful for knowing current client state if needed
+        let eventSource = null;
 
         function calculateAndSetContainerHeight(container, numTextLines) {
             if (!container || numTextLines <= 0) return;
@@ -155,77 +141,133 @@
             }
         }
 
-        function fetchLogData() {
-            // Clear the log container immediately at the start of a refresh
-            logContainer.innerHTML = '';
+        function connectEventSource() {
+            if (eventSource) {
+                eventSource.close();
+            }
 
-            fetch(`/php/getLogData.php`, { cache: 'no-store' }) // Fetch all lines, ensuring no cache is used
-                .then(response => {
-                    if (!response.ok) {
-                        // Handle HTTP errors (e.g., 404, 500) before trying to parse JSON
-                        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json(); // Proceed to parse JSON only if response is ok
-                })
-                .then(data => {
-                    // logContainer is already cleared at this point.
-                    if (data.error) {
-                        console.error('Application error from getLogData.php:', data.error);
-                        logContainer.textContent = `Error loading log: ${data.error}`; // Display error
-                        return;
-                    }
+            eventSource = new EventSource('/php/logstream.php');
+            // Clear previous content and show connecting message
+            logContainer.innerHTML = '<div>Connecting to log stream...</div>';
+            displayedLineCount = 0;
 
-                    if (data.lines && data.lines.length > 0) {
-                        // Append new lines to the log container
-                        data.lines.forEach(line => {
-                            const lineElement = document.createElement('div');
-                            lineElement.textContent = line; // PHP already did htmlspecialchars
-                            logContainer.appendChild(lineElement);
-                        });
-                    } else {
-                        // If no lines and no error, it means the log is empty.
-                        // logContainer is already empty, which is correct.
-                    }
-                })
-                .catch(error => {
-                    // Catches network errors, HTTP errors thrown above, or JSON parsing errors
-                    console.error('Failed to fetch or process log data:', error);
-                    logContainer.textContent = `Failed to load log data. Error: ${error.message}`;
-                })
-                .finally(() => {
-                    // Always scroll to bottom after attempting to fetch and process data
-                    scrollToBottom(logContainer);
-                });
+            eventSource.onopen = function () {
+                console.log("SSE Connection opened.");
+                // Server will send initial log state via 'logupdate' event with type 'full_log'
+            };
+
+            eventSource.addEventListener('logupdate', function (event) {
+                const data = JSON.parse(event.data);
+                handleLogData(data);
+            });
+
+            eventSource.onerror = function (err) {
+                console.error("EventSource failed:", err);
+                let message = '<div>Connection to log stream lost.';
+                if (eventSource.readyState === EventSource.CONNECTING) {
+                    message += ' Attempting to reconnect...</div>';
+                } else if (eventSource.readyState === EventSource.CLOSED) {
+                    message = '<div>Connection to log stream closed. Please refresh manually or check server.</div>';
+                }
+                // Avoid appending multiple error messages if already showing one
+                if (!logContainer.innerHTML.includes("Connection to log stream lost") && !logContainer.innerHTML.includes("Connection to log stream closed")) {
+                    logContainer.innerHTML += message;
+                }
+            };
         }
 
-        async function clearLogFile() {
+        function handleLogData(data) {
+            if (!data || !data.type) {
+                console.warn("Received malformed data from SSE:", data);
+                return;
+            }
+
+            // Clear "Connecting..." or "Log is empty" message if it's the only thing there
+            if (logContainer.children.length === 1 &&
+                (logContainer.firstChild.textContent.startsWith('Connecting') || logContainer.firstChild.textContent.startsWith('Log is currently empty'))) {
+                logContainer.innerHTML = '';
+            }
+
+            switch (data.type) {
+                case 'full_log':
+                case 'truncated':
+                    logContainer.innerHTML = ''; // Clear existing content
+                    if (data.lines && data.lines.length > 0) {
+                        data.lines.forEach(line => {
+                            const lineElement = document.createElement('div');
+                            lineElement.textContent = line;
+                            logContainer.appendChild(lineElement);
+                        });
+                        displayedLineCount = data.lines.length;
+                    } else {
+                        logContainer.innerHTML = `<div>${data.message || 'Log is currently empty.'}</div>`;
+                        displayedLineCount = 0;
+                    }
+                    scrollToBottom(logContainer);
+                    return;
+                case 'new_lines':
+                    if (data.lines && data.lines.length > 0) {
+                        data.lines.forEach(line => {
+                            const lineElement = document.createElement('div');
+                            lineElement.textContent = line;
+                            logContainer.appendChild(lineElement);
+                        });
+                        displayedLineCount += data.lines.length;
+                        scrollToBottom(logContainer);
+                    }
+                    return;
+                case 'log_cleared_or_missing':
+                    logContainer.innerHTML = `<div>${data.message || 'Log file cleared or is missing.'}</div>`;
+                    displayedLineCount = 0;
+                    return;
+                case 'log_moved_or_deleted':
+                case 'error': // Server-side errors from logstream.php
+                    logContainer.innerHTML += `<div style="color: red;">${data.message}</div>`;
+                    if (eventSource && data.type === 'error') eventSource.close(); // Stop retrying on fatal server error
+                    return;
+                default:
+                    console.warn("Unknown SSE event type:", data.type, data);
+            }
+        }
+
+        // Event Listeners and Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateAndSetContainerHeight(logContainer, linesInViewport);
+            connectEventSource();
+        });
+
+        refreshButton.addEventListener('click', () => {
+            // Reconnect to the SSE stream to get a fresh state
+            connectEventSource();
+        });
+
+        clearLogButton.addEventListener('click', async () => {
             if (!confirm('Are you sure you want to clear the log file? This action cannot be undone.')) {
                 return;
             }
+            // No need to stop EventSource, server should detect change and send update
             try {
                 const response = await fetch('/php/clearLog.php', { method: 'POST' });
                 const result = await response.json();
 
                 if (result.success) {
                     alert(result.message || 'Log file action completed.');
-                    fetchLogData(); // Refresh the log view to show it's empty
+                    logContainer.innerHTML = ''; // Manually clear on client
+                    displayedLineCount = 0;      // Reset count
                 } else {
                     alert('Error: ' + (result.error || 'Unknown error occurred while clearing log.'));
                 }
             } catch (error) {
                 console.error('Error calling clearLog.php:', error);
                 alert('Failed to communicate with the server to clear the log file. See console for details.');
+            } finally {
+                // Fetch current state (should be empty or new data if writes happened during clear)
+                fetchAndDisplayLog(true).then(() => {
+                    scrollToBottom(logContainer);
+                    startAutoRefresh(); // Resume polling
+                });
             }
-        }
-
-        // Initial scroll on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            calculateAndSetContainerHeight(logContainer, linesInViewport);
-            scrollToBottom(logContainer); // Scroll after initial PHP content is rendered and height is set
         });
-
-        refreshButton.addEventListener('click', fetchLogData);
-        clearLogButton.addEventListener('click', clearLogFile);
     </script>
 </body>
 
