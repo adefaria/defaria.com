@@ -185,7 +185,7 @@ function downloadFile(url, filename) {
 
     // Create a temporary link and trigger a click to start the download
     const link = document.createElement('a');
-    link.href = '/php/monitorFile.php?download="' + decodedFilename + '"&url=' + encodeURIComponent(url);
+    link.href = '/php/monitorFile.php?download="' + decodedFilename + '"&u=' + encodeURIComponent(url);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
