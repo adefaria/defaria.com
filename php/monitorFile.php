@@ -97,6 +97,11 @@ function getFullUrl(string $relativeUrl): ?string
 $URL = "";
 $path = null; // Initialize $path to null
 
+// Load the IP mapping
+$ipMapping = loadIpMapping($ipMappingFile);
+
+$displayValue = replaceIpWithText($IPAddr, $ipMapping);
+
 if (isset($_GET['u'])) {
     $URL = $_GET['u'];
 
@@ -148,15 +153,20 @@ if (isset($download)) {
 }
 
 $msg = '<html><body>';
-$msg .= "<h1>Somebody accessed $URL</h1>";
+
+$fullURL = getFullUrl($URL);
+
+if ($displayvalue == $IPAddr) {
+    $msg .= "<h1>Somebody accessed $URL</h1>";
+} else {
+    $msg .= "<h1>$displayValue accessed $URL</h1>";
+}
+
 $msg .= "<p>Full URL: $fullURL</p>";
 $msg .= "<p>Here's what I know about them:</p>";
 
 $me = false;
 $myip = '75.80.5.95';
-
-// Load the IP mapping
-$ipMapping = loadIpMapping($ipMappingFile);
 
 if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
     $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
@@ -166,13 +176,7 @@ if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
 
 foreach ($_SERVER as $key => $value) {
     if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
-        // Replace IP with text if available
-        if ($key == 'REMOTE_ADDR') {
-            $displayValue = replaceIpWithText($value, $ipMapping);
-        } else {
-            $displayValue = $value;
-        }
-        $msg .= "$key: $displayValue<br>";
+        $msg .= "$key: $value<br>";
 
         if ($key == 'REMOTE_ADDR') {
             // Skip me...
@@ -209,15 +213,21 @@ if (!$me) {
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     $headers .= "From: WebMonitor <WebMonitor@DeFaria.com>";
 
-    if ($download) {
-        $subject = "Somebody just downloaded $URL";
+    if ($displayValue == $IPAddr) {
+        $subject = "Somebody just ";
     } else {
-        $subject = "Somebody just accessed $URL";
+        $subject = "$displayValue just ";
+    } // if
+
+    if ($download) {
+        $subject .= "downloaded $URL";
+    } else {
+        $subject .= "accessed $URL";
     } // if
 
     // Replace IP address in the email subject and body with text from the mapping
-    $displayIP = replaceIpWithText($_SERVER["REMOTE_ADDR"], $ipMapping);
-    $subject = str_replace($_SERVER["REMOTE_ADDR"], $displayIP, $subject);
+    $displayIP = replaceIpWithText($IPAddr, $ipMapping);
+    $subject = str_replace($IPAddr, $displayIP, $subject);
     $msg = str_replace("REMOTE_ADDR: $_SERVER[REMOTE_ADDR]", "REMOTE_ADDR: $displayIP", $msg);
 
     mail("andrew@defaria.com", $subject, $msg, $headers);
