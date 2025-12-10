@@ -142,8 +142,9 @@ if (isset($download)) {
     // Set headers for file download.
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
-    // The filename should come from the 'download' parameter, which downloaddir.php passes as the item name
-    header('Content-Disposition: attachment; filename="' . $_GET['download'] . '"');
+    $filename = urldecode($_GET['download']);
+    $trimmedFilename = substr($filename, 1, -1);
+    header('Content-Disposition: attachment; filename="' . trim($trimmedFilename) . '"');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
