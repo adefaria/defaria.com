@@ -1,4 +1,27 @@
 <?php
+include "site-functions.php";
+
+// Handle Stop request
+if (isset($_POST['action']) && $_POST['action'] === 'cancel' && isset($_POST['download_id'])) {
+    $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['download_id']);
+    $tempDir = sys_get_temp_dir();
+    $pidFile = $tempDir . DIRECTORY_SEPARATOR . $id . '.pid';
+
+    if (file_exists($pidFile)) {
+        $pid = trim(file_get_contents($pidFile));
+        if (is_numeric($pid)) {
+            exec("kill -9 $pid");
+        }
+        @unlink($pidFile);
+    }
+
+    $files = glob($tempDir . DIRECTORY_SEPARATOR . $id . '_*');
+    foreach ($files as $file)
+        @unlink($file);
+
+    exit('Stopped');
+}
+
 // Handle POST request for downloading
 $error = null;
 $generatedCommand = null;
@@ -13,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
 
     // Temp directory and unique ID for this download
     $tempDir = sys_get_temp_dir();
-    $uniqId = uniqid('dl_', true);
+    $uniqId = isset($_POST['download_id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['download_id']) : uniqid('dl_', true);
 
     // Copy cookies to temp file to avoid permission errors when yt-dlp tries to update them
     $cookiesFile = $tempDir . DIRECTORY_SEPARATOR . $uniqId . '_cookies.txt';
@@ -61,7 +84,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
     $command = implode(' ', $cmdArgs);
 
     // Execute command
-    exec($command . ' 2>&1', $output, $returnVar);
+    // exec($command . ' 2>&1', $output, $returnVar);
+
+    // Use proc_open to allow interruption
+    $logFile = $tempDir . DIRECTORY_SEPARATOR . $uniqId . '.log';
+    $pidFile = $tempDir . DIRECTORY_SEPARATOR . $uniqId . '.pid';
+
+    $descriptors = [
+        0 => ['pipe', 'r'],
+        1 => ['file', $logFile, 'w'],
+        2 => ['file', $logFile, 'w']
+    ];
+
+    $process = proc_open($command, $descriptors, $pipes);
+
+    if (is_resource($process)) {
+        $status = proc_get_status($process);
+        file_put_contents($pidFile, $status['pid']);
+
+        while (true) {
+            $status = proc_get_status($process);
+            if (!$status['running'])
+                break;
+
+            if (!file_exists($pidFile)) {
+                // PID file removed by stop action
+                proc_terminate($process);
+                $returnVar = -1; // Cancelled
+                break;
+            }
+            usleep(200000);
+        }
+
+        if (file_exists($pidFile))
+            @unlink($pidFile);
+        if (!isset($returnVar))
+            $returnVar = $status['exitcode'];
+
+        proc_close($process);
+        $output = file_exists($logFile) ? file($logFile, FILE_IGNORE_NEW_LINES) : [];
+        @unlink($logFile);
+    } else {
+        $returnVar = 1;
+        $output = ["Failed to start process"];
+    }
 
     // Clean up temp cookies
     if (file_exists($cookiesFile)) {
@@ -133,7 +199,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         <?php endif; ?>
 
         <div id="processing">
-            <div class="spinner"></div> Processing... Please wait.
+            <div class="spinner"></div> Processing... Please wait.<br><br>
+            <button type="button" id="stop-button"
+                style="background-color: #d9534f; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px;">Stop
+                Download</button>
         </div>
 
         <?php if (!empty($generatedCommand)): ?>
@@ -150,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
                 <button type="submit" name="download_type" value="audio" id="download-audio">Download Audio</button>
             </div>
         </form>
+        <?php copyright(); ?>
     </div>
 
     <script>
@@ -161,6 +231,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
             input.value = token;
             this.appendChild(input);
 
+            var downloadId = 'dl_' + new Date().getTime() + '_' + Math.floor(Math.random() * 10000);
+            var inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'download_id';
+            inputId.value = downloadId;
+            this.appendChild(inputId);
+
+            document.getElementById('stop-button').setAttribute('data-id', downloadId);
+
             document.getElementById('processing').style.display = 'block';
 
             var pollTimer = window.setInterval(function () {
@@ -170,6 +249,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
                     document.cookie = 'download_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 }
             }, 500);
+        });
+
+        document.getElementById('stop-button').addEventListener('click', function () {
+            var id = this.getAttribute('data-id');
+            if (id && confirm('Stop the download?')) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'index.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('action=cancel&download_id=' + id);
+                document.getElementById('processing').style.display = 'none';
+                window.location.reload();
+            }
         });
     </script>
 
