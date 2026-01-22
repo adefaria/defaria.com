@@ -1,24 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR" CONTENT="Mozilla/4.04 [en] (WinNT; U) [Netscape]">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Birth Announcement</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="/css/Default.css">
-  <link rel="stylesheet" type="text/css" media="print" href="/css/Print.css">
-  <link rel="SHORTCUT ICON" href="https://defaria.com/favicon.ico" type="image/png">
-  <?php include "site-functions.php"?>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=2">
+
+  <?php include "../php/site-functions.php" ?>
+  <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
 </head>
-<body>
 
-<div class="heading">
-  <h1 align="center">Danielle Rosemary DeFaria</h1>
-  <h3 align="center">April 15, 1992</h3>
-</div>
+<body class="iframe-body">
 
-<div id="content">
-  <?php navigation_bar ()?>
+  <div class="content-container">
+    <div class="heading">
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Danielle Rosemary DeFaria</h1>
+    </div>
 
-  <p>This is Danielle's birth announcement that I wrote the night she
+    <p>This is Danielle's birth announcement that I wrote the night she
   was born:</p>
 
   <p><img src="Images/JustHoursOld.jpg" width="204" height="300"
@@ -173,9 +178,7 @@
   and, of course,<br>
   Danielle Rosemary DeFaria</p>
 
-  <?php copyright (1992);?>
-</div>
-
+  </div>
 </body>
 
 </html>

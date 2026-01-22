@@ -1,5 +1,5 @@
 <?php
-include "site-functions.php";
+include "../php/site-functions.php";
 
 // Handle Stop request
 if (isset($_POST['action']) && $_POST['action'] === 'cancel' && isset($_POST['download_id'])) {
@@ -200,63 +200,198 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Downloader (PHP)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>YouTube Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=2">
+    <style>
+        /* Specific Styles for YT Downloader */
+        .yt-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--google-red);
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        div.subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--google-blue);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button#download-video {
+            background-color: var(--google-blue);
+            color: white;
+        }
+
+        button#download-audio {
+            background-color: var(--google-green);
+            color: white;
+        }
+
+        .error {
+            background-color: rgba(234, 67, 53, 0.2);
+            border: 1px solid var(--google-red);
+            color: #ffcccc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .search-results ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .search-item {
+            background: #2a2a2a;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
+        }
+
+        .search-title {
+            font-weight: 500;
+            margin-right: 15px;
+            color: #fff;
+        }
+
+        #processing {
+            display: none;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--google-blue);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
 </head>
 
-<body>
-    <div class="container">
-        <h1>YouTube Downloader</h1>
-        <p>Powered by PHP</p>
+<body class="iframe-body">
 
-        <?php if (!empty($error)): ?>
-            <div class="error"><?= $error ?></div>
-        <?php endif; ?>
+    <div class="content-container">
+        <div class="yt-container">
+            <h1>YouTube Downloader</h1>
+            <div class="subtitle">Powered by PHP & yt-dlp</div>
 
-        <form action="index.php" method="post" id="download-form">
-            <input type="text" name="video_url" placeholder="Enter search string or YouTube Video Link" required>
-            <div class="buttons">
-                <button type="submit" name="download_type" value="video" id="download-video">Video</button>
-                <button type="submit" name="download_type" value="audio" id="download-audio">Audio</button>
+            <?php if (!empty($error)): ?>
+                <div class="error"><?= $error ?></div>
+            <?php endif; ?>
+
+            <form action="index.php" method="post" id="download-form">
+                <input type="text" name="video_url" placeholder="Enter search string or YouTube Video Link" required>
+                <div class="buttons">
+                    <button type="submit" name="download_type" value="video" id="download-video">Video</button>
+                    <button type="submit" name="download_type" value="audio" id="download-audio">Audio</button>
+                </div>
+            </form>
+
+            <div id="processing">
+                <div class="spinner"></div> <span id="processing-text">Processing... Please wait.</span><br><br>
+                <button type="button" id="stop-button"
+                    style="background-color: var(--google-red); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px;">Stop
+                    Download</button>
             </div>
-        </form>
 
-        <div id="processing">
-            <div class="spinner"></div> <span id="processing-text">Processing... Please wait.</span><br><br>
-            <button type="button" id="stop-button"
-                style="background-color: #d9534f; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px;">Stop
-                Download</button>
+            <?php if (!empty($generatedCommand)): ?>
+                <div class="success">
+                    <p><strong>Command Generated:</strong></p>
+                    <textarea readonly class="command-output"
+                        style="width: 100%; background: #222; color: #0f0; border: 1px solid #444; padding: 10px;"><?= htmlspecialchars($generatedCommand) ?></textarea>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($searchResults)): ?>
+                <div class="search-results">
+                    <h3>Search Results</h3>
+                    <ul>
+                        <?php foreach ($searchResults as $result): ?>
+                            <li class="search-item">
+                                <span class="search-title"><?= htmlspecialchars($result['title']) ?></span>
+                                <div class="buttons" style="flex-shrink: 0; margin: 0;">
+                                    <button type="button" id="download-video"
+                                        onclick="downloadFromSearch('https://www.youtube.com/watch?v=<?= $result['id'] ?>', 'video')">Video</button>
+                                    <button type="button" id="download-audio"
+                                        onclick="downloadFromSearch('https://www.youtube.com/watch?v=<?= $result['id'] ?>', 'audio')">Audio</button>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
         </div>
-
-        <?php if (!empty($generatedCommand)): ?>
-            <div class="success">
-                <p><strong>Command Generated:</strong></p>
-                <textarea readonly class="command-output"><?= htmlspecialchars($generatedCommand) ?></textarea>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!empty($searchResults)): ?>
-            <div class="search-results">
-                <h3>Search Results</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <?php foreach ($searchResults as $result): ?>
-                        <li
-                            style="background: #f4f4f4; margin: 5px 0; padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span
-                                style="font-weight: bold; flex: 1; margin-right: 10px; word-wrap: break-word;"><?= htmlspecialchars($result['title']) ?></span>
-                            <div class="buttons" style="flex-shrink: 0; margin: 0;">
-                                <button type="button" id="download-video"
-                                    onclick="downloadFromSearch('https://www.youtube.com/watch?v=<?= $result['id'] ?>', 'video')">Video</button>
-                                <button type="button" id="download-audio"
-                                    onclick="downloadFromSearch('https://www.youtube.com/watch?v=<?= $result['id'] ?>', 'audio')">Audio</button>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-
-        <?php copyright(); ?>
     </div>
 
     <script>
@@ -322,7 +457,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
             }
         }
     </script>
-
 </body>
 
 </html>

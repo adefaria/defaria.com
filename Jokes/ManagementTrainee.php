@@ -1,29 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR" CONTENT="Mozilla/4.04 [en] (WinNT; U) [Netscape]">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jokes: Management Trainee</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="/css/Default.css">
-  <link rel="stylesheet" type="text/css" media="print" href="/css/Print.css">
-  <link rel="SHORTCUT ICON" href="https://defaria.com/favicon.ico" type="image/png">
-  <?php include "site-functions.php"?>
-  <?php include "oneliner.php"?>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=2">
+
+  <?php include "../php/site-functions.php" ?>
+  <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
 </head>
-<body>
 
-<div class="heading">
-  <h1 class="centered">Jokes: Management Trainee</h1>
-  <div class="box">
-    <?php oneliner ("no")?>
-  </div>
-</div>
+<body class="iframe-body">
 
-<div id="content">
-  <?php navigation_bar ("yes")?>
+  <div class="content-container">
+    <div class="heading">
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Jokes: Management Trainee</h1>
+    </div>
 
-  <p>An Indian named Tom walks into a cafe with a shotgun in one hand
+    <p>An Indian named Tom walks into a cafe with a shotgun in one hand
   pulling a male buffalo with the other. He says to the waiter, "Me
   want coffee. "Sure chief, coming right up." He gets the Indian a
   tall mug of coffee. The Indian drinks the coffee down in one gulp,
@@ -40,7 +40,7 @@
   management position: Come in, drink coffee, shoot the bull, leave
   mess for others to clean up, disappear for rest of day."</p>
 
-  <?php copyright ();?>
-</div>
+  </div>
 </body>
+
 </html>

@@ -1,138 +1,161 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="verify-v1" content="4HQ9/7f2knFu9nL7tb3s4TPbozxnE2H7LPRj9txmtbk=" />
-  <title>Andrew DeFaria</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="/css/Default.css">
-  <link rel="stylesheet" type="text/css" media="print" href="/css/Print.css">
-  <link rel="SHORTCUT ICON" href="https://defaria.com/favicon.ico" type="image/png">
+<?php include 'includes/header.php'; ?>
+<?php // Shell Index - content load via iframe ?>
 
-  <!-- Google Analytics -->
-  <script src="https://www.google-analytics.com/urchin.js" type="text/javascript">
-  </script>
-  <script type="text/javascript">
-    _uacct = "UA-89317-1";
-    urchinTracker ();
-  </script>
-  <!-- Google Analytics -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="/" class="home-icon">
+      <img src="/Icons/NewHome.png" alt="Home" height="32" width="32">
+      <span class="brand-name">Andrew DeFaria</span>
+    </a>
+  </div>
 
-  <?php include "site-functions.php"?>
-  <?php include "oneliner.php"?>
-</head>
+  <!-- Search Widget -->
+  <div class="search-widget">
+    <form method="get" action="https://www.google.com/search" name="search">
+      <input type="hidden" name="domains" value="defaria.com">
+      <input type="hidden" name="sitesearch" value="defaria.com">
+      <input type="text" name="q" id="q" maxlength="255" placeholder="Search..." aria-label="Search">
+    </form>
+  </div>
 
-<body>
+  <div class="top-bar-right">
+    <!-- CheckAddress.js script -->
+    <script src="/maps/JavaScript/CheckAddress.js" type="text/javascript"></script>
 
-<div class="heading">
-  <h1 class="centered">Andrew DeFaria's Home Page</h1>
-  <div class="box">
-    <?php oneliner ("no")?>
+    <!-- Email Form -->
+    <form method="post" action="javascript:void(0);" name="address" onsubmit="return checkaddress(this, 'andrew');"
+      class="email-form">
+      <label for="email" class="email-label">Can you email me?</label>
+      <input type="text" id="email" name="email" value="Type your email address and hit return"
+        onfocus="if(this.value=='Type your email address and hit return') this.value='';"
+        onblur="if(this.value=='') this.value='Type your email address and hit return';" class="email-input-box">
+    </form>
   </div>
 </div>
 
-<div id="content">
-  <?php navigation_bar ()?>
+<div class="app-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <a href="#personal" class="tab-btn" id="tab-personal">Personal</a>
+    <a href="#professional" class="tab-btn" id="tab-professional">Professional</a>
+    <a href="#music" class="tab-btn" id="tab-music">Music</a>
+    <a href="#projects" class="tab-btn" id="tab-projects">Projects</a>
+    <?php if (isset($_GET['show_hidden']) && $_GET['show_hidden'] == '1'): ?>
+      <a href="#hidden" class="tab-btn" id="tab-hidden">Hidden</a>
+    <?php endif; ?>
+  </nav>
 
-  <h2>About me</h2>
-  <p>Hello, my name is Andrew DeFaria. Welcome to my little corner of
-  the internet.</p>
-
-  <p>Well I'm still in California. After having travelled to Dallas, Phoenix,
-  Seattle, Reston and after reminding myself how much I didn't like the East
-  coast I'm back in good ole San Jose, California! Enjoying the climate,
-  mountains and wine. But San Jose didn't last and I finally made it down to
-  beautiful San Diego! And I'm loving it! I'm 2 miles from the beach, which
-  is great, there's plenty of interesting hiking, lovely weather and a great
-  new contract.</p>
-
-  <p>Before that I moved across the country to Reston, VA to take up a
-  contract with Fannie Mae. Alas, after a few weeks the contract
-  lost its funding.</p>
-
-  <p>Prior to that it was off to the <i>Great White North</i> I
-  guess - really the Pacific Northwest. I've taken a contract in
-  Seattle and am moving up there for 2010. New year - new place.</p>
-
-  <p>I also managed to upgrade my car to a brand new <a
-  href="/gallery/index.php/Corvette/Vette_at_Lost_Dog_Trail.jpg">2008
-  Chevy Corvette</a>! That's all the pictures I have of it so far as I
-  lost my good camera and only have my cell phone camera. The car is
-  wonderful with lots of power and creature comforts.</p>
-
-  <p>Last year I was working at Texas Instruments and moved from
-  California, where I lived for some 20 years, back to Dallas. It was
-  a lot cheaper to live there. I've had some <a
-  href="/blogs/Personal/archives/000614.html">health issues</a> of
-  late but am doing much better now.</p>
-
-  <p>Before moving to Dallas I was working at <a
-  href="http://www.hp.com/go/ilm">HP Information Lifecycle Management
-  Solutions</a> up in Pleasanton.</p>
-
-  <h2>Music</h2>
-
-  <p>And as the picture shows I'm a guitarist. Click on
-  the picture to see a photo album of my previous bands or see <a
-  href="/Band">Band</a> for more detail. <span class="standout">News
-  flash!</span> The cast of <a href="/Band"><i>Cast of
-  Shadows</i></a> are working on new stuff. More on that when it
-  arrives!</p>
-
-  <h2>Photos</h2>
-
-  <p>Of course one must have their <a href="/gallery">Photos</a>
-  online for those who want to take a peek at you and your
-  family. Pictures do help to get a better sense of another person. I
-  have a whole bunch of photos arranged into albums using <a
-  href="http://gallery.menalto.com">Gallery</a>
-  which is an open source <a href="http://php.net">PHP</a> package for
-  managing photos into albums on a web site.</p>
-
-  <p>Then there is the <a href="/Family">Family</a> section which is
-  basically about my daughter Danielle.</p>
-
-  <h2>Car</h2>
-
-  <p>At some point I need to fix up the section about my <a
-  href="/Vette">Corvette</a>. Actually most of it is about my first
-  vette and very little about my second one. Alas they are both gone
-  now!</p>
-
-  <p>But true to the phoenix name, from the ashes arises a new <a
-  href="/gallery/main.php?g2_view=core.ShowItem&g2_itemId=6564">Corvette</a>!
-  Alas it only highlight the need to further update the Corvette
-  section...</p>
-
-  <h2>Quicken 2000</h2>
-
-  <p>I used to run the <a href="/Quicken">Unofficial Quicken Web
-  Page</a> but haven't been updating that since around 2000. There is
-  still some good information in there though.</p>
-
-  <h2>MAPS - My own Spam filter</h2>
-
-  <p><a href="/maps">MAPS</a>, or <i>Mail Authorization and Permission
-  System</i>, is my email filtering system. I get a <b>lot</b> of email -
-  typically about 5000 emails a week! - and only about 1% of it is
-  email that I want. Being bombarded by spam like that makes one
-  protect themselves. MAPS will eventually be available for anybody to
-  use but is currently still in development. Stay tuned...</p>
-
-  <h2>Jokes</h2>
-
-  <p><a href="/Jokes">Jokes</a> is just a section where I can put
-  together various lists of jokes and funnies that I've found over the
-  years.</p>
-
-  <h2>Blogging</h2>
-
-  <p>Also, I'm into web logging and learning <span
-  class="standout">Cascading Style Sheets</span> so check out my <a
-  href="/blogs">Weblogs</a>...</p>
-
-  <?php copyright ("1960");?>
+  <!-- Main Content -->
+  <main class="main-content" style="padding: 0; display: flex; flex-direction: column;">
+    <iframe id="content-frame" name="content-frame" src="personal.php"
+      style="width: 100%; flex: 1; border: none; height: calc(100vh - 60px);"></iframe>
+  </main>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const iframe = document.getElementById('content-frame');
+    const tabs = document.querySelectorAll('.tab-btn');
+
+    function activateTab(hash) {
+      // Normalize hash (remove #)
+      // Default to 'personal' if empty
+      const route = hash ? hash.substring(1) : 'personal';
+
+      // Map route to file
+      const page = route + '.php';
+
+      // Update Iframe
+      // Check if we need to update src to avoid reload loops
+      // We must check the ACTUAL content location, not just the stale src attribute.
+      let currentPath = '';
+      try {
+        currentPath = iframe.contentWindow.location.pathname;
+      } catch (e) {
+        // Cross-origin or not loaded yet. Fallback to src.
+        currentPath = iframe.src;
+      }
+
+      // If strict match fails, or if the content has drifted (e.g. navigation to contact.php)
+      // Note: page is like 'personal.php'. pathname might be '/personal.php'
+      if (!iframe.src.endsWith(page) || (currentPath && !currentPath.endsWith(page))) {
+        iframe.src = page;
+      }
+
+      // Update Active Tab UI
+      tabs.forEach(tab => {
+        const tabHash = tab.getAttribute('href').substring(1);
+        if (tabHash === route) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+
+        // Add Click Listener for Reset
+        // Remove old listener if any to avoid duplicates? 
+        // Better: do this outside activateTab or ensure idempotency. 
+        // Doing it outside is better.
+      });
+    }
+
+    // Handle Tab Clicks
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const hash = tab.getAttribute('href');
+        // If current hash matches clicked hash, force reload
+        if (window.location.hash === hash) {
+          e.preventDefault(); // Prevent default anchor jump
+          activateTab(hash); // Retrieve default page
+          // Force iframe src update even if endsWith matches?
+          // activateTab uses check: if (!iframe.src.endsWith(page))
+          // If we are on personal.php via contact.php click, src is contact.php on DOM?
+          // If we are on contact.php: src="contact.php"
+          // We click Personal (#personal) -> activateTab('#personal')
+          // page = 'personal.php'
+          // src ends with contact.php -> logic sets src = personal.php
+          // So logic should work IF hashchange fires. 
+          // If hash is SAME, hashchange doesn't fire.
+          // So this click handler is NECESSARY.
+
+          // One catch: activateTab relies on implicit check. 
+          // If src ALREADY matches page (e.g. personal.php) and we want to RELOAD?
+          // User said: "if I click on the Personal tab again I expect to get the personal cards displayed".
+          // If we are on Contact, src is contact.php. activateTab will switch it.
+          // So calling activateTab(hash) here works.
+
+          // But wait, activateTab is defined above.
+        }
+      });
+    });
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => {
+      activateTab(window.location.hash);
+    });
+
+    // Initial Load
+    activateTab(window.location.hash);
+
+    // Update Footer from Iframe
+    iframe.addEventListener('load', () => {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const meta = iframeDoc.querySelector('meta[name="last-modified"]');
+        if (meta) {
+          const date = meta.getAttribute('content');
+          const footerDate = document.getElementById('footer-mod-date');
+          if (footerDate) {
+            footerDate.textContent = 'This page was last modified: ' + date;
+          }
+        }
+      } catch (e) {
+        console.log('Cross-origin iframe access restricted or other error.');
+      }
+    });
+  });
+</script>
+
+<?php include 'includes/footer.php'; ?>
 </body>
+
 </html>

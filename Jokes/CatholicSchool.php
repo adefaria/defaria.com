@@ -1,29 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR" CONTENT="Mozilla/4.04 [en] (WinNT; U) [Netscape]">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jokes: Catholic School</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="/css/Default.css">
-  <link rel="stylesheet" type="text/css" media="print" href="/css/Print.css">
-  <link rel="SHORTCUT ICON" href="https://defaria.com/favicon.ico" type="image/png">
-  <?php include "site-functions.php"?>
-  <?php include "oneliner.php"?>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=2">
+
+  <?php include "../php/site-functions.php" ?>
+  <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
 </head>
-<body>
 
-<div class="heading">
-  <h1 class="centered">Jokes: Catholic School</h1>
-  <div class="box">
-    <?php oneliner ("no")?>
-  </div>
-</div>
+<body class="iframe-body">
 
-<div id="content">
-  <?php navigation_bar ("yes")?>
+  <div class="content-container">
+    <div class="heading">
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Jokes: Catholic School</h1>
+    </div>
 
-  <p>Little Tommy's parents had tried everything to help his math grade:
+    <p>Little Tommy's parents had tried everything to help his math grade:
   tutors, flash cards, "Hooked on Math," special learning centers,
   everything. Finally, they enrolled him in the local Catholic school.</p>
 
@@ -46,7 +46,7 @@
   <p>When I saw that guy out in the lobby nailed to a plus sign, I knew
   they weren't screwing around!"</p>
 
-  <?php copyright ();?>
-</div>
+  </div>
 </body>
+
 </html>

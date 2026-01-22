@@ -1,0 +1,555 @@
+:root {
+  --bg-color: #121212;
+  --surface-color: #1e1e1e;
+  --primary-color: #bb86fc;
+  --secondary-color: #03dac6;
+  --text-color: #e0e0e0;
+  --muted-color: #a0a0a0;
+
+  /* Google Colors */
+  --google-blue: rgb(66, 133, 244);
+  --google-red: rgb(234, 67, 53);
+  --google-yellow: rgb(251, 188, 5);
+  --google-green: rgb(52, 168, 83);
+  --google-purple: rgb(161, 66, 244);
+  /* For Hidden tab */
+
+  --sidebar-width: 80px;
+  --topbar-height: 60px;
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-fancy: 'Dancing Script', cursive;
+  --spacing-unit: 1rem;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: #fff;
+  margin-top: 0;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Layout Grid */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  margin-top: var(--topbar-height);
+}
+
+/* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar-height);
+  background-color: var(--surface-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* Align left */
+  width: auto;
+  /* Allow growth */
+  overflow: visible;
+  /* Show all content */
+  padding-right: 2rem;
+  /* Spacing from search */
+}
+
+.home-icon {
+  font-size: 1.2rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  /* Ensure no underline on the name */
+}
+
+.home-icon span {
+  display: none;
+}
+
+.brand-name {
+  display: block !important;
+  /* Force show */
+  font-family: var(--font-fancy);
+  font-size: 1.8rem;
+  color: #fff;
+  font-weight: 700;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .home-icon span {
+    display: none;
+  }
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-widget input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 300px;
+  /* Reduced from 400px */
+}
+
+.search-widget input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.email-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.email-label {
+  color: var(--muted-color);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.email-input-box {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 250px;
+  font-size: 0.9rem;
+}
+
+.email-input-box:focus {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Sidebar (Vertical Tabs) */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: #181818;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  position: fixed;
+  left: 0;
+  top: var(--topbar-height);
+  bottom: 0;
+  padding: 1rem 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.tab-btn {
+  display: block;
+  width: 50px;
+  min-height: 100px;
+  padding: 0.5rem 0.2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  /* Unrotated: TR/BR. Rotated: BL/TL (Visual Right -> Left?) */
+  /* Wait, user wants VISUAL LEFT. 
+     Rotated 180deg:
+     Top -> Bottom
+     Bottom -> Top
+     Left -> Right
+     Right -> Left
+     
+     If I want Visual Left:
+     I need Unrotated Right.
+     Unrotated Right is border-right and radius TR/BR (0 8px 8px 0).
+  */
+  color: var(--muted-color);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* Vertical Text */
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
+.tab-btn:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: none;
+  /* Was right: none */
+  width: 50px;
+  /* Keep consistent width */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  /* Flip shadow x? */
+  border-right-width: 4px;
+  border-right-style: solid;
+  /* Default fallback if specific colors don't match */
+  border-right-color: var(--primary-color);
+  color: #fff;
+}
+
+/* Tab Colors Rotation (Google Colors) - Specificity applied */
+/* 1: Blue */
+.tab-btn:nth-child(4n+1).active {
+  color: var(--google-blue);
+  border-right-color: var(--google-blue);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 2: Red */
+.tab-btn:nth-child(4n+2).active {
+  color: var(--google-red);
+  border-right-color: var(--google-red);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 3: Yellow */
+.tab-btn:nth-child(4n+3).active {
+  color: var(--google-yellow);
+  border-right-color: var(--google-yellow);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 4: Green */
+.tab-btn:nth-child(4n+4).active {
+  color: var(--google-green);
+  border-right-color: var(--google-green);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cards */
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.link-card {
+  background-color: var(--surface-color);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.link-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.link-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  /* Increased size for fancy font */
+  font-weight: 700;
+  font-family: var(--font-fancy);
+  /* Fancy Font */
+}
+
+/* Google Colors based on Tab */
+/* Personal: Blue */
+#tab-personal .link-card h3 {
+  color: var(--google-blue);
+}
+
+#tab-personal .link-card {
+  border-top: 3px solid var(--google-blue);
+}
+
+/* Business: Red */
+#tab-business .link-card h3 {
+  color: var(--google-red);
+}
+
+#tab-business .link-card {
+  border-top: 3px solid var(--google-red);
+}
+
+/* Music: Yellow */
+#tab-music .link-card h3 {
+  color: var(--google-yellow);
+}
+
+#tab-music .link-card {
+  border-top: 3px solid var(--google-yellow);
+}
+
+/* Projects: Green */
+#tab-projects .link-card h3 {
+  color: var(--google-green);
+}
+
+#tab-projects .link-card {
+  border-top: 3px solid var(--google-green);
+}
+
+.link-card p {
+  color: var(--muted-color);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Footer */
+footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  color: var(--muted-color);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    margin-top: var(--topbar-height);
+  }
+
+  .sidebar {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    top: auto;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0;
+    align-items: stretch;
+    background-color: var(--surface-color);
+  }
+
+  .tab-btn {
+    width: auto;
+    min-height: auto;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+
+    /* Reset vertical text for mobile */
+    writing-mode: horizontal-tb;
+    transform: none;
+
+    border-bottom: 3px solid transparent;
+  }
+
+  .tab-btn:hover {
+    width: auto;
+  }
+
+  .tab-btn.active {
+    width: auto;
+    border-left: none;
+    border-bottom-color: var(--primary-color);
+    box-shadow: none;
+
+    /* Mobile separate specific overrides if needed, or keeping base */
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 70px;
+  }
+
+  .top-bar-left {
+    width: auto;
+  }
+
+  /* Mobile overrides... */
+}
+
+/* Hidden: Purple */
+#tab-hidden .link-card h3 {
+  color: var(--google-purple);
+}
+
+#tab-hidden .link-card {
+  border-top: 3px solid var(--google-purple);
+}
+
+/* Override for Hidden Tab Button */
+.tab-btn[data-tab="tab-hidden"].active {
+  color: var(--google-purple);
+  border-right-color: var(--google-purple);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--surface-color);
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--muted-color);
+  font-size: 0.7rem;
+  z-index: 200;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.page-title {
+  text-align: center;
+  font-family: var(--font-fancy);
+  color: #ffffff;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  /* Added for better visibility */
+}
+
+/* Common Content Page Styles (Moved from contact.php) */
+.iframe-body {
+  background-color: var(--surface-color);
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content-container h2 {
+  color: var(--google-blue);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  font-family: var(--font-heading);
+}
+
+.content-container blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--google-blue);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.content-container .standout {
+  font-weight: bold;
+  color: var(--google-green);
+}
+
+.content-container address {
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.content-container a {
+  color: var(--google-blue);
+}
+
+/* Quotes List Rotating Colors */
+.quotes-list li {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.quotes-list li:nth-child(4n+1) {
+  color: var(--google-blue) !important;
+}
+
+.quotes-list li:nth-child(4n+2) {
+  color: var(--google-red) !important;
+}
+
+.quotes-list li:nth-child(4n+3) {
+  color: var(--google-yellow) !important;
+}
+
+.quotes-list li:nth-child(4n+4) {
+  color: var(--google-green) !important;
+}
