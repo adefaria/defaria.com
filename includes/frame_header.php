@@ -20,6 +20,8 @@
             padding-bottom: 80px;
             /* Ensure content is above footer */
             overflow-y: auto;
+            height: auto;
+            min-height: 0;
         }
 
         main.container {

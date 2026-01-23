@@ -67,8 +67,8 @@
 
   <!-- Main Content -->
   <main class="main-content" style="padding: 0; display: flex; flex-direction: column;">
-    <iframe id="content-frame" name="content-frame" src="personal.php"
-      style="width: 100%; flex: 1; border: none; height: calc(100vh - 60px);"></iframe>
+    <iframe id="content-frame" name="content-frame" src="welcome.php"
+      style="width: 100%; flex: 1; border: none;"></iframe>
   </main>
 </div>
 

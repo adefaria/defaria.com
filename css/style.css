@@ -77,8 +77,9 @@ a:hover {
 /* Layout Grid */
 .app-container {
   display: flex;
-  min-height: 100vh;
+  height: calc(100vh - var(--topbar-height));
   margin-top: var(--topbar-height);
+  overflow: hidden;
 }
 
 /* Top Bar */
@@ -572,32 +573,36 @@ footer {
 
 .quotes-list li:nth-child(4n+4) {
   color: var(--google-green) !important;
-}/* Theme Toggle Button */
+}
+
+/* Theme Toggle Button */
 .theme-toggle {
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s ease, color 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .theme-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="light"] .theme-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}.page-description {
-    text-align: center;
-    max-width: 800px;
-    margin: -1rem auto 2rem auto;
-    /* pulls it up closer to title, pushes content down */
-    color: var(--muted-color);
-    font-size: 1.1rem;
-    line-height: 1.5;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.page-description {
+  text-align: center;
+  max-width: 800px;
+  margin: -1rem auto 2rem auto;
+  /* pulls it up closer to title, pushes content down */
+  color: var(--muted-color);
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
