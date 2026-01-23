@@ -37,6 +37,7 @@
             else if (path.indexOf('professional.php') !== -1) hash = 'professional';
             else if (path.indexOf('music.php') !== -1) hash = 'music';
             else if (path.indexOf('projects.php') !== -1) hash = 'projects';
+            else if (path.indexOf('welcome.php') !== -1) hash = 'welcome';
 
             if (hash) {
                 window.location.replace('/#' + hash);

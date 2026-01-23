@@ -3,7 +3,7 @@
 
 <div class="top-bar">
   <div class="top-bar-left">
-    <a href="/" class="home-icon">
+    <a href="/#welcome" class="home-icon">
       <img src="/Icons/NewHome.png" alt="Home" height="32" width="32">
       <span class="brand-name">Andrew DeFaria</span>
     </a>
@@ -170,8 +170,8 @@
 
     function activateTab(hash) {
       // Normalize hash (remove #)
-      // Default to 'personal' if empty
-      const route = hash ? hash.substring(1) : 'personal';
+      // Default to 'welcome' if empty
+      const route = hash ? hash.substring(1) : 'welcome';
 
       // Map route to file
       let page = route + '.php';
