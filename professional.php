@@ -5,6 +5,10 @@
         color: var(--google-red);
     }
 
+    .page-title {
+        color: var(--google-red);
+    }
+
     .link-card {
         border-top: 3px solid var(--google-red);
     }
@@ -12,6 +16,11 @@
 
 <main class="container">
     <h1 class="page-title">Professional</h1>
+    <p class="page-description">This section focuses on my professional life. I am a Linux administrator who often
+        writes in Perl and performs Build and Release and Devops role for corporation. ClearSCM was my old corporation
+        where I focused on Clearcase and Clearquest. If you want to employ me check out my resume. Historical
+        information about me and computers is an interesting read. MAPS is my home grown spam filter that I've been
+        using since ~2001. CPAN Modules are coming and also Mobile MAPS - a mobile app for MAPS.</p>
     <div class="link-grid">
         <div class="link-card" onclick="window.open('/clearscm/index.php', '_self');">
             <h3>ClearSCM</h3>

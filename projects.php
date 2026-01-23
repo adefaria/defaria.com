@@ -3,12 +3,14 @@
 $project_links = [
     ['title' => 'MAPS', 'url' => '/maps/', 'desc' => 'Mail Authorization and Permission System (Spam Filter).'],
     ['title' => 'Upload', 'url' => 'https://upload.defariahome.com/file/upload', 'desc' => 'File upload utility.'],
-    ['title' => 'YouTube Download', 'url' => '/yt/', 'desc' => 'Download videos from YouTube.']
+    ['title' => 'YouTube Download', 'url' => '/yt/', 'desc' => 'Download videos from YouTube.'],
+    ['title' => 'Spleeter', 'url' => 'https://spleeter.defariahome.com', 'desc' => 'AI source separation tool.']
 ];
 ?>
 
 <main class="container">
     <h1 class="page-title">Projects</h1>
+    <p class="page-description">Contained here are various projects or utilities that I've been working on.</p>
     <!-- <p>Code, Utilities, and Tools.</p> -->
 
     <div class="link-grid">
@@ -16,7 +18,7 @@ $project_links = [
         <?php foreach ($project_links as $link): ?>
             <?php
             // Default target logic similar to music.php, but override specifically for these internal tools
-            $is_tool = in_array($link['title'], ['Upload', 'YouTube Download', 'MAPS']);
+            $is_tool = in_array($link['title'], ['Upload', 'YouTube Download', 'MAPS', 'Spleeter']);
             $target = $is_tool ? '_self' : '_blank';
             $is_external = ($target === '_blank');
             ?>
@@ -41,6 +43,10 @@ $project_links = [
 <style>
     /* Specific styling for Project cards */
     .link-card h3 {
+        color: var(--google-green);
+    }
+
+    .page-title {
         color: var(--google-green);
     }
 

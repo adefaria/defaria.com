@@ -27,6 +27,46 @@
             margin: 0 auto;
         }
     </style>
+    <script>
+        // Redirect standalone pages to App Shell
+        if (window.self === window.top) {
+            var path = window.location.pathname;
+            var hash = '';
+            if (path.indexOf('resume') !== -1) hash = 'resume';
+            else if (path.indexOf('personal.php') !== -1) hash = 'personal';
+            else if (path.indexOf('professional.php') !== -1) hash = 'professional';
+            else if (path.indexOf('music.php') !== -1) hash = 'music';
+            else if (path.indexOf('projects.php') !== -1) hash = 'projects';
+
+            if (hash) {
+                window.location.replace('/#' + hash);
+            }
+        }
+
+        // Apply theme immediately to prevent flash
+        (function () {
+            try {
+                // Try to get from parent first (most accurate if in sync)
+                var theme;
+                if (window.parent && window.parent.document) {
+                    theme = window.parent.document.documentElement.getAttribute('data-theme');
+                }
+
+                // Fallback to local storage or matching logic if standalone
+                if (!theme) {
+                    theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                }
+
+                if (theme) {
+                    document.documentElement.setAttribute('data-theme', theme);
+                }
+            } catch (e) {
+                // If cross-origin or other error, fallback to storage
+                var theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+        })();
+    </script>
 </head>
 
 <?php include_once __DIR__ . '/../php/site-functions.php'; ?>

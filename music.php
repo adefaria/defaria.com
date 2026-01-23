@@ -1,18 +1,20 @@
 <?php include 'includes/frame_header.php'; ?>
 <?php
 $music_links = [
-    ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Cast of Shadows', 'url' => '/Band/index.php', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
+    ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songbook/', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_blank'],
     ['title' => 'Bluegrass', 'url' => '/bluegrass/', 'desc' => 'Bluegrass Songbook.', 'target' => '_blank'],
-    ['title' => 'XMAS', 'url' => '/xmas/', 'desc' => 'Christmas Songbook.', 'target' => '_blank'],
-    ['title' => 'Spleeter', 'url' => 'https://spleeter.defariahome.com', 'desc' => 'AI source separation tool.', 'target' => '_blank']
+    ['title' => 'XMAS', 'url' => '/xmas/', 'desc' => 'Christmas Songbook.', 'target' => '_blank']
 ];
 ?>
 
 <main class="container">
     <h1 class="page-title">Music</h1>
-    <!-- <p>Bands, Songs, and Sound.</p> -->
+    <p class="page-description">Computers and music have always been my yin yang of my life. I play guitar, bass and
+        vocals. Cast of Shadows was my best band and Rock Ready is my current band. Songbook is a web based songbook
+        that uses Chordpro file format to organize my music and interface with the Songbook app on my Android Tablet.
+    </p>
 
     <div class="link-grid">
         <?php foreach ($music_links as $link): ?>
@@ -44,6 +46,10 @@ $music_links = [
 <style>
     /* Specific styling for Music cards if needed */
     .link-card h3 {
+        color: var(--google-yellow);
+    }
+
+    .page-title {
         color: var(--google-yellow);
     }
 

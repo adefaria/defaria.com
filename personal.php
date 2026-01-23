@@ -19,6 +19,9 @@ $personal_links = [
 
 <main class="container">
     <h1 class="page-title">Personal</h1>
+    <p class="page-description">These are some of my personal pages that have information, jokes and other interests
+        like cars. I also have a few blogs that I sometimes write my thoughts. Select a card for more or a tab for other
+        areas of my life.</p>
     <div class="link-grid">
         <?php foreach ($personal_links as $link): ?>
             <?php
@@ -46,6 +49,10 @@ $personal_links = [
 <style>
     /* Specific styling for Personal cards */
     .link-card h3 {
+        color: var(--google-blue);
+    }
+
+    .page-title {
         color: var(--google-blue);
     }
 

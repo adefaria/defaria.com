@@ -93,7 +93,8 @@ END;
 
   print <<<END
 $current_year - All rights reserved - <a href="$home/" target="_top">$author</a> &lt;<a
-href="mailto:$email">$email</a>&gt;
+href="mailto:$email">$email</a>&gt;<br>
+Website designed and programmed by Andrew DeFaria with the help of his AI friend - Gemini
 </footer>
 END;
 } // copyright

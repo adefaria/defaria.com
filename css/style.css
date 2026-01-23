@@ -23,6 +23,24 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --tab-hover-bg: rgba(255, 255, 255, 0.08);
+  --tab-active-bg: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --surface-color: #f5f5f5;
+  --text-color: #121212;
+  --muted-color: #5f6368;
+
+  /* Adjust shadows for light mode */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  --input-bg: rgba(0, 0, 0, 0.05);
+  --tab-hover-bg: rgba(0, 0, 0, 0.05);
+  --tab-active-bg: rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -42,7 +60,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  color: #fff;
+  color: var(--text-color);
   margin-top: 0;
 }
 
@@ -95,7 +113,7 @@ a:hover {
 
 .home-icon {
   font-size: 1.2rem;
-  color: #fff;
+  color: var(--text-color);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -112,7 +130,7 @@ a:hover {
   /* Force show */
   font-family: var(--font-fancy);
   font-size: 1.8rem;
-  color: #fff;
+  color: var(--text-color);
   font-weight: 700;
   margin-left: 0.5rem;
   white-space: nowrap;
@@ -131,11 +149,11 @@ a:hover {
 }
 
 .search-widget input {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--input-bg);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 0.5rem 1rem;
-  color: #fff;
+  color: var(--text-color);
   outline: none;
   transition: all 0.2s ease;
   width: 300px;
@@ -155,17 +173,18 @@ a:hover {
 
 .email-label {
   color: var(--muted-color);
+  /* Fixed Muted Color */
   font-size: 0.9rem;
   white-space: nowrap;
   font-weight: bold;
 }
 
 .email-input-box {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--input-bg);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 0.5rem 1rem;
-  color: #fff;
+  color: var(--text-color);
   outline: none;
   transition: all 0.2s ease;
   width: 250px;
@@ -179,7 +198,7 @@ a:hover {
 /* Sidebar (Vertical Tabs) */
 .sidebar {
   width: var(--sidebar-width);
-  background-color: #181818;
+  background-color: var(--surface-color);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   position: fixed;
   left: 0;
@@ -216,7 +235,8 @@ a:hover {
      I need Unrotated Right.
      Unrotated Right is border-right and radius TR/BR (0 8px 8px 0).
   */
-  color: var(--muted-color);
+  color: #a0a0a0;
+  /* Fixed Muted Color */
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 600;
@@ -230,12 +250,12 @@ a:hover {
 }
 
 .tab-btn:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  background-color: var(--tab-hover-bg);
 }
 
 .tab-btn.active {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--tab-active-bg);
   border-left: none;
   /* Was right: none */
   width: 50px;
@@ -246,7 +266,7 @@ a:hover {
   border-right-style: solid;
   /* Default fallback if specific colors don't match */
   border-right-color: var(--primary-color);
-  color: #fff;
+  color: var(--text-color);
 }
 
 /* Tab Colors Rotation (Google Colors) - Specificity applied */
@@ -254,28 +274,28 @@ a:hover {
 .tab-btn:nth-child(4n+1).active {
   color: var(--google-blue);
   border-right-color: var(--google-blue);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tab-active-bg);
 }
 
 /* 2: Red */
 .tab-btn:nth-child(4n+2).active {
   color: var(--google-red);
   border-right-color: var(--google-red);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tab-active-bg);
 }
 
 /* 3: Yellow */
 .tab-btn:nth-child(4n+3).active {
   color: var(--google-yellow);
   border-right-color: var(--google-yellow);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tab-active-bg);
 }
 
 /* 4: Green */
 .tab-btn:nth-child(4n+4).active {
   color: var(--google-green);
   border-right-color: var(--google-green);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tab-active-bg);
 }
 
 /* Main Content Area */
@@ -462,7 +482,7 @@ footer {
 .tab-btn[data-tab="tab-hidden"].active {
   color: var(--google-purple);
   border-right-color: var(--google-purple);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tab-active-bg);
 }
 
 .copyright {
@@ -482,7 +502,7 @@ footer {
 .page-title {
   text-align: center;
   font-family: var(--font-fancy);
-  color: #ffffff;
+  color: var(--text-color);
   font-size: 3rem;
   margin-bottom: 2rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -552,4 +572,32 @@ footer {
 
 .quotes-list li:nth-child(4n+4) {
   color: var(--google-green) !important;
+}/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}.page-description {
+    text-align: center;
+    max-width: 800px;
+    margin: -1rem auto 2rem auto;
+    /* pulls it up closer to title, pushes content down */
+    color: var(--muted-color);
+    font-size: 1.1rem;
+    line-height: 1.5;
 }
