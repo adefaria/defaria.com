@@ -24,6 +24,14 @@
             min-height: 0;
         }
 
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+                padding-bottom: 120px;
+                /* Nav (60) + Copyright (~30-40) + buffer */
+            }
+        }
+
         main.container {
             max-width: 1200px;
             margin: 0 auto;

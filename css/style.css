@@ -412,62 +412,154 @@ footer {
   .app-container {
     flex-direction: column;
     margin-top: var(--topbar-height);
+    /* Adjust height for mobile: 100vh - topbar - bottombar (approx 60px) */
+    height: calc(100vh - var(--topbar-height) - 60px);
   }
 
+  /* Top Bar Adjustments */
+  .top-bar {
+    padding: 0 1rem;
+    justify-content: space-between;
+  }
+
+  .top-bar-left {
+    padding-right: 0.5rem;
+  }
+
+  .brand-name {
+    font-size: 1.4rem;
+    /* Smaller font for mobile */
+    display: none !important;
+    /* Hide text on very small screens if needed, or keep? Let's hide text to save space for search */
+  }
+
+  /* Show brand name only if enough space, or maybe just Hide it to allow search bar? 
+     Let's keep it but hide if screen is very narrow, or rely on flexwrap.
+     Actually, let's hide the full name on mobile and show icon only, or use shorter name.
+     For now, let's hide it to make room for search. */
+  .brand-name {
+    display: none !important;
+  }
+
+  .home-icon span {
+    display: none;
+  }
+
+  .top-bar-right {
+    gap: 0.5rem;
+  }
+
+  /* Search Widget Mobile */
+  .search-widget input {
+    width: 150px;
+    /* Smaller search bar */
+    font-size: 0.9rem;
+  }
+
+  .email-form {
+    display: none;
+    /* Hide email form on mobile to save space? Or move to footer? Hidden for now as it takes too much space in top bar */
+  }
+
+  /* Sidebar -> Bottom Navigation */
   .sidebar {
     position: fixed;
     width: 100%;
-    height: auto;
+    height: 60px;
+    /* Fixed height for bottom bar */
     bottom: 0;
     top: auto;
+    left: 0;
     border-right: none;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     padding: 0;
-    align-items: stretch;
+    align-items: center;
     background-color: var(--surface-color);
+    z-index: 1000;
+    /* Ensure on top */
+    overflow-y: hidden;
   }
 
   .tab-btn {
-    width: auto;
+    width: 100%;
+    height: 100%;
     min-height: auto;
-    padding: 1rem;
-    text-align: center;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 0;
     border: none;
+    border-top: 3px solid transparent;
+    /* Indicator on top */
 
-    /* Reset vertical text for mobile */
+    /* Reset vertical text */
     writing-mode: horizontal-tb;
     transform: none;
 
-    border-bottom: 3px solid transparent;
+    font-size: 0.9rem;
   }
 
   .tab-btn:hover {
-    width: auto;
+    background-color: rgba(255, 255, 255, 0.05);
   }
 
   .tab-btn.active {
-    width: auto;
+    width: 100%;
     border-left: none;
-    border-bottom-color: var(--primary-color);
-    box-shadow: none;
-
-    /* Mobile separate specific overrides if needed, or keeping base */
+    /* Indicator on top for bottom bar */
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-right: none;
+    /* Remove desktop border */
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   }
+
+  /* Specific color overrides for active tabs on mobile (border-top) */
+  .tab-btn:nth-child(4n+1).active {
+    border-top-color: var(--google-blue);
+    border-right-color: transparent;
+  }
+
+  .tab-btn:nth-child(4n+2).active {
+    border-top-color: var(--google-red);
+    border-right-color: transparent;
+  }
+
+  .tab-btn:nth-child(4n+3).active {
+    border-top-color: var(--google-yellow);
+    border-right-color: transparent;
+  }
+
+  .tab-btn:nth-child(4n+4).active {
+    border-top-color: var(--google-green);
+    border-right-color: transparent;
+  }
+
+  /* Hidden tab */
+  .tab-btn[data-tab="tab-hidden"].active {
+    border-top-color: var(--google-purple);
+    border-right-color: transparent;
+  }
+
 
   .main-content {
     margin-left: 0;
-    margin-bottom: 70px;
+    /* No margin bottom needed as container height excludes bottom bar */
+    padding: 1rem;
+    /* Reduced padding */
   }
 
-  .top-bar-left {
-    width: auto;
+  /* Copyright adjustments */
+  .copyright {
+    bottom: 60px;
+    /* Above nav bar */
+    font-size: 0.6rem;
+    padding: 0.2rem;
   }
-
-  /* Mobile overrides... */
 }
 
 /* Hidden: Purple */
