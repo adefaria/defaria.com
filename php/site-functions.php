@@ -81,20 +81,13 @@ function copyright(
 
   $mod_time = date("F d Y @ g:i a", filemtime($this_file));
 
+  $year_str = ($start_year ? "$start_year - " : "") . $current_year;
+
   print <<<END
 <footer class="copyright">
-<span id="footer-mod-date">This page was last modified: $mod_time</span><br>
-Copyright &copy; 
-END;
-
-  if ($start_year != "") {
-    print "$start_year-";
-  } // if
-
-  print <<<END
-$current_year - All rights reserved - <a href="$home/" target="_top">$author</a> &lt;<a
-href="mailto:$email">$email</a>&gt;<br>
-Website designed and programmed by Andrew DeFaria with the help of his AI friend - Gemini
+<div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
+<div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
+<div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
 </footer>
 END;
 } // copyright

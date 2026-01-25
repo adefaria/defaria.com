@@ -14,7 +14,7 @@
     <form method="get" action="https://www.google.com/search" name="search">
       <input type="hidden" name="domains" value="defaria.com">
       <input type="hidden" name="sitesearch" value="defaria.com">
-      <input type="text" name="q" id="q" maxlength="255" placeholder="Search..." aria-label="Search">
+      <input type="text" name="q" id="q" maxlength="255" placeholder="Search my website..." aria-label="Search">
     </form>
   </div>
 
@@ -187,16 +187,19 @@
       // Check if we need to update src to avoid reload loops
       // We must check the ACTUAL content location, not just the stale src attribute.
       let currentPath = '';
+      let isCrossOrigin = false;
       try {
         currentPath = iframe.contentWindow.location.pathname;
       } catch (e) {
-        // Cross-origin or not loaded yet. Fallback to src.
-        currentPath = iframe.src;
+        // Cross-origin or not loaded yet.
+        // If we have a cross-origin error, we are typically on an external site (like Google Maps)
+        // So we definitely want to reload our local page.
+        isCrossOrigin = true;
       }
 
       // If strict match fails, or if the content has drifted (e.g. navigation to contact.php)
-      // Note: page is like 'personal.php'. pathname might be '/personal.php'
-      if (!iframe.src.endsWith(page) || (currentPath && !currentPath.endsWith(page))) {
+      // OR if we are cross-origin (map view)
+      if (isCrossOrigin || !iframe.src.endsWith(page) || (currentPath && !currentPath.endsWith(page))) {
         iframe.src = page;
       }
 

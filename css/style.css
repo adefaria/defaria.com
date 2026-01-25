@@ -555,10 +555,22 @@ footer {
 
   /* Copyright adjustments */
   .copyright {
-    bottom: 60px;
-    /* Above nav bar */
-    font-size: 0.6rem;
-    padding: 0.2rem;
+    position: relative;
+    /* Not fixed on mobile */
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: 2rem;
+    margin-bottom: 60px;
+    /* Buffer for nav bar */
+    font-size: 0.75rem;
+    padding: 1rem;
+    height: auto;
+    max-height: none;
+    line-height: 1.4;
+    background-color: var(--surface-color);
+    z-index: 10;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -698,3 +710,41 @@ footer {
   font-size: 1.1rem;
   line-height: 1.5;
 }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  /* Auto width for labels, remaining for values */
+  gap: 0.5rem 1.5rem;
+  /* Row gap, Col gap */
+  align-items: center;
+}
+
+
+[data-theme="dark"] .cpanel-logo {
+  filter: invert(1) hue-rotate(180deg);
+  /* Invert brightness and rotate hue to keep colors somewhat similar if needed, or just invert(1) for pure negative */
+  background: transparent !important;
+  /* Remove white background in dark mode if image allows, otherwise invert will turn white bg to black */
+}
+
+/* Wait, image has inline style background: white. Invert(1) on white bg makes it black. 
+   If user wants "inverse colors", maybe they mean the logo itself?
+   If I invert the whole element including background:
+   White bg -> Black bg.
+   Orange/Blue logo -> Inverted colors.
+   
+   If I remove background in dark mode:
+   If image is transparent PNG:
+     Logo colors invert.
+   If image is not transparent:
+     Background inverts too.
+   
+   Let's assume transparent PNG since it has style="background: white".
+   So removing background and inverting might be best?
+   Or just inverting the whole thing?
+   
+   User said "inverse the colors on the cPanel logo".
+   Let's try simple inversion first. But inline style has priority. 
+   So I used !important.
+*/
