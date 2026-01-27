@@ -86,76 +86,92 @@
 <BODY>
 
     <div class="content">
+        <div id="main-content-view">
 
-        <h1 class="fancy-title">Bottoms Up</h1>
+            <h1 class="fancy-title">Bottoms Up</h1>
 
-        <p>When asked the question, "What new talent is sweeping through the Bay Area club scene?", the band Bottoms
-            Up quickly comes to mind. To some, it's no surprise considering the strength
-            of this band's line-up. Former Cast of Shadows members Andy DeFaria and
-            Scott Dinn have teamed up with Steve Burgio and with Steve Sampson of The
-            Wave to form this high energy modern rock dance band.</p>
+            <p>When asked the question, "What new talent is sweeping through the Bay Area club scene?", the band Bottoms
+                Up quickly comes to mind. To some, it's no surprise considering the strength
+                of this band's line-up. Former Cast of Shadows members Andy DeFaria and
+                Scott Dinn have teamed up with Steve Burgio and with Steve Sampson of The
+                Wave to form this high energy modern rock dance band.</p>
 
-        <p>With each member boasting over 10 years stage experience and a list of credentials surpassing most
-            local cover acts, the fan base is strong and growing. Sampson's success
-            in The Wave has earned him credit as a supporting act for nationals such
-            as Richard Marx, Bad English, and The Tubes. On the home front, DeFaria
-            and Dinn have performed steadily throughout the Bay Area as leading members
-            of the well established Cast of Shadows, and have earned a following that
-            has held to this day.</p>
+            <p>With each member boasting over 10 years stage experience and a list of credentials surpassing most
+                local cover acts, the fan base is strong and growing. Sampson's success
+                in The Wave has earned him credit as a supporting act for nationals such
+                as Richard Marx, Bad English, and The Tubes. On the home front, DeFaria
+                and Dinn have performed steadily throughout the Bay Area as leading members
+                of the well established Cast of Shadows, and have earned a following that
+                has held to this day.</p>
 
-        <p>The music for Bottoms Up is consistent with the demands of today's club music scene and is dynamic
-            and strong.</p>
+            <p>The music for Bottoms Up is consistent with the demands of today's club music scene and is dynamic
+                and strong.</p>
 
-        <p>Check out our album produced from a cassette recording off the soundboard: <a
-                href="/php/downloaddir.php?dir=%2FMedia%2FBottoming+Out+in+Monterey" target="_blank">Bottoming Out in
-                Monterey</a>.</p>
+            <p>Check out our album produced from a cassette recording off the soundboard:
+                <a href="/php/downloaddir.php?dir=%2FMedia%2FBottoming+Out+in+Monterey"
+                    onclick="event.preventDefault(); document.getElementById('main-content-view').style.display='none'; document.getElementById('album-iframe-view').style.display='block';">
+                    Bottoming Out in Monterey
+                </a>.
+            </p>
 
-        <table class="band-table">
-            <tr>
-                <td>
-                    <div class="band-member">
-                        <img src="Images/andy.jpg" alt="Andrew DeFaria">
-                        <div class="band-info">
-                            <strong><a href="/" target="_top">Andrew DeFaria</a></strong><br>
-                            Guitar/Vocals<br>
-                            <small>Formally of <em>Cast of Shadows</em></small>
+            <table class="band-table">
+                <tr>
+                    <td>
+                        <div class="band-member">
+                            <img src="Images/andy.jpg" alt="Andrew DeFaria">
+                            <div class="band-info">
+                                <strong><a href="/" target="_top">Andrew DeFaria</a></strong><br>
+                                Guitar/Vocals<br>
+                                <small>Formally of <em>Cast of Shadows</em></small>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="band-member">
-                        <img src="Images/steves.jpg" alt="Steve Sampson">
-                        <div class="band-info">
-                            <strong>Steve Sampson</strong><br>
-                            Keyboards/Vocals<br>
-                            <small>Formally of <em>The Wave</em><br>Currently in <em>Dig This</em></small>
+                    </td>
+                    <td>
+                        <div class="band-member">
+                            <img src="Images/steves.jpg" alt="Steve Sampson">
+                            <div class="band-info">
+                                <strong>Steve Sampson</strong><br>
+                                Keyboards/Vocals<br>
+                                <small>Formally of <em>The Wave</em><br>Currently in <em>Dig This</em></small>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="band-member">
-                        <img src="Images/steveb.jpg" alt="Steve Burgio">
-                        <div class="band-info">
-                            <strong>Steve Burgio</strong><br>
-                            Bass/Vocals<br>
-                            <small>Formally of <em>Nervus Rexx</em></small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="band-member">
+                            <img src="Images/steveb.jpg" alt="Steve Burgio">
+                            <div class="band-info">
+                                <strong>Steve Burgio</strong><br>
+                                Bass/Vocals<br>
+                                <small>Formally of <em>Nervus Rexx</em></small>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="band-member">
-                        <img src="Images/scott.jpg" alt="Scott Dinn">
-                        <div class="band-info">
-                            <strong><a href="http://www.webthumper.com" target="_blank">Scott Dinn</a></strong><br>
-                            Drums/Vocals<br>
-                            <small>Formally of <em>Cast of Shadows</em></small>
+                    </td>
+                    <td>
+                        <div class="band-member">
+                            <img src="Images/scott.jpg" alt="Scott Dinn">
+                            <div class="band-info">
+                                <strong><a href="http://www.webthumper.com" target="_blank">Scott Dinn</a></strong><br>
+                                Drums/Vocals<br>
+                                <small>Formally of <em>Cast of Shadows</em></small>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                    </td>
+                </tr>
+            </table>
+
+        </div> <!-- End main-content-view -->
+
+        <!-- Iframe Content View (Full Page Replacement) -->
+        <div id="album-iframe-view" style="display: none; width: 100%; height: 80vh;">
+            <p><a href="#"
+                    onclick="event.preventDefault(); document.getElementById('album-iframe-view').style.display='none'; document.getElementById('main-content-view').style.display='block';">&larr;
+                    Back to Bottoms Up</a></p>
+            <iframe src="/php/downloaddir.php?dir=%2FMedia%2FBottoming+Out+in+Monterey"
+                style="width: 100%; height: 100%; border: 1px solid var(--outline-variant); border-radius: 8px; background-color: white;"
+                title="Bottoming Out in Monterey Album"></iframe>
+        </div>
 
     </div>
 

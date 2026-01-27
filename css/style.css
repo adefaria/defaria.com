@@ -476,7 +476,8 @@ footer {
     position: fixed;
     width: 100%;
     height: 60px;
-    bottom: 0;
+    bottom: 68px;
+    /* Reduced gap to touch the footer */
     left: 0;
     background-color: var(--surface-color);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -632,25 +633,7 @@ footer {
     /* Reduced padding */
   }
 
-  /* Copyright adjustments */
-  .copyright {
-    position: relative;
-    /* Not fixed on mobile */
-    bottom: auto;
-    left: auto;
-    right: auto;
-    margin-top: 2rem;
-    margin-bottom: 60px;
-    /* Buffer for nav bar */
-    font-size: 0.75rem;
-    padding: 1rem;
-    height: auto;
-    max-height: none;
-    line-height: 1.4;
-    background-color: var(--surface-color);
-    z-index: 10;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-  }
+
 }
 
 /* Hidden: Purple */
@@ -669,17 +652,53 @@ footer {
   background: var(--tab-active-bg);
 }
 
+/* Hide footer inside content frames (prevent double footer) */
+.content-frame .copyright {
+  display: none !important;
+}
+
+/* Shell Copyright styling */
+/* Shell Copyright styling - Global (Desktop & Mobile Unified) */
 .copyright {
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  box-sizing: border-box;
   background-color: var(--surface-color);
-  padding: 0.5rem;
+  padding: 0.3rem;
+  /* Reduced padding */
   text-align: center;
   color: var(--muted-color);
   font-size: 0.7rem;
-  z-index: 200;
+  z-index: 2002;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
 }
+
+.copyright p {
+  margin: 0;
+}
+
+/* Desktop-specific adjustments */
+@media (min-width: 769px) {
+  .copyright {
+    left: var(--sidebar-width);
+    /* Start after sidebar */
+    width: auto;
+    /* Fill remaining width */
+    padding-left: 0;
+    /* Reset padding if necessary */
+  }
+}
+
+
 
 .page-title {
   text-align: center;

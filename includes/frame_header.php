@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php date_default_timezone_set('America/Los_Angeles'); ?>
     <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
     <title>Andrew DeFaria</title>
     <link rel="icon" href="/Icons/Home.ico" type="image/x-icon">
@@ -12,7 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=3">
+    <link rel="stylesheet" href="/css/style.css?v=<?php echo time(); ?>">
     <style>
         body {
             background-color: transparent;
@@ -82,4 +83,4 @@
 
 <?php include_once __DIR__ . '/../php/site-functions.php'; ?>
 
-<body>
+<body class="content-frame">

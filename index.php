@@ -86,6 +86,9 @@
   </main>
 </div>
 
+<!-- Shell Footer -->
+<?php include 'includes/footer.php'; ?>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const iframe = document.getElementById('content-frame');
