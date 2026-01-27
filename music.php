@@ -4,17 +4,21 @@ $music_links = [
     ['title' => 'Cast of Shadows', 'url' => '/Band/index.php', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
     ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songbook/', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_blank'],
-    ['title' => 'Bluegrass', 'url' => '/bluegrass/', 'desc' => 'Bluegrass Songbook.', 'target' => '_blank'],
-    ['title' => 'XMAS', 'url' => '/xmas/', 'desc' => 'Christmas Songbook.', 'target' => '_blank']
+    ['title' => 'Bottoms Up', 'url' => '/Band/BottomsUp.php', 'desc' => 'From a cassette mix from the sound board, I produced this album of my Bottoms Up band called Bottoming out in Monterey']
 ];
 ?>
 
 <main class="container">
     <h1 class="page-title">Music</h1>
-    <p class="page-description">Computers and music have always been my yin yang of my life. I play guitar, bass and
-        vocals. Cast of Shadows was my best band and Rock Ready is my current band. Songbook is a web based songbook
-        that uses Chordpro file format to organize my music and interface with the Songbook app on my Android Tablet.
-    </p>
+    <div class="music-intro">
+        <img src="/Images/Music/AndrewLiveBW.jpg" alt="Andrew playing guitar" class="intro-image left">
+        <p class="page-description">Computers and music have always been my yin yang of my life. I play guitar, bass and
+            vocals. Cast of Shadows was my best band and Rock Ready is my current band. Songbook is a web based songbook
+            that uses Chordpro file format to organize my music and interface with the Songbook app on my Android
+            Tablet.
+        </p>
+        <img src="/Images/Music/AndrewLiveColor.jpg" alt="Andrew playing guitar" class="intro-image right">
+    </div>
 
     <div class="link-grid">
         <?php foreach ($music_links as $link): ?>
@@ -27,14 +31,12 @@ $music_links = [
                 <h3>
                     <?php echo $link['title']; ?>
                     <?php if ($is_external): ?>
-                        <?php if ($is_external): ?>
-                            <svg class="external-icon"
-                                style="width: 0.8em; height: 0.8em; vertical-align: middle; fill: currentColor; margin-left: 0.3em;"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zm-2 16H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z" />
-                            </svg>
-                        <?php endif; ?>
+                        <svg class="external-icon"
+                            style="width: 0.8em; height: 0.8em; vertical-align: middle; fill: currentColor; margin-left: 0.3em;"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zm-2 16H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z" />
+                        </svg>
                     <?php endif; ?>
                 </h3>
                 <p><?php echo $link['desc']; ?></p>
@@ -44,6 +46,49 @@ $music_links = [
 </main>
 
 <style>
+    .music-intro {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .intro-image {
+        max-width: 250px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        object-fit: cover;
+    }
+
+    .page-description {
+        flex: 1;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        text-align: justify;
+    }
+
+    @media (max-width: 900px) {
+        .music-intro {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .intro-image {
+            max-width: 80%;
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            text-align: left;
+        }
+
+        /* Reorder for mobile: Image 1, Text, Image 2 defaults. 
+           If we want Image 1, Image 2, Text or Text, Image 1, Image 2? 
+           Default flow is fine: Image (Left), Text, Image (Right). 
+        */
+    }
+
     /* Specific styling for Music cards if needed */
     .link-card h3 {
         color: var(--google-yellow);
@@ -58,4 +103,4 @@ $music_links = [
     }
 </style>
 
-<?php // Footer handled by shell ?>
+<?php include 'includes/footer.php'; ?>

@@ -8,20 +8,14 @@ $personal_links = [
     ['title' => 'Family', 'url' => '/Family/', 'desc' => "Early on the Internet I posted things about my family and my daughter - they are available here."],
     ['title' => 'Jokes', 'url' => '/Jokes/', 'desc' => 'I collected a bunch of joke lines - you know the emails you used to get with a bunch of funny lines. I collected them here.'],
     ['title' => 'Quotes', 'url' => '/libertarian.php', 'desc' => "I'm a libertarian - OK sue me! You'll lose - Here's a bunch of libertarian quotes."],
-    ['title' => 'Hotroad - My Corvettes', 'url' => '/Vette/', 'desc' => "I like fast cars - here's a page about my first Corvette."],
-    // Blogs section separate? Or just included? Original had them in the same grid loop.
-    ['title' => 'Work Blog', 'url' => 'https://defaria-status.blogspot.com/', 'desc' => 'Blog about things I do at work or for clients'],
-    ['title' => 'MAPS Blog', 'url' => 'https://defaria-maps.blogspot.com/', 'desc' => 'Updates on the Mail Authorization and Permission System.'],
-    ['title' => 'Personal Blog', 'url' => 'https://defaria-personal.blogspot.com/', 'desc' => 'Personal thoughts and musings.'],
-    ['title' => 'General Blog', 'url' => 'https://defaria-general.blogspot.com/', 'desc' => 'General topics and commentary.']
+    ['title' => 'Hotroad - My Corvettes', 'url' => '/Vette/', 'desc' => "I like fast cars - here's a page about my first Corvette."]
 ];
 ?>
 
 <main class="container">
     <h1 class="page-title">Personal</h1>
     <p class="page-description">These are some of my personal pages that have information, jokes and other interests
-        like cars. I also have a few blogs that I sometimes write my thoughts. Select a card for more or a tab for other
-        areas of my life.</p>
+        like cars. Select a card for more or a tab for other areas of my life.</p>
     <div class="link-grid">
         <?php foreach ($personal_links as $link): ?>
             <?php
@@ -63,4 +57,4 @@ $personal_links = [
     /* Ensure container has some padding if needed, frame_header adds 2rem to body */
 </style>
 
-<?php // Footer handled by shell ?>
+<?php include 'includes/footer.php'; ?>

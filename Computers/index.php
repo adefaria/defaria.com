@@ -74,54 +74,60 @@
     <h2><a name="gear"></a>Gear</h2>
 
     <p>My site is hosted at my home through an always on
-      DSL connection. It used to run on my <a href="http://microsoft.com/windowsxp">Windows XP</a> box, a 5 year
+      DSL connection. It used to run on my Windows XP box, a 5 year
       old 450 Mhz machine that's still kicking and provided a lot of
       service. Being brought up on <span class="standout">Unix</span> I am
       more comfortable at programming in a <i>Unix mode</i>. As such I
-      have discovered and utilize <a href="http://cygwin.com">Cygwin</a>
+      have discovered and utilize <a href="https://cygwin.com" target="_blank">Cygwin</a>
       which is essentially <span class="standout">Linux</span> running
-      under Windows. With it I was able to run my web server (<a href="http://apache.org">Apache</a> running under <a
-        href="http://cygwin.com">Cygwin</a>), mail server (<a href="http://exim.org">Exim</a>), <a
-        href="http://www.proftpd.org">FTP</a> server, provide <a href="http://www.openssh.com">SSH</a> services as
+      under Windows. With it I was able to run my web server (<a href="https://httpd.apache.org"
+        target="_blank">Apache</a> running under <a href="https://cygwin.com" target="_blank">Cygwin</a>), mail server
+      (<a href="https://www.exim.org" target="_blank">Exim</a>), FTP server, provide <a href="https://www.openssh.com"
+        target="_blank">SSH</a> services as
       well as a very
-      functional development environment using <a href="http://www.gnu.org/software/bash/bash.html">Bash</a>, <a
-        href="http://perl.com">Perl</a>, <a href="http://xemacs.org">XEmacs</a>, <a href="http://www.vim.org">vi</a>,
+      functional development environment using <a href="https://www.gnu.org/software/bash/" target="_blank">Bash</a>, <a
+        href="https://www.perl.org" target="_blank">Perl</a>, <a href="https://www.xemacs.org"
+        target="_blank">XEmacs</a>, <a href="https://www.vim.org" target="_blank">vi</a>,
       etc. That, plus running my XP
-      Desktop, browsing the web (I use <a href="http://netscape.com">Netscape</a>
-      and now <a href="http://www.mozilla.org/products/firefox">Firefox</a> and <a
-        href="http://www.mozilla.org/products/thunderbird">Thunderbird</a>),
-      image processing, music production (<a href="http://www.steinberg.net/en/index.php">Cubase</a>, <a
-        href="http://www.cakewalk.com/">Cakewalk</a>, Media players and the
+      Desktop, browsing the web (I use Netscape
+      and now <a href="https://www.mozilla.org/en-US/firefox/" target="_blank">Firefox</a> and <a
+        href="https://www.thunderbird.net/" target="_blank">Thunderbird</a>),
+      image processing, music production (<a href="https://www.steinberg.net/" target="_blank">Cubase</a>, <a
+        href="https://www.cakewalk.com/" target="_blank">Cakewalk</a>, Media players and the
       like), providing my answering machine in a 24/7 environment really
       has been taxing my poor old 450 Mhz machine!
     </p>
 
-    <p>Next I offloaded most services to my <a href="http://www.mandrakesoft.com/">Mandrake 9.1 Linux</a>
+    <p>Next I offloaded most services to my Mandrake 9.1 Linux
       system. Not that the <span class="standout">Linux</span> box is any
       more powered - it's a 333 Mhz machine but doesn't seem that bogged
       down since it's running <span class="standout">Linux</span>. More
       things will move to <span class="standout">Linux</span> because it
       just a lot easier to program and much more stable. Still the <span class="standout">Linux</span> box is quite
       responsive. I'm also
-      starting to use <a href="http://mysql.com">MySQL</a> and am playing
-      with some weblog software from <a href="http://movabletype.org">MovableType</a>.</p>
+      starting to use <a href="https://www.mysql.com" target="_blank">MySQL</a> and am playing
+      with some weblog software from <a href="https://movabletype.org" target="_blank">MovableType</a>.</p>
 
-    <p>I've also set up <a href="http://gallery.sourceforge.net/">Gallery</a> which is a <a
-        href="http://php.net">PHP</a> web application for managing a <a href="/gallery">photo gallery</a> and, of
+    <p>I've also set up Gallery which is a <a href="https://www.php.net" target="_blank">PHP</a> web application for
+      managing a photo
+      gallery and, of
       course, requires that your
-      web server understands <a href="http://php.net">PHP</a>. I've been
-      getting into <a href="http://php.net">PHP</a> lately and have been
-      changing <a href="http://defaria.com/maps">MAPS</a> <a href="http://perl.com">Perl</a> based web pages with <a
-        href="http://php.net">PHP</a> based web pages. For one, since the
-      PHP intepreter is embedded in the <a href="http://httpd.apache.org">Apache web server</a> it's faster -
-      I'd bet that mod_perl would make the <a href="http://perl.com">Perl</a> versions as quick but <a
-        href="http://php.net">PHP</a> is more "web oriented" than <a href="http://perl.com">Perl</a> anyway.</p>
+      web server understands <a href="https://www.php.net" target="_blank">PHP</a>. I've been
+      getting into <a href="https://www.php.net" target="_blank">PHP</a> lately and have been
+      changing MAPS <a href="https://www.perl.org" target="_blank">Perl</a> based web pages with <a
+        href="https://www.php.net" target="_blank">PHP</a> based web pages. For one, since the
+      PHP intepreter is embedded in the <a href="https://httpd.apache.org" target="_blank">Apache web server</a> it's
+      faster -
+      I'd bet that mod_perl would make the <a href="https://www.perl.org" target="_blank">Perl</a> versions as quick but
+      <a href="https://www.php.net" target="_blank">PHP</a> is more "web oriented" than <a href="https://www.perl.org"
+        target="_blank">Perl</a> anyway.
+    </p>
 
-    <p>Finally I've installed <a href="http://www.ics.uci.edu/~ejw/authoring/">WebDAV</a> so I can
+    <p>Finally I've installed WebDAV so I can
       host Mozilla's <i>Remote Calendars</i> from my web site. The goal is
       to centralize my data, my life, from my house, under my control and
       be able to provide me with all of my stuff from wherever I am. Also,
-      I believe with <a href="http://www.ics.uci.edu/~ejw/authoring/">WebDAV</a> I will be
+      I believe with WebDAV I will be
       able to use things like Netscape's <i>publish</i> option so that I
       can even edit my web pages from anywhere.</p>
 
@@ -217,23 +223,25 @@
 
     <h2><a name="projects"></a>Current Projects</h2>
 
-    <h3><a href="http://quikiwiki.com">QuikiWiki</a></h3>
+    <h3><a href="https://quikiwiki.com" target="_blank">QuikiWiki</a></h3>
 
     <p>I wanted to get into and understand Wiki's, which are
       collaborative web sites or CMS (Content Management Systems), and
-      decided to set up a wiki for Quicken. Plus the name <a href="http://quikiwiki.com">QuikiWiki.com</a> was just too
+      decided to set up a wiki for Quicken. Plus the name <a href="https://quikiwiki.com"
+        target="_blank">QuikiWiki.com</a> was just too
       cute to
       pass up! Plus my <a href="/Quicken">Unofficial Quicken Web Page</a>
       (noticably absent from the menu on the left) was too stale to be of
       much use anymore. I don't want this to be too much of time drain on
       me. Wiki's have the potential of solving that problem because every
       account member has authorship rights for creating and maintaining
-      the pages. The wiki engine I choose was <a href="http://tikiwiki.org">TikiWiki</a> and it has a ton of features
-      like <a href="http://quikiwiki.com/tiki-forums.php">forums</a>, <a
-        href="http://quikiwiki.com/tiki-list_faqs.php">FAQs</a> and much,
+      the pages. The wiki engine I choose was <a href="https://tiki.org" target="_blank">TikiWiki</a> and it has a ton
+      of features
+      like <a href="https://quikiwiki.com/tiki-forums.php" target="_blank">forums</a>, <a
+        href="https://quikiwiki.com/tiki-list_faqs.php" target="_blank">FAQs</a> and much,
       much more. Check it out!</p>
 
-    <p>If you use Quicken then <a href="http://quikiwiki.com/tiki-register.php">sign up now</a> and
+    <p>If you use Quicken then <a href="https://quikiwiki.com/tiki-register.php" target="_blank">sign up now</a> and
       help us to build the best wiki for Quicken!</p>
 
     <h3>MAPS</h3>
@@ -245,12 +253,12 @@
       user. This dramatically cuts down on spam.</p>
 
     <p>I am currently working on porting <a href="/maps">MAPS</a> over
-      to use <a href="http://mysql.com">MySQL</a> database back end and to
+      to use <a href="https://www.mysql.com" target="_blank">MySQL</a> database back end and to
       spruce up the front end so this area is definitely in flux right
       now.</p>
 
     <p>MAPS is now running on my <span class="standout">Linux</span> box
-      using <a href="http://mysql.com">MySQL</a>. It is pretty functional
+      using <a href="https://www.mysql.com" target="_blank">MySQL</a>. It is pretty functional
       but not yet ready for prime time.
 
     <h3>Music</h3>
@@ -261,33 +269,34 @@
       computers so now we are writing new material and passing it around
       our computers using software as our studio.</p>
 
-    <p>I started putting together some <a href="http://php.net">PHP</a>
+    <p>I started putting together some <a href="https://www.php.net" target="_blank">PHP</a>
       code to browse my music collection. While this was an interesting
-      exercise, when looking for some <a href="http://php.net">PHP</a>
+      exercise, when looking for some <a href="https://www.php.net" target="_blank">PHP</a>
       code to get ID3 tags out of Windows Media Audio files (.wma as I use
       them more than .mp3 format because they are usually much smaller in
-      size) I came across <a href="http://www.turnstyle.com/andromeda">Andromeda</a> which does a
+      size) I came across <a href="https://www.turnstyle.com/andromeda" target="_blank">Andromeda</a> which does a
       much nicer job than I could do unless I spent a lot of my time doing
-      it. <a href="http://defaria.com/Music">My Music Collection</a> is
+      it. <a href="/Music">My Music Collection</a> is
       now online!</p>
 
     <h3>Photo Gallery</h3>
 
-    <p>I've also put a bunch of my photos into a photo <a href="/gallery">gallery</a>. <a
-        href="http://gallery.sourceforge.net/">Gallery</a> is open source
+    <p>I've also put a bunch of my photos into a photo gallery. Gallery is open source
       software that runs on my web server and uses PHP. As it seems to
       do a fine job on it's own I'll just use it. Maybe I'll tweak it
       some later...</p>
 
     <h3>Weblogging</h3>
 
-    <p>I've also installed weblogging software from <a href="http://www.movabletype.org/">Movable Type</a>. This
+    <p>I've also installed weblogging software from <a href="https://movabletype.org" target="_blank">Movable Type</a>.
+      This
       package is
-      written in <a href="http://perl.com">Perl</a> and also runs on my
+      written in <a href="https://www.perl.org" target="_blank">Perl</a> and also runs on my
       Linux web server. Blogging is not only a culture but can be
       tremendous time sync. As such I have not sunk that much time into it
       but I have sunk some time into it. There are lots of "plugins" and
-      tweaks for Movable Type and being written in <a href="http://perl.com">Perl</a> the community seems to be
+      tweaks for Movable Type and being written in <a href="https://www.perl.org" target="_blank">Perl</a> the community
+      seems to be
       encouraged
       to hack it. Maybe sometime when I get more time. Meantime I've
       basically used it for a part of Danielle's section of the web site

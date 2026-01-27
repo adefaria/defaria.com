@@ -55,4 +55,4 @@ $project_links = [
     }
 </style>
 
-<?php // Footer handled by shell ?>
+<?php include 'includes/footer.php'; ?>

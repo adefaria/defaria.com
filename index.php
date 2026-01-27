@@ -60,9 +60,8 @@
     <a href="#professional" class="tab-btn" id="tab-professional">Professional</a>
     <a href="#music" class="tab-btn" id="tab-music">Music</a>
     <a href="#projects" class="tab-btn" id="tab-projects">Projects</a>
-    <?php if (isset($_GET['show_hidden']) && $_GET['show_hidden'] == '1'): ?>
-      <a href="#hidden" class="tab-btn" id="tab-hidden">Hidden</a>
-    <?php endif; ?>
+    <a href="#blogs" class="tab-btn" id="tab-blogs">Blogs</a>
+    <a href="#misc" class="tab-btn" id="tab-misc">Misc</a>
   </nav>
 
   <!-- Main Content -->
@@ -108,7 +107,7 @@
       if (storedTheme) {
         return storedTheme;
       }
-      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      return 'light';
     }
 
     function setTheme(theme) {
@@ -276,7 +275,6 @@
   });
 </script>
 
-<?php include 'includes/footer.php'; ?>
 </body>
 
 </html>

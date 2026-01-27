@@ -19,7 +19,6 @@
             padding: 2rem;
             padding-bottom: 80px;
             /* Ensure content is above footer */
-            overflow-y: auto;
             height: auto;
             min-height: 0;
         }
@@ -65,7 +64,7 @@
 
                 // Fallback to local storage or matching logic if standalone
                 if (!theme) {
-                    theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                    theme = localStorage.getItem('theme') || 'light';
                 }
 
                 if (theme) {
@@ -73,7 +72,7 @@
                 }
             } catch (e) {
                 // If cross-origin or other error, fallback to storage
-                var theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                var theme = localStorage.getItem('theme') || 'light';
                 document.documentElement.setAttribute('data-theme', theme);
             }
         })();
