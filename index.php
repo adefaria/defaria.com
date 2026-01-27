@@ -55,14 +55,29 @@
 
 <div class="app-container">
   <!-- Sidebar -->
-  <nav class="sidebar">
-    <a href="#personal" class="tab-btn" id="tab-personal">Personal</a>
-    <a href="#professional" class="tab-btn" id="tab-professional">Professional</a>
-    <a href="#music" class="tab-btn" id="tab-music">Music</a>
-    <a href="#projects" class="tab-btn" id="tab-projects">Projects</a>
-    <a href="#blogs" class="tab-btn" id="tab-blogs">Blogs</a>
-    <a href="#misc" class="tab-btn" id="tab-misc">Misc</a>
-  </nav>
+  <!-- Sidebar Wrapper for Mobile Arrows -->
+  <div class="sidebar-wrapper">
+    <button class="nav-arrow left-arrow" id="scroll-left" aria-label="Scroll Left">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <nav class="sidebar" id="sidebar-nav">
+      <a href="#personal" class="tab-btn" id="tab-personal">Personal</a>
+      <a href="#professional" class="tab-btn" id="tab-professional">Professional</a>
+      <a href="#music" class="tab-btn" id="tab-music">Music</a>
+      <a href="#projects" class="tab-btn" id="tab-projects">Projects</a>
+      <a href="#blogs" class="tab-btn" id="tab-blogs">Blogs</a>
+      <a href="#misc" class="tab-btn" id="tab-misc">Misc</a>
+    </nav>
+    <button class="nav-arrow right-arrow" id="scroll-right" aria-label="Scroll Right">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
 
   <!-- Main Content -->
   <main class="main-content" style="padding: 0; display: flex; flex-direction: column;">
@@ -78,6 +93,27 @@
     const themeToggle = document.getElementById('theme-toggle');
     const sunIcon = themeToggle.querySelector('.sun-icon');
     const moonIcon = themeToggle.querySelector('.moon-icon');
+
+    // Mobile Sidebar Scrolling
+    const sidebar = document.getElementById('sidebar-nav');
+    const scrollLeftBtn = document.getElementById('scroll-left');
+    const scrollRightBtn = document.getElementById('scroll-right');
+
+    if (sidebar && scrollLeftBtn && scrollRightBtn) {
+      scrollLeftBtn.addEventListener('click', () => {
+        sidebar.scrollBy({
+          left: -100,
+          behavior: 'smooth'
+        });
+      });
+
+      scrollRightBtn.addEventListener('click', () => {
+        sidebar.scrollBy({
+          left: 100,
+          behavior: 'smooth'
+        });
+      });
+    }
 
     // Cookie Helpers
     function setCookie(name, value, days) {

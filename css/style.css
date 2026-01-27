@@ -408,6 +408,15 @@ footer {
   font-size: 0.85rem;
 }
 
+/* Sidebar Wrapper (Desktop: Invisible) */
+.sidebar-wrapper {
+  display: contents;
+}
+
+.nav-arrow {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
@@ -461,46 +470,102 @@ footer {
     /* Hide email form on mobile to save space? Or move to footer? Hidden for now as it takes too much space in top bar */
   }
 
-  /* Sidebar -> Bottom Navigation */
-  .sidebar {
+  /* Sidebar Wrapper -> Bottom Navigation Container */
+  .sidebar-wrapper {
+    display: flex;
     position: fixed;
     width: 100%;
     height: 60px;
-    /* Fixed height for bottom bar */
     bottom: 0;
-    top: auto;
     left: 0;
-    border-right: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 0;
-    align-items: center;
     background-color: var(--surface-color);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
-    /* Ensure on top */
-    overflow-y: hidden;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .tab-btn {
-    width: 100%;
-    height: 100%;
-    min-height: auto;
-    padding: 0;
+  /* Arrows */
+  .nav-arrow {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0;
+    width: 40px;
+    height: 100%;
+    background: transparent;
     border: none;
-    border-top: 3px solid transparent;
-    /* Indicator on top */
+    color: var(--muted-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1001;
+  }
+
+  .nav-arrow:active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+  }
+
+  /* Sidebar (Scrollable Container) */
+  .sidebar {
+    position: static;
+    /* Wrapper handles position */
+    width: auto;
+    /* Flexible width */
+    flex: 1;
+    /* Take remaining space */
+    height: 100%;
+    /* Fill wrapper height */
+    border: none;
+    /* Border on wrapper */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 0.5rem;
+    align-items: center;
+    background-color: transparent;
+    /* Wrapper has bg */
+    z-index: auto;
+    overflow-y: hidden;
+    overflow-x: auto;
+    /* Enable horizontal scroll */
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
+  }
+
+  .tab-btn {
+    width: auto;
+    /* Allow natural width */
+    min-width: auto;
+    /* Remove fixed min-width to reduce whitespace */
+    flex-shrink: 0;
+    /* Prevent shrinking */
+    height: 40px;
+    /* Reduced height for pill shape */
+    padding: 0 1rem;
+    /* Horizontal padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    /* Rounded corners for all tabs (hover state too) */
+    border: none;
+    /* Reset borders */
+    position: relative;
+    /* For pseudo-element */
 
     /* Reset vertical text */
     writing-mode: horizontal-tb;
     transform: none;
 
     font-size: 0.9rem;
+    color: var(--muted-color);
   }
 
   .tab-btn:hover {
@@ -508,41 +573,55 @@ footer {
   }
 
   .tab-btn.active {
-    width: 100%;
-    border-left: none;
-    /* Indicator on top for bottom bar */
-    border-top-width: 3px;
-    border-top-style: solid;
-    border-right: none;
-    /* Remove desktop border */
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    width: auto;
+    /* Reset width */
+    min-width: auto;
+    border: none;
+    /* Remove all borders */
+    box-shadow: none;
+    /* Remove shadow on mobile */
+    background-color: var(--tab-active-bg);
+    /* Make background visible */
+    color: var(--text-color);
+    border-radius: 20px;
+    /* Pill shape */
   }
 
-  /* Specific color overrides for active tabs on mobile (border-top) */
+  /* Rounded Accent Indicator */
+  .tab-btn.active::after {
+    display: none;
+  }
+
+  /* Specific color overrides for active tabs on mobile */
+  /* We want the text to take the color */
   .tab-btn:nth-child(4n+1).active {
-    border-top-color: var(--google-blue);
-    border-right-color: transparent;
+    border: none;
+    color: var(--google-blue);
+    background-color: rgba(66, 133, 244, 0.15);
+    /* Tinted background */
   }
 
   .tab-btn:nth-child(4n+2).active {
-    border-top-color: var(--google-red);
-    border-right-color: transparent;
+    border: none;
+    color: var(--google-red);
+    background-color: rgba(234, 67, 53, 0.15);
   }
 
   .tab-btn:nth-child(4n+3).active {
-    border-top-color: var(--google-yellow);
-    border-right-color: transparent;
+    border: none;
+    color: var(--google-yellow);
+    background-color: rgba(251, 188, 5, 0.15);
   }
 
   .tab-btn:nth-child(4n+4).active {
-    border-top-color: var(--google-green);
-    border-right-color: transparent;
+    border: none;
+    color: var(--google-green);
+    background-color: rgba(52, 168, 83, 0.15);
   }
 
   /* Hidden tab */
   .tab-btn[data-tab="tab-hidden"].active {
-    border-top-color: var(--google-purple);
-    border-right-color: transparent;
+    border: none;
   }
 
 
