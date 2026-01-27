@@ -5,8 +5,17 @@
   <div class="top-bar-left">
     <a href="/#welcome" class="home-icon">
       <img src="/Icons/NewHome.png" alt="Home" height="32" width="32">
-      <span class="brand-name">Andrew DeFaria</span>
     </a>
+    <div class="brand-text-col">
+      <a href="/#welcome" style="text-decoration: none;">
+        <span class="brand-name">Andrew DeFaria</span>
+      </a>
+      <span class="brand-tagline">
+        <a href="/Computers/" target="content-frame" id="link-computers">Computers</a> /
+        <a href="#music" id="link-music">Music</a> /
+        <a href="/Vette/" target="content-frame" id="link-cars">Cars</a>
+      </span>
+    </div>
   </div>
 
   <!-- Search Widget -->
@@ -257,7 +266,7 @@
       });
     }
 
-    // Handle Tab Clicks
+    // Handle Sidebar Tab Clicks
     tabs.forEach(tab => {
       tab.addEventListener('click', (e) => {
         const hash = tab.getAttribute('href');
@@ -265,27 +274,47 @@
         if (window.location.hash === hash) {
           e.preventDefault(); // Prevent default anchor jump
           activateTab(hash); // Retrieve default page
-          // Force iframe src update even if endsWith matches?
-          // activateTab uses check: if (!iframe.src.endsWith(page))
-          // If we are on personal.php via contact.php click, src is contact.php on DOM?
-          // If we are on contact.php: src="contact.php"
-          // We click Personal (#personal) -> activateTab('#personal')
-          // page = 'personal.php'
-          // src ends with contact.php -> logic sets src = personal.php
-          // So logic should work IF hashchange fires. 
-          // If hash is SAME, hashchange doesn't fire.
-          // So this click handler is NECESSARY.
-
-          // One catch: activateTab relies on implicit check. 
-          // If src ALREADY matches page (e.g. personal.php) and we want to RELOAD?
-          // User said: "if I click on the Personal tab again I expect to get the personal cards displayed".
-          // If we are on Contact, src is contact.php. activateTab will switch it.
-          // So calling activateTab(hash) here works.
-
-          // But wait, activateTab is defined above.
         }
       });
     });
+
+    // Handle Tagline Link Clicks (Sync Sidebar)
+    const linkComputers = document.getElementById('link-computers');
+    const linkCars = document.getElementById('link-cars');
+    const linkMusic = document.getElementById('link-music');
+
+    if (linkComputers) {
+      linkComputers.addEventListener('click', () => {
+        // Highlight Professional Tab (#professional)
+        tabs.forEach(t => t.classList.remove('active'));
+        const profTab = document.getElementById('tab-professional');
+        if (profTab) profTab.classList.add('active');
+        // Content loads via target="content-frame", so no need to touch iframe src here
+      });
+    }
+
+    if (linkCars) {
+      linkCars.addEventListener('click', () => {
+        // Highlight Personal Tab (#personal)
+        tabs.forEach(t => t.classList.remove('active'));
+        const persTab = document.getElementById('tab-personal');
+        if (persTab) persTab.classList.add('active');
+      });
+    }
+
+    if (linkMusic) {
+      linkMusic.addEventListener('click', (e) => {
+        // If already on #music, force reload via activateTab
+        if (window.location.hash === '#music') {
+          e.preventDefault();
+          activateTab('#music');
+        }
+        // Also ensure tab is highlighted (redundant if hash triggers, but safe)
+        tabs.forEach(t => t.classList.remove('active'));
+        const musicTab = document.getElementById('tab-music');
+        if (musicTab) musicTab.classList.add('active');
+      });
+    }
 
     // Listen for hash changes
     window.addEventListener('hashchange', () => {
@@ -293,7 +322,18 @@
     });
 
     // Initial Load
-    activateTab(window.location.hash);
+    // Check for 'url' query parameter first (e.g. from downloaddir redirect)
+    const urlParam = new URLSearchParams(window.location.search).get('url');
+    if (urlParam) {
+      // Load the specific URL requested
+      iframe.src = urlParam;
+      // Optionally try to highlight a relevant tab? 
+      // For /tmp/ items, maybe nothing active or 'misc'?
+      // Clean up URL to hide the ugly param? 
+      // history.replaceState(null, '', '/#' + urlParam); // logic might break if not matching expected hash format
+    } else {
+      activateTab(window.location.hash);
+    }
 
     // Update Footer from Iframe
     iframe.addEventListener('load', () => {

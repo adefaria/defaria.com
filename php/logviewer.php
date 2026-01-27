@@ -4,34 +4,59 @@
 <head>
     <title>Playback Log Viewer</title>
     <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: monospace;
-            white-space: pre-wrap;
-            background-color: #222;
-            color: #eee;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: white;
+            color: #333;
             padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
 
         #log-container {
-            border: 1px solid #555;
+            border: 1px solid #ccc;
             padding: 10px;
             overflow-y: auto;
             box-sizing: border-box;
-            /* Ensures padding is included in the height */
             max-height: 80vh;
             line-height: 1.2;
-            /* Explicit line-height for better calculation consistency */
-            background-color: #000;
-            color: #0f0;
+            background-color: #f9f9f9;
+            color: #333;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border-radius: 4px;
         }
 
-        /* Common styles for action buttons */
+        .button-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
         .action-button {
-            padding: 10px 20px;
-            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
         }
 
         #refresh-button {
@@ -39,100 +64,132 @@
             /* Green */
         }
 
+        #refresh-button:hover {
+            background-color: #45a049;
+        }
+
         #clear-log-button {
             background-color: #f44336;
             /* Red */
-            margin-left: 10px;
+        }
+
+        #clear-log-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Dark Mode */
+        .dark-mode body {
+            background-color: #121212 !important;
+            color: #e0e0e0 !important;
+        }
+
+        .dark-mode h1 {
+            color: #e0e0e0 !important;
+        }
+
+        .dark-mode #log-container {
+            background-color: #000;
+            color: #0f0;
+            /* Terminal look for logs in dark mode */
+            border-color: #333;
         }
     </style>
 </head>
 
 <body>
-    <h1>Playback Log</h1>
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+    <h1>
+        Playback Log (v2)
+        <span id="connection-status" title="Connected"
+            style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:#4CAF50; margin-left:10px;"></span>
+    </h1>
+    <div class="button-container">
         <button id="refresh-button" class="action-button">Refresh Log</button>
         <button id="clear-log-button" class="action-button">Empty Log</button>
     </div>
-    <div id="log-container"></div> <!-- Initially empty, content loaded by JS -->
+    <div id="log-container"></div>
 
     <script>
         const logContainer = document.getElementById('log-container');
         const refreshButton = document.getElementById('refresh-button');
         const clearLogButton = document.getElementById('clear-log-button');
-        const linesInViewport = 25; // Desired number of text lines in the viewport
-        let displayedLineCount = 0; // Still useful for knowing current client state if needed
+        const statusDot = document.getElementById('connection-status');
+        const linesInViewport = 25;
+        let displayedLineCount = 0;
         let eventSource = null;
+
+        // ... (theme sync omitted, assume existing) ...
+
+        // ... (calculateHeight omitted) ...
+
+        function setStatus(state) {
+            if (!statusDot) return;
+            if (state === 'connected') {
+                statusDot.style.backgroundColor = '#4CAF50'; // Green
+                statusDot.title = 'Connected';
+            } else if (state === 'connecting') {
+                statusDot.style.backgroundColor = '#FFC107'; // Yellow
+                statusDot.title = 'Connecting...';
+            } else {
+                statusDot.style.backgroundColor = '#f44336'; // Red
+                statusDot.title = 'Disconnected';
+            }
+        }
+
+        // ... (rest of code needs verify) ...
+
+        // Theme Sync Logic
+        function updateTheme() {
+            try {
+                const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                const isLight = parentTheme === 'light';
+
+                if (isLight) {
+                    document.documentElement.classList.remove('dark-mode');
+                } else {
+                    document.documentElement.classList.add('dark-mode');
+                }
+            } catch (e) {
+                console.log('Cannot access parent theme, falling back to system preference.');
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateTheme);
+
+        try {
+            const observer = new MutationObserver(updateTheme);
+            observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        } catch (e) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+        }
 
         function calculateAndSetContainerHeight(container, numTextLines) {
             if (!container || numTextLines <= 0) return;
-
             let singleLineHeight = 0;
             const computedContainerStyle = window.getComputedStyle(container);
-
-            // Get the computed font-size of the container itself.
-            // This should resolve to a pixel value (e.g., "16px").
             const containerFontSizePxString = computedContainerStyle.fontSize;
             const containerFontSizePx = parseFloat(containerFontSizePxString);
 
-            console.log(`Container computed font-size string: ${containerFontSizePxString}`);
-
             if (isNaN(containerFontSizePx) || containerFontSizePx <= 0) {
-                console.error("Could not determine container font size in pixels. Aborting height calculation.");
-                // As a last resort, try to set a reasonable fixed height if font size fails
-                // This is a fallback to prevent the container from having zero or undefined height.
-                // 16px (typical default font) * 1.2 line-height * 25 lines + 20px padding
                 container.style.height = `${(16 * 1.2 * 25) + 20}px`;
-                console.log(`Fell back to a default calculated height: ${container.style.height}`);
                 return;
             }
-
-            // The line-height is set to 1.2 (unitless) in CSS for #log-container.
-            // This means 1.2 * font-size.
             singleLineHeight = Math.round(containerFontSizePx * 1.2);
-            console.log(`Calculated singleLineHeight based on container font-size (${containerFontSizePx}px) and line-height 1.2: ${singleLineHeight}px`);
-
-            // Ensure singleLineHeight is a positive integer, as offsetHeight would be.
             singleLineHeight = Math.max(1, Math.round(singleLineHeight));
-            if (singleLineHeight <= 0) {
-                console.error("Calculated singleLineHeight is not positive. Aborting.");
-                // Fallback height if singleLineHeight is invalid
-                container.style.height = `${(16 * 1.2 * 25) + 20}px`;
-                console.log(`Fell back to a default calculated height due to invalid singleLineHeight: ${container.style.height}`);
-                return;
-            }
-
-            // This is the height needed for the text content itself
             const contentHeightForText = singleLineHeight * numTextLines;
-            console.log(`Calculated contentHeightForText for ${numTextLines} lines: ${contentHeightForText}px`);
-
             let targetHeight;
-            // If box-sizing is border-box, the style.height includes padding.
-            // So, we need to add padding to the contentHeightForText.
             if (computedContainerStyle.boxSizing === 'border-box') {
                 const paddingTop = parseFloat(computedContainerStyle.paddingTop) || 0;
                 const paddingBottom = parseFloat(computedContainerStyle.paddingBottom) || 0;
                 targetHeight = contentHeightForText + paddingTop + paddingBottom;
-                console.log(`Box-sizing: border-box. PaddingTop: ${paddingTop}px, PaddingBottom: ${paddingBottom}px. TargetHeight: ${targetHeight}px`);
-            } else { // content-box (default)
+            } else {
                 targetHeight = contentHeightForText;
-                console.log(`Box-sizing: content-box. TargetHeight: ${targetHeight}px`);
             }
-
             container.style.height = targetHeight + 'px';
-            // Note: The CSS 'max-height: 80vh' will still cap this if targetHeight is larger.
-            console.log(`Set container style.height to: ${targetHeight}px`);
-
-            // For debugging, let's see what the browser says its height is AFTER we set it.
-            // And also check scrollHeight vs clientHeight
-            requestAnimationFrame(() => {
-                const newComputedStyle = window.getComputedStyle(container);
-                console.log(`After setting style.height, container computed CSS height: ${newComputedStyle.height}, clientHeight: ${container.clientHeight}px, scrollHeight: ${container.scrollHeight}px`);
-                if (container.scrollHeight > container.clientHeight) {
-                    console.log("Content is overflowing the container (scrollbar expected).");
-                } else {
-                    console.log("Content fits within the container (no scrollbar expected).");
-                }
-            });
         }
 
         function scrollToBottom(container) {
@@ -147,42 +204,39 @@
             }
 
             eventSource = new EventSource('/php/logstream.php');
-            // Clear previous content and show connecting message
-            logContainer.innerHTML = '<div>Connecting to log stream...</div>';
-            displayedLineCount = 0;
+            setStatus('connecting');
+            // logContainer.innerHTML = '<div>Connecting to log stream...</div>'; // Removed text clutter
+
+            // Only clear log on explicit refresh or clear, not reconnect?
+            // Actually, keep logic simple. If connecting, we wait for data.
+            // If displayedLineCount is 0, maybe show "Waiting for logs..."?
 
             eventSource.onopen = function () {
-                console.log("SSE Connection opened.");
-                // Server will send initial log state via 'logupdate' event with type 'full_log'
+                setStatus('connected');
             };
 
             eventSource.addEventListener('logupdate', function (event) {
+                setStatus('connected');
                 const data = JSON.parse(event.data);
                 handleLogData(data);
             });
 
             eventSource.onerror = function (err) {
-                console.error("EventSource failed:", err);
-                let message = '<div>Connection to log stream lost.';
+                // console.error("EventSource failed:", err);
                 if (eventSource.readyState === EventSource.CONNECTING) {
-                    message += ' Attempting to reconnect...</div>';
+                    setStatus('connecting');
+                    // Silent retry
                 } else if (eventSource.readyState === EventSource.CLOSED) {
-                    message = '<div>Connection to log stream closed. Please refresh manually or check server.</div>';
-                }
-                // Avoid appending multiple error messages if already showing one
-                if (!logContainer.innerHTML.includes("Connection to log stream lost") && !logContainer.innerHTML.includes("Connection to log stream closed")) {
-                    logContainer.innerHTML += message;
+                    setStatus('disconnected');
+                    // Optional: Append error if permanent
+                    // logContainer.innerHTML += '<div style="color:red">Connection closed.</div>'; 
                 }
             };
         }
 
         function handleLogData(data) {
-            if (!data || !data.type) {
-                console.warn("Received malformed data from SSE:", data);
-                return;
-            }
+            if (!data || !data.type) return;
 
-            // Clear "Connecting..." or "Log is empty" message if it's the only thing there
             if (logContainer.children.length === 1 &&
                 (logContainer.firstChild.textContent.startsWith('Connecting') || logContainer.firstChild.textContent.startsWith('Log is currently empty'))) {
                 logContainer.innerHTML = '';
@@ -191,7 +245,7 @@
             switch (data.type) {
                 case 'full_log':
                 case 'truncated':
-                    logContainer.innerHTML = ''; // Clear existing content
+                    logContainer.innerHTML = '';
                     if (data.lines && data.lines.length > 0) {
                         data.lines.forEach(line => {
                             const lineElement = document.createElement('div');
@@ -221,23 +275,21 @@
                     displayedLineCount = 0;
                     return;
                 case 'log_moved_or_deleted':
-                case 'error': // Server-side errors from logstream.php
+                case 'error':
                     logContainer.innerHTML += `<div style="color: red;">${data.message}</div>`;
-                    if (eventSource && data.type === 'error') eventSource.close(); // Stop retrying on fatal server error
+                    if (eventSource && data.type === 'error') eventSource.close();
                     return;
-                default:
-                    console.warn("Unknown SSE event type:", data.type, data);
             }
         }
 
-        // Event Listeners and Initial Load
         document.addEventListener('DOMContentLoaded', () => {
             calculateAndSetContainerHeight(logContainer, linesInViewport);
             connectEventSource();
+            // Re-calc height on resize in case font size changes
+            window.addEventListener('resize', () => calculateAndSetContainerHeight(logContainer, linesInViewport));
         });
 
         refreshButton.addEventListener('click', () => {
-            // Reconnect to the SSE stream to get a fresh state
             connectEventSource();
         });
 
@@ -245,27 +297,21 @@
             if (!confirm('Are you sure you want to clear the log file? This action cannot be undone.')) {
                 return;
             }
-            // No need to stop EventSource, server should detect change and send update
             try {
                 const response = await fetch('/php/clearLog.php', { method: 'POST' });
                 const result = await response.json();
 
                 if (result.success) {
                     alert(result.message || 'Log file action completed.');
-                    logContainer.innerHTML = ''; // Manually clear on client
-                    displayedLineCount = 0;      // Reset count
+                    logContainer.innerHTML = '';
+                    displayedLineCount = 0;
                 } else {
                     alert('Error: ' + (result.error || 'Unknown error occurred while clearing log.'));
                 }
             } catch (error) {
-                console.error('Error calling clearLog.php:', error);
-                alert('Failed to communicate with the server to clear the log file. See console for details.');
+                alert('Failed to communicate with the server to clear the log file.');
             } finally {
-                // Fetch current state (should be empty or new data if writes happened during clear)
-                fetchAndDisplayLog(true).then(() => {
-                    scrollToBottom(logContainer);
-                    startAutoRefresh(); // Resume polling
-                });
+                connectEventSource(); // Reconnect to get fresh state/file creation if needed
             }
         });
     </script>

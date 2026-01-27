@@ -28,12 +28,17 @@ error_log("displayIP: {$displayIP}");
         body {
             margin: 0;
             overflow: hidden;
-            background-color: black;
+            background-color: white;
+            /* Changed from black as requested */
+            color: black;
+            font-family: sans-serif;
         }
 
         video {
             width: 100vw;
             object-fit: contain;
+            background-color: black;
+            /* Video frame itself can remain black or dark */
         }
 
         #resumeButton {
@@ -54,9 +59,13 @@ error_log("displayIP: {$displayIP}");
         echo $src; ?>
         Your browser does not support the video tag.
     </video>
+    <!-- Hidden resume button logic kept in JS just in case, though usually overlays handle this -->
+    <button id="resumeButton">Resume Playback</button>
+
     <script>
         const videoID = document.getElementById('video');
         const videoFile = videoID.querySelector('source').getAttribute('src');
+        const resumeButton = document.getElementById('resumeButton');
 
         let startTime = 0;
         let totalTimeWatched = 0;
@@ -105,7 +114,8 @@ error_log("displayIP: {$displayIP}");
                 logmsg('Resumed @ ' + Math.round(videoID.currentTime) + ' seconds');
             }
             localStorage.setItem('lastCurrentTime', videoID.currentTime);
-            resumeButton.style.display = 'none';
+            // Hide custom button if visible
+            if (resumeButton) resumeButton.style.display = 'none';
         });
 
         videoID.addEventListener('pause', () => {
@@ -142,16 +152,12 @@ error_log("displayIP: {$displayIP}");
 
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'hidden') {
-                //localStorage.setItem('lastCurrentTime', videoID.currentTime);
-                //debug('setItem localStorage.lastCurrentTime: ' + localStorage.getItem('lastCurrentTime'));
                 videoID.pause();
             } else if (document.visibilityState === 'visible') {
                 let lastCurrentTime = localStorage.getItem('lastCurrentTime');
                 if (lastCurrentTime > 0) {
                     videoID.currentTime = lastCurrentTime;
-                    if (lastCurrentTime > 0) {
-                        resumeButton.style.display = 'block';
-                    }
+                    // Could show button here?
                 }
             }
         });
@@ -167,19 +173,18 @@ error_log("displayIP: {$displayIP}");
                 msg: msg,
             };
 
-            xhr.open('POST', 'https://defaria.com:3000/log-playback', true);
+            xhr.open('POST', '/php/log_action.php', true); // Updated endpoint
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(data));
         }
 
         function debug(msg) {
-            return;
-            logmsg("DEBUG: " + msg);
+            // logmsg("DEBUG: " + msg);
         }
 
         window.addEventListener('beforeunload', (event) => {
-            event.preventDefault();
-            event.returnValue = '';
+            // event.preventDefault(); // Removed to prevent popup
+            // event.returnValue = ''; // Removed to prevent popup
 
             if (!videoEnded) {
                 totalTimeWatched += videoID.currentTime - startTime;
@@ -187,7 +192,6 @@ error_log("displayIP: {$displayIP}");
             }
             localStorage.setItem('lastCurrentTime', 0);
         });
-
     </script>
 </body>
 

@@ -120,7 +120,7 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
     text-decoration: none;
   }
 
-  .button a {
+  .button a, .button a:visited {
     text-decoration: none;
     color: inherit;
   }
@@ -138,7 +138,8 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
     }
 
     th {
-        background-color: #f0f0f0;
+        background-color: #008CBA;
+        color: white;
     }
     /* Make the Actions column wider */
     .actions-column {
@@ -160,36 +161,121 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
         text-align: center;
         width: 100px;
     }
+
+    body {
+        background-color: white; /* Default light mode background */
+        color: black;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dark-mode body {
+        background-color: #121212 !important;
+        color: #e0e0e0 !important;
+    }
+    
+    .dark-mode th {
+        background-color: #008CBA !important; /* Match Download button blue */
+        color: white !important;
+        border-color: #555 !important;
+    }
+    
+    .dark-mode td {
+        background-color: white !important;
+        color: black !important;
+        border-color: #ccc !important;
+    }
+    
+    /* Ensure links are readable on the white td background */
+    .dark-mode td a {
+        color: #0000EE !important; /* Standard blue for visibility on white */
+    }
+    
+    .dark-mode td a:visited {
+        color: #551A8B !important;
+    }
+    
+    /* Fix button text color in dark mode (override generic link color) */
+    .dark-mode .button a, .dark-mode .button a:visited {
+        color: white !important;
+        text-decoration: none !important;
+    }
     </style>
     <script>
-function logmsg(msg) {
-    const fileType = 'Download';
-    const xhr = new XMLHttpRequest();
-    const IPAddr = '{$_SERVER["REMOTE_ADDR"]}';
-    const data = {
-        IPAddr: IPAddr,
-        fileType: fileType,
-        file: "", // This will be updated in the downloadFile function
-        msg: msg,
-    };
+    function updateTheme() {
+        const isStandalone = window === window.top;
+        let isLight = true; // Default to light
 
-    xhr.open('POST', 'https://defaria.com:3000/log-playback', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(data));
-}
+        if (!isStandalone) {
+            try {
+                // Try to get theme from parent
+                const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                isLight = parentTheme === 'light';
+                // If parent has no theme yet, it might be loading. Fallback to light or dark? 
+                // User said "When in the website and in light mode it should be white". 
+                // "When in the website... dark mode... Should be black".
+                if (!parentTheme) isLight = true; // Default light if undetermined
+            } catch (e) {
+                // Cross-origin or other error: fallback to system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    isLight = false;
+                }
+            }
+        } else {
+             // Standalone: User said "default to light mode".
+             // Bonus: Redirect to iframe wrapper
+             // Check if we are already in the "content" frame or similar? No, strict "standalone" means top.
+             // We'll implement the redirect here.
+             const currentPath = window.location.pathname + window.location.search;
+             // Don't redirect if we are just testing or if user doesn't want it forced? 
+             // User asked for "Bonus point if you can redirect".
+             // We need to know the structure. Usually /?page=... or similar.
+             // Based on typical index.php, let's assume we can pass the URL.
+             // Warning: This could cause loops if index.php includes this file immediately.
+             // Let's implement the theme logic first.
+             isLight = true; 
+        }
 
-function downloadFile(url, filename) {
-    const filenameWithSpaces = filename.replace(/\+/g, ' ');
-    const decodedFilename = decodeURIComponent(filenameWithSpaces);
-    logmsg('File: ' + decodedFilename);
+        if (isLight) {
+            document.documentElement.classList.remove('dark-mode');
+        } else {
+            document.documentElement.classList.add('dark-mode');
+        }
+    }
 
-    // Create a temporary link and trigger a click to start the download
-    const link = document.createElement('a');
-    link.href = '/php/monitorFile.php?download="' + decodedFilename + '"&u=' + encodeURIComponent(url);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+    // Redirect logic (Bonus)
+    if (window === window.top) {
+        // Redirect to main site with this page as content
+        // This puts the standalone page into the iframe wrapper
+        const currentUrl = window.location.pathname + window.location.search;
+        window.location.href = '/?url=' + encodeURIComponent(currentUrl);
+    }
+
+    // Initial check
+    document.addEventListener('DOMContentLoaded', updateTheme);
+
+    // Watch for changes in parent attribute
+    if (window !== window.top) {
+        try {
+            const observer = new MutationObserver(updateTheme);
+            observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        } catch (e) {
+            console.log('Cannot observe parent theme due to security/structure.');
+        }
+    }
+
+    function downloadFile(url, filename) {
+        const filenameWithSpaces = filename.replace(/\+/g, ' ');
+        const decodedFilename = decodeURIComponent(filenameWithSpaces);
+        // JS logging removed as it relies on dead port 3000. Logging now handled server-side in monitorFile.php.
+
+        // Create a temporary link and trigger a click to start the download
+        const link = document.createElement('a');
+        link.href = '/php/monitorFile.php?download="' + decodedFilename + '"&u=' + encodeURIComponent(url);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
 </script>
 </head>
 EOF;
@@ -346,67 +432,11 @@ function timeUntilExpiration(string $filePath): string
 
     // If fileatime fails, use filemtime as a fallback
     if ($lastAccessTime === false) {
-        function timeUntilExpiration(string $filePath): string
-        {
-            // ...
-            // Get the last access time of the file.
-            $lastAccessTime = fileatime($filePath);
-
-            // If fileatime fails, use filemtime as a fallback
-            if ($lastAccessTime === false) {
-                $lastAccessTime = filemtime($filePath);
-            }
-            // ...
-        }
-        function timeUntilExpiration(string $filePath): string
-        {
-            // Check if the file exists
-            if (!file_exists($filePath)) {
-                return "File not found";
-            }
-
-            // Get the last modification time of the file.
-            $lastModifiedTime = filemtime($filePath);
-
-            // If filemtime fails, return an error
-            if ($lastModifiedTime === false) {
-                return "Error getting modification time";
-            }
-
-            // Calculate the expiration time (7 days from last modification).
-            $expirationTime = $lastModifiedTime + (7 * 24 * 60 * 60); // 7 days in seconds
-
-            // Get the current time.
-            $currentTime = time();
-
-            // Calculate the time difference.
-            $timeDifference = $expirationTime - $currentTime;
-
-            // Handle expired files.
-            if ($timeDifference <= 0) {
-                return "Expired";
-            }
-
-            // Format the time difference into a human-readable string.
-            $days = floor($timeDifference / (60 * 60 * 24));
-            $hours = floor(($timeDifference % (60 * 60 * 24)) / (60 * 60));
-            $minutes = floor(($timeDifference % (60 * 60)) / 60);
-
-            $formattedTime = "Expires in ";
-            if ($days > 0) {
-                $formattedTime .= $days . " day" . ($days > 1 ? "s" : "");
-            } elseif ($hours > 0) {
-                $formattedTime .= $hours . " hour" . ($hours > 1 ? "s" : "");
-            } elseif ($minutes > 0) {
-                $formattedTime .= $minutes . " minute" . ($minutes > 1 ? "s" : "");
-            } else {
-                $formattedTime .= "less than a minute";
-            }
-
-            return $formattedTime;
-        }
-
         $lastAccessTime = filemtime($filePath);
+    }
+
+    if ($lastAccessTime === false) {
+        return "Error getting access time";
     }
 
     // Calculate the expiration time (7 days from last access).

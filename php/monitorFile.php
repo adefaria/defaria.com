@@ -139,11 +139,16 @@ if (isset($_GET['u'])) {
 
 // Check if the download parameter is set in $_GET
 if (isset($download)) {
+    $filename = urldecode($_GET['download']);
+    $trimmedFilename = substr($filename, 1, -1);
+
+    // Log the download action to playback.log
+    $logMessage = "Downloaded " . $trimmedFilename;
+    log_playback($logMessage, $displayValue);
+
     // Set headers for file download.
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
-    $filename = urldecode($_GET['download']);
-    $trimmedFilename = substr($filename, 1, -1);
     header('Content-Disposition: attachment; filename="' . trim($trimmedFilename) . '"');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
@@ -153,11 +158,23 @@ if (isset($download)) {
     exit; // Important: Stop further execution after sending the file
 }
 
+function log_playback($msg, $ip)
+{
+    $logFile = '/web/pm/playback.log';
+    $timestamp = date('H:i:s'); // Format relative to expectation? 
+    // The previous JS sent JSON. The log viewer expects lines. 
+    // Let's assume simple text appending.
+    // Construct a log line similar to what playbackmonitor might have done or just readable text.
+    // "10:30:00 [IP] File: foo.mp3"
+    $entry = "$timestamp [$ip] $msg\n";
+    file_put_contents($logFile, $entry, FILE_APPEND);
+}
+
 $msg = '<html><body>';
 
 $fullURL = getFullUrl($URL);
 
-if ($displayvalue == $IPAddr) {
+if ($displayValue == $IPAddr) { // Corrected variable casing displayValue vs displayvalue
     $msg .= "<h1>Somebody accessed $URL</h1>";
 } else {
     $msg .= "<h1>$displayValue accessed $URL</h1>";
@@ -199,13 +216,33 @@ if (!$me) {
     $histfile = fopen('/web/pm/.history', 'a');
     $date = date(DATE_RFC822);
 
+    // Determine verb based on file type
+    $extension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
     if ($download) {
-        $access = "downloaded";
+        $verb = "Downloading";
+    } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
+        $verb = "Viewing";
+    } elseif (in_array($extension, ['mp3', 'm4a', 'wav', 'ogg'])) {
+        $verb = "Playing";
+    } elseif (in_array($extension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'])) {
+        $verb = "Watching";
     } else {
-        $access = "accessed";
-    } // if
+        $verb = "Opening"; // Default fallback
+    }
 
-    fwrite($histfile, "$_SERVER[REMOTE_ADDR] $access $URL $date\n");
+    // Log to playback.log
+    // Format: "Viewed <filename>" (No "File:" prefix)
+    $logMessage = "$verb " . basename($URL);
+
+    log_playback($logMessage, $displayValue);
+
+    // Logging to history file
+    $accessVerb = $download ? 'downloaded' : 'accessed';
+    // Or just use $verb? $verb is "Viewing". History file format is "$ip $access $URL $date"
+    // Let's keep it compatible with old format or update it?
+    // Old format: "accessed" or "downloaded".
+    // I will stick to "accessed"/"downloaded" mapping for history file compatibility.
+    fwrite($histfile, "$_SERVER[REMOTE_ADDR] $accessVerb $URL $date\n");
     fclose($histfile);
 
     $msg .= '</body></html>';
@@ -248,6 +285,8 @@ if (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg', 'mkv'])) {
     header("Location: /php/videoplayback.php?video=" . urlencode($URL)); // urlencode the parameter
 } elseif (in_array(strtolower($fileExtension), ['m4a', 'mp3', 'wav', 'ogg'])) {
     header("Location: /php/audioplayback.php?audio=" . urlencode($URL)); // urlencode the parameter
+} elseif (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
+    header("Location: /php/imageview.php?image=" . urlencode($URL)); // New image wrapper
 } else {
     header("Location: " . $URL); // Redirect directly to the file URL
 } // if

@@ -30,7 +30,15 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             align-items: center;
             flex-direction: column;
             min-height: 100vh;
+            background-color: white;
+            color: black;
+            font-family: sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
             background-color: black;
+            color: white;
         }
 
         audio {
@@ -44,10 +52,39 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             background-color: #4CAF50;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
             margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        #resumeButton:hover {
+            background-color: #45a049;
         }
     </style>
+    <script>
+        function updateTheme() {
+            try {
+                const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                if (parentTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            } catch (e) {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('dark-mode');
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) { }
+        }
+    </script>
 </head>
 
 <body>
@@ -160,7 +197,7 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
                 msg: msg,
             };
 
-            xhr.open('POST', 'https://defaria.com:3000/log-playback', true);
+            xhr.open('POST', '/php/log_action.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(data));
         }
@@ -170,8 +207,8 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         }
 
         window.addEventListener('beforeunload', (event) => {
-            event.preventDefault();
-            event.returnValue = '';
+            // event.preventDefault();
+            // event.returnValue = ''; 
 
             if (!audioEnded) {
                 totalTimeListened += audioID.currentTime - startTime;
