@@ -212,10 +212,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         .yt-container {
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--surface-color);
             padding: 2rem;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--muted-color);
         }
 
         h1 {
@@ -236,9 +236,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
             padding: 12px;
             margin-bottom: 1rem;
             border-radius: 8px;
-            border: 1px solid #444;
-            background: #222;
-            color: #fff;
+            border: 1px solid var(--muted-color);
+            background: var(--input-bg);
+            color: var(--text-color);
             font-size: 1rem;
         }
 
@@ -291,20 +291,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         }
 
         .search-item {
-            background: #2a2a2a;
+            background: var(--bg-color);
             margin: 10px 0;
             padding: 15px;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #333;
+            border: 1px solid var(--muted-color);
         }
 
         .search-title {
             font-weight: 500;
             margin-right: 15px;
-            color: #fff;
+            color: var(--text-color);
         }
 
         #processing {
