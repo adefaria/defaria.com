@@ -158,7 +158,13 @@
       if (storedTheme) {
         return storedTheme;
       }
-      return 'light';
+
+      // Auto-switch based on time of day (7am - 7pm = light)
+      const hour = new Date().getHours();
+      if (hour >= 7 && hour < 19) {
+        return 'light';
+      }
+      return 'dark'; // Default to dark at night
     }
 
     function setTheme(theme) {
