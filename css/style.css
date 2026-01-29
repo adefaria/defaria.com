@@ -435,6 +435,13 @@ a:hover {
   border-top: 3px solid var(--google-green);
 }
 
+/* Specific overwrite for MAPS card to look like version 4.0 */
+.link-card.card-maps h3 {
+  font-family: var(--font-fancy);
+  font-size: 1.3rem;
+  /* Slightly smaller than default 1.5rem */
+}
+
 .link-card p {
   color: var(--muted-color);
   font-size: 0.95rem;

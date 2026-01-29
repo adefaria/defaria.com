@@ -22,7 +22,9 @@ $project_links = [
             $target = $is_tool ? '_self' : '_blank';
             $is_external = ($target === '_blank');
             ?>
-            <a href="<?php echo $link['url']; ?>" class="link-card" target="<?php echo $target; ?>">
+            <a href="<?php echo $link['url']; ?>"
+                class="link-card card-<?php echo strtolower(str_replace(' ', '-', $link['title'])); ?>"
+                target="<?php echo $target; ?>">
                 <h3>
                     <?php echo $link['title']; ?>
                     <?php if ($is_external): ?>
