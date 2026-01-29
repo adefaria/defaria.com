@@ -2,7 +2,7 @@
 <?php
 $project_links = [
     ['title' => 'MAPS', 'url' => '/maps/', 'desc' => 'Mail Authorization and Permission System (Spam Filter).'],
-    ['title' => 'Upload', 'url' => 'https://upload.defariahome.com/file/upload', 'desc' => 'File upload utility.'],
+    ['title' => 'Upload', 'url' => 'upload.php', 'desc' => 'File upload utility.'],
     ['title' => 'YouTube Download', 'url' => '/yt/', 'desc' => 'Download videos from YouTube.'],
     ['title' => 'Spleeter', 'url' => 'https://spleeter.defariahome.com', 'desc' => 'AI source separation tool.']
 ];
