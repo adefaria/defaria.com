@@ -394,8 +394,8 @@ a:hover {
   font-size: 1.5rem;
   /* Increased size for fancy font */
   font-weight: 700;
-  font-family: var(--font-heading);
-  /* Standard Font */
+  font-family: var(--font-fancy);
+  /* Fancy Font */
 }
 
 /* Google Colors based on Tab */
