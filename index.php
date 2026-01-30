@@ -11,9 +11,18 @@
         <span class="brand-name">Andrew DeFaria</span>
       </a>
       <span class="brand-tagline">
-        <a href="/Computers/" target="content-frame" id="link-computers">Computers</a> /
-        <a href="#music" id="link-music">Music</a> /
-        <a href="/Vette/" target="content-frame" id="link-cars">Cars</a>
+        <a href="/Computers/" target="content-frame" id="link-computers" style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          Computers
+        </a> /
+        <a href="#music" id="link-music" style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          Music
+        </a> /
+        <a href="/Vette/" target="content-frame" id="link-cars" style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg>
+          Cars
+        </a>
       </span>
     </div>
   </div>
