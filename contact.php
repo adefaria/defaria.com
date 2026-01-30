@@ -1,4 +1,5 @@
 <?php
+$page_title = "Contact";
 include 'includes/frame_header.php';
 ?>
 

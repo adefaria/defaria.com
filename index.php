@@ -237,6 +237,8 @@
         page = 'resume/index.php';
       } else if (route === 'music') {
         page = 'music.php'; // or whatever implicit logic if consistent
+      } else if (route === 'maps') {
+        page = '/maps/';
       }
 
       // Update Iframe
@@ -344,10 +346,21 @@
       activateTab(window.location.hash);
     }
 
-    // Update Footer from Iframe
+    // Update Footer from Iframe & Sync Title
     iframe.addEventListener('load', () => {
       try {
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Sync Title
+        if (iframeDoc.title) {
+          document.title = iframeDoc.title;
+        } else {
+          // Fallback if no title is found or access denied?
+          // document.title = "Andrew DeFaria"; 
+          // Better to leave as is or default? 
+          // If we navigated to a page with no title, it might retain old title.
+        }
+
         const meta = iframeDoc.querySelector('meta[name="last-modified"]');
         if (meta) {
           const date = meta.getAttribute('content');

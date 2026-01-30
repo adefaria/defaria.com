@@ -1,4 +1,5 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Blogs";
+include 'includes/frame_header.php'; ?>
 
 <?php
 $blog_links = [

@@ -1,4 +1,5 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Professional";
+include 'includes/frame_header.php'; ?>
 <style>
     /* Specific styling for Business cards */
     .link-card h3 {

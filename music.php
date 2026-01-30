@@ -1,9 +1,10 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Music";
+include 'includes/frame_header.php'; ?>
 <?php
 $music_links = [
-    ['title' => 'Cast of Shadows', 'url' => '/Band/index.php', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
     ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songbook/', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_blank'],
+    ['title' => 'Cast of Shadows', 'url' => '/Band/index.php', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
     ['title' => 'Bottoms Up', 'url' => '/Band/BottomsUp.php', 'desc' => 'From a cassette mix from the sound board, I produced this album of my Bottoms Up band called Bottoming out in Monterey']
 ];
 ?>

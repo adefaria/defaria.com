@@ -1,4 +1,5 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Misc";
+include 'includes/frame_header.php'; ?>
 <?php
 $hidden_links = [
     ['title' => 'Temporary Files', 'url' => '/tmp/', 'desc' => 'Temporary area for sharing files'],

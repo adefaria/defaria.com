@@ -1,4 +1,5 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Personal";
+include 'includes/frame_header.php'; ?>
 
 <?php
 // Correct Personal Links from original index.php

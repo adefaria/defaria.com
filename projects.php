@@ -1,7 +1,8 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "Projects";
+include 'includes/frame_header.php'; ?>
 <?php
 $project_links = [
-    ['title' => 'MAPS', 'url' => '/maps/', 'desc' => 'Mail Authorization and Permission System (Spam Filter).'],
+    ['title' => 'MAPS', 'url' => '#maps', 'desc' => 'Mail Authorization and Permission System (Spam Filter).'],
     ['title' => 'Upload', 'url' => 'upload.php', 'desc' => 'File upload utility.'],
     ['title' => 'YouTube Download', 'url' => '/yt/', 'desc' => 'Download videos from YouTube.'],
     ['title' => 'Spleeter', 'url' => 'https://spleeter.defariahome.com', 'desc' => 'AI source separation tool.']

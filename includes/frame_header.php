@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php date_default_timezone_set('America/Los_Angeles'); ?>
     <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
-    <title>Andrew DeFaria</title>
+    <title><?php echo isset($page_title) ? $page_title . " - Andrew DeFaria" : "Andrew DeFaria"; ?></title>
     <link rel="icon" href="/Icons/Home.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

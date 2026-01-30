@@ -1,4 +1,5 @@
 <?php
+$page_title = "Addresses";
 include 'includes/frame_header.php';
 ?>
 

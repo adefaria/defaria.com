@@ -1,4 +1,5 @@
-<?php include 'includes/frame_header.php'; ?>
+<?php $page_title = "QuickDrop";
+include 'includes/frame_header.php'; ?>
 <style>
     /* Ensure the iframe takes up the full available height of the content area */
     body,
