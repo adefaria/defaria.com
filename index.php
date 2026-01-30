@@ -11,16 +11,34 @@
         <span class="brand-name">Andrew DeFaria</span>
       </a>
       <span class="brand-tagline">
-        <a href="/Computers/" target="content-frame" id="link-computers" style="display:inline-flex; align-items:center; gap:4px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+        <a href="/Computers/" target="content-frame" id="link-computers"
+          style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
           Computers
         </a> /
         <a href="#music" id="link-music" style="display:inline-flex; align-items:center; gap:4px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
           Music
         </a> /
-        <a href="/Vette/" target="content-frame" id="link-cars" style="display:inline-flex; align-items:center; gap:4px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg>
+        <a href="/Vette/" target="content-frame" id="link-cars"
+          style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2">
+            </path>
+            <circle cx="7" cy="17" r="2"></circle>
+            <circle cx="17" cy="17" r="2"></circle>
+          </svg>
           Cars
         </a>
       </span>
@@ -217,18 +235,6 @@
       try {
         if (iframe.contentDocument) {
           iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
-
-          // Also update footer date while we are here
-          const meta = iframe.contentDocument.querySelector('meta[name="last-modified"]');
-          if (meta) {
-            const date = meta.getAttribute('content');
-            const footerDate = document.getElementById('footer-mod-date');
-            if (footerDate) {
-              let title = document.title.replace(' - Andrew DeFaria', '');
-              if (title === 'Andrew DeFaria') title = 'Welcome';
-              footerDate.textContent = title + ': Last modified ' + date;
-            }
-          }
         }
       } catch (e) {
         // Ignore cross-origin
@@ -247,7 +253,7 @@
       if (route === 'resume') {
         page = 'resume/index.php';
       } else if (route === 'music') {
-        page = 'music.php'; // or whatever implicit logic if consistent
+        page = 'music.php';
       } else if (route === 'maps') {
         page = '/maps/';
       }
@@ -261,8 +267,6 @@
         currentPath = iframe.contentWindow.location.pathname;
       } catch (e) {
         // Cross-origin or not loaded yet.
-        // If we have a cross-origin error, we are typically on an external site (like Google Maps)
-        // So we definitely want to reload our local page.
         isCrossOrigin = true;
       }
 
@@ -280,11 +284,6 @@
         } else {
           tab.classList.remove('active');
         }
-
-        // Add Click Listener for Reset
-        // Remove old listener if any to avoid duplicates? 
-        // Better: do this outside activateTab or ensure idempotency. 
-        // Doing it outside is better.
       });
     }
 
@@ -305,19 +304,17 @@
     const linkCars = document.getElementById('link-cars');
     const linkMusic = document.getElementById('link-music');
 
+
     if (linkComputers) {
       linkComputers.addEventListener('click', () => {
-        // Highlight Professional Tab (#professional)
         tabs.forEach(t => t.classList.remove('active'));
         const profTab = document.getElementById('tab-professional');
         if (profTab) profTab.classList.add('active');
-        // Content loads via target="content-frame", so no need to touch iframe src here
       });
     }
 
     if (linkCars) {
       linkCars.addEventListener('click', () => {
-        // Highlight Personal Tab (#personal)
         tabs.forEach(t => t.classList.remove('active'));
         const persTab = document.getElementById('tab-personal');
         if (persTab) persTab.classList.add('active');
@@ -326,12 +323,10 @@
 
     if (linkMusic) {
       linkMusic.addEventListener('click', (e) => {
-        // If already on #music, force reload via activateTab
         if (window.location.hash === '#music') {
           e.preventDefault();
           activateTab('#music');
         }
-        // Also ensure tab is highlighted (redundant if hash triggers, but safe)
         tabs.forEach(t => t.classList.remove('active'));
         const musicTab = document.getElementById('tab-music');
         if (musicTab) musicTab.classList.add('active');
@@ -344,15 +339,9 @@
     });
 
     // Initial Load
-    // Check for 'url' query parameter first (e.g. from downloaddir redirect)
     const urlParam = new URLSearchParams(window.location.search).get('url');
     if (urlParam) {
-      // Load the specific URL requested
       iframe.src = urlParam;
-      // Optionally try to highlight a relevant tab? 
-      // For /tmp/ items, maybe nothing active or 'misc'?
-      // Clean up URL to hide the ugly param? 
-      // history.replaceState(null, '', '/#' + urlParam); // logic might break if not matching expected hash format
     } else {
       activateTab(window.location.hash);
     }
@@ -365,11 +354,6 @@
         // Sync Title
         if (iframeDoc.title) {
           document.title = iframeDoc.title;
-        } else {
-          // Fallback if no title is found or access denied?
-          // document.title = "Andrew DeFaria"; 
-          // Better to leave as is or default? 
-          // If we navigated to a page with no title, it might retain old title.
         }
 
         const meta = iframeDoc.querySelector('meta[name="last-modified"]');

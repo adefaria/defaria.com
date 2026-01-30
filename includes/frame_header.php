@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['theme']) ? htmlspecialchars($_COOKIE['theme']) : 'dark'; ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
             background-color: transparent;
             /* Or var(--surface-color) */
             padding: 2rem;
-            padding-bottom: 80px;
+            padding-bottom: 120px;
             /* Ensure content is above footer */
             height: auto;
             min-height: 0;
@@ -64,20 +64,78 @@
                     theme = window.parent.document.documentElement.getAttribute('data-theme');
                 }
 
-                // Fallback to local storage or matching logic if standalone
+                // Fallback to cookie (matching index.php) or parent
                 if (!theme) {
-                    theme = localStorage.getItem('theme') || 'light';
+                    var match = document.cookie.match(new RegExp('(^| )theme=([^;]+)'));
+                    if (match) theme = match[2];
                 }
+
+                // Fallback to light
+                if (!theme) theme = 'light';
 
                 if (theme) {
                     document.documentElement.setAttribute('data-theme', theme);
                 }
             } catch (e) {
-                // If cross-origin or other error, fallback to storage
-                var theme = localStorage.getItem('theme') || 'light';
+                var theme = 'light';
+                // Try cookie in catch block too
+                try {
+                    var match = document.cookie.match(new RegExp('(^| )theme=([^;]+)'));
+                    if (match) theme = match[2];
+                } catch (err) { }
                 document.documentElement.setAttribute('data-theme', theme);
             }
         })();
+
+        // Keep theme in sync with parent dynamically
+        if (window.parent && window.parent.document !== document) {
+            try {
+                // Determine preferred theme from parent immediately
+                var parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
+
+                var observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.type === "attributes" && mutation.attributeName === "data-theme") {
+                            var newTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                            document.documentElement.setAttribute('data-theme', newTheme);
+                        }
+                    });
+                });
+
+                observer.observe(window.parent.document.documentElement, {
+                    attributes: true,
+                    attributeFilter: ['data-theme']
+                });
+            } catch (e) {
+                console.log('Error syncing theme with parent:', e);
+            }
+
+            // Sync Title and Footer Date
+            window.addEventListener('DOMContentLoaded', function () {
+                try {
+                    if (window.parent && window.parent.document !== document) {
+                        // Update parent title
+                        if (document.title) {
+                            window.parent.document.title = document.title;
+                        }
+
+                        // Update parent footer if accessible
+                        var footerDate = window.parent.document.getElementById('footer-mod-date');
+                        if (footerDate) {
+                            var meta = document.querySelector('meta[name="last-modified"]');
+                            if (meta) {
+                                var pageName = document.title.replace(' - Andrew DeFaria', '');
+                                if (pageName === 'Andrew DeFaria') pageName = 'Welcome';
+                                footerDate.textContent = pageName + ': Last modified ' + meta.getAttribute('content');
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Ignore cross-origin issues
+                }
+            });
+        }
     </script>
 </head>
 
