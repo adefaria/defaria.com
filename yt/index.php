@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
     if (!filter_var($videoUrl, FILTER_VALIDATE_URL)) {
         // Search Logic
         $ytBin = 'yt-dlp';
-        $cmd = $ytBin . ' --flat-playlist --dump-single-json --no-warnings ' . escapeshellarg('ytsearch10:' . $videoUrl);
+        $cmd = $ytBin . ' --js-runtimes node --flat-playlist --dump-single-json --no-warnings ' . escapeshellarg('ytsearch10:' . $videoUrl);
         exec($cmd, $output, $ret);
         if ($ret === 0 && !empty($output)) {
             $data = json_decode(implode("\n", $output), true);
@@ -77,6 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         $cmdArgs = [];
         $cmdArgs[] = escapeshellcmd($ytBin);
         $cmdArgs[] = '--cookies ' . escapeshellarg($cookiesFile);
+        // Explicitly use nodejs if available to avoid "No supported JavaScript runtime" warning/error
+        $cmdArgs[] = '--js-runtimes node';
         $cmdArgs[] = '--output ' . escapeshellarg($outputTemplate);
         $cmdArgs[] = '--no-playlist';
         $cmdArgs[] = '--ffmpeg-location /bin';
@@ -279,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         .error {
             background-color: rgba(234, 67, 53, 0.2);
             border: 1px solid var(--google-red);
-            color: #ffcccc;
+            color: #d93025;
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
