@@ -215,7 +215,9 @@
             const date = meta.getAttribute('content');
             const footerDate = document.getElementById('footer-mod-date');
             if (footerDate) {
-              footerDate.textContent = 'This page was last modified: ' + date;
+              let title = document.title.replace(' - Andrew DeFaria', '');
+              if (title === 'Andrew DeFaria') title = 'Welcome';
+              footerDate.textContent = title + ': Last modified ' + date;
             }
           }
         }
@@ -366,7 +368,9 @@
           const date = meta.getAttribute('content');
           const footerDate = document.getElementById('footer-mod-date');
           if (footerDate) {
-            footerDate.textContent = 'This page was last modified: ' + date;
+            let title = document.title.replace(' - Andrew DeFaria', '');
+            if (title === 'Andrew DeFaria') title = 'Welcome';
+            footerDate.textContent = title + ': Last modified ' + date;
           }
         }
       } catch (e) {
