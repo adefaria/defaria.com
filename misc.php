@@ -28,11 +28,15 @@ $hidden_links = [
 <style>
     /* Specific styling for Hidden cards */
     .link-card h3 {
-        color: var(--google-purple);
+        color: var(--google-red);
+    }
+
+    .page-title {
+        color: var(--google-red);
     }
 
     .link-card {
-        border-top: 3px solid var(--google-purple);
+        border-top: 3px solid var(--google-red);
     }
 </style>
 

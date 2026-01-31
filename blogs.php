@@ -41,15 +41,15 @@ $blog_links = [
 <style>
     /* Specific styling for Blog cards */
     .link-card h3 {
-        color: var(--google-red);
+        color: var(--google-blue);
     }
 
     .page-title {
-        color: var(--google-red);
+        color: var(--google-blue);
     }
 
     .link-card {
-        border-top: 3px solid var(--google-red);
+        border-top: 3px solid var(--google-blue);
     }
 </style>
 
