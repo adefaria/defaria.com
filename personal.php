@@ -21,9 +21,37 @@ $personal_links = [
         <?php foreach ($personal_links as $link): ?>
             <?php
             $is_external = (strpos($link['url'], 'http') === 0);
-            $target = $is_external ? '_blank' : '_self';
+            $onclick = "";
+            if ($is_external) {
+                $onclick = "window.open('" . $link['url'] . "', '_blank');";
+            } else {
+                // Convert internal URL to hash for SPA navigation
+                // e.g. /contact.php -> contact
+                // /Vette/ -> vette
+                $path = $link['url'];
+                $hash = '';
+                if ($path == '/contact.php')
+                    $hash = 'contact';
+                elseif ($path == '/addresses.php')
+                    $hash = 'addresses';
+                elseif ($path == '/Family/')
+                    $hash = 'family';
+                elseif ($path == '/Jokes/')
+                    $hash = 'jokes';
+                elseif ($path == '/libertarian.php')
+                    $hash = 'quotes';
+                elseif ($path == '/Vette/')
+                    $hash = 'vette';
+
+                if ($hash) {
+                    $onclick = "window.parent.location.hash = '$hash';";
+                } else {
+                    // Fallback for unmapped internal links
+                    $onclick = "window.open('" . $link['url'] . "', '_self');";
+                }
+            }
             ?>
-            <div class="link-card" onclick="window.open('<?php echo $link['url']; ?>', '<?php echo $target; ?>');">
+            <div class="link-card" onclick="<?php echo $onclick; ?>">
                 <h3>
                     <?php echo $link['title']; ?>
                     <?php if ($is_external): ?>

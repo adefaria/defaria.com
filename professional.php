@@ -33,7 +33,7 @@ include 'includes/frame_header.php'; ?>
             <p>Mail Authorization and Permission System - A homegrown spam solution.</p>
         </div>
 
-        <div class="link-card" onclick="window.open('https://metacpan.org/author/ADEFARIA', '_blank');">
+        <div class="link-card" onclick="window.open('https://metacpan.org/author/DEFARIA', '_blank');">
             <h3>
                 CPAN Modules
                 <svg class="external-icon"

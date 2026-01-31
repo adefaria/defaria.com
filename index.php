@@ -255,7 +255,33 @@
       } else if (route === 'music') {
         page = 'music.php';
       } else if (route === 'maps') {
-        page = '/maps/';
+        page = '/maps/php/main.php';
+      } else if (route === 'contact') {
+        page = 'contact.php';
+      } else if (route === 'addresses') {
+        page = 'addresses.php';
+      } else if (route === 'family') {
+        page = 'Family/index.php';
+      } else if (route === 'jokes') {
+        page = 'Jokes/index.php';
+      } else if (route === 'quotes') {
+        page = 'libertarian.php';
+      } else if (route === 'vette') {
+        page = 'Vette/index.html';
+      } else if (route === 'computers') {
+        page = 'Computers/index.php';
+      } else if (route === 'band' || route === 'cos') {
+        page = 'Band/index.php';
+      } else if (route === 'bottomsup') {
+        page = 'Band/BottomsUp.php';
+      } else if (route === 'upload') {
+        page = 'upload.php';
+      } else if (route === 'ytdownload') {
+        page = '/yt/';
+      } else if (route === 'spleeter') {
+        page = 'https://spleeter.defariahome.com';
+      } else if (route === 'webmonitor') {
+        page = '/php/logviewer.php';
       }
 
       // Update Iframe
@@ -280,6 +306,18 @@
       tabs.forEach(tab => {
         const tabHash = tab.getAttribute('href').substring(1);
         if (tabHash === route) {
+          tab.classList.add('active');
+        } else if ((route === 'resume' || route === 'clearscm' || route === 'maps' || route === 'computers') && tabHash === 'professional') {
+          // Extended logic for professional items if we want them highlighted
+          tab.classList.add('active');
+        } else if ((route === 'contact' || route === 'addresses' || route === 'family' || route === 'jokes' || route === 'quotes' || route === 'vette') && tabHash === 'personal') {
+          // Extended logic for personal items
+          tab.classList.add('active');
+        } else if ((route === 'band' || route === 'cos' || route === 'bottomsup') && tabHash === 'music') {
+          // Extended logic for music items
+          tab.classList.add('active');
+        } else if ((route === 'upload' || route === 'ytdownload' || route === 'spleeter' || route === 'webmonitor') && tabHash === 'projects') {
+          // Extended logic for project items
           tab.classList.add('active');
         } else {
           tab.classList.remove('active');
