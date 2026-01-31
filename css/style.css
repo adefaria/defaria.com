@@ -805,26 +805,12 @@ footer {
   color: var(--google-blue);
 }
 
-/* Quotes List Rotating Colors */
+/* Quotes List - Single Spaced & Plain */
 .quotes-list li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem;
   font-weight: 500;
-}
-
-.quotes-list li:nth-child(4n+1) {
-  color: var(--google-blue) !important;
-}
-
-.quotes-list li:nth-child(4n+2) {
-  color: var(--google-red) !important;
-}
-
-.quotes-list li:nth-child(4n+3) {
-  color: var(--google-yellow) !important;
-}
-
-.quotes-list li:nth-child(4n+4) {
-  color: var(--google-green) !important;
+  color: var(--text-color);
+  line-height: 1.2;
 }
 
 /* Theme Toggle Button */

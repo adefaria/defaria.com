@@ -108,8 +108,7 @@
                 and strong.</p>
 
             <p>Check out our album produced from a cassette recording off the soundboard:
-                <a href="/php/downloaddir.php?dir=%2FMedia%2FBottoming+Out+in+Monterey"
-                    onclick="event.preventDefault(); document.getElementById('main-content-view').style.display='none'; document.getElementById('album-iframe-view').style.display='block';">
+                <a href="https://earth.defariahome.com/Media/Bottoming%20Out%20in%20Monterey/">
                     Bottoming Out in Monterey
                 </a>.
             </p>
@@ -162,17 +161,6 @@
             </table>
 
         </div> <!-- End main-content-view -->
-
-        <!-- Iframe Content View (Full Page Replacement) -->
-        <div id="album-iframe-view" style="display: none; width: 100%; height: 80vh;">
-            <p><a href="#"
-                    onclick="event.preventDefault(); document.getElementById('album-iframe-view').style.display='none'; document.getElementById('main-content-view').style.display='block';">&larr;
-                    Back to Bottoms Up</a></p>
-            <iframe src="/php/downloaddir.php?dir=%2FMedia%2FBottoming+Out+in+Monterey"
-                style="width: 100%; height: 100%; border: 1px solid var(--outline-variant); border-radius: 8px; background-color: white;"
-                title="Bottoming Out in Monterey Album"></iframe>
-        </div>
-
     </div>
 
     <?php include '../includes/footer.php'; ?>

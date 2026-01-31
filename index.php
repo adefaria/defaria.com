@@ -379,7 +379,13 @@
     // Initial Load
     const urlParam = new URLSearchParams(window.location.search).get('url');
     if (urlParam) {
-      iframe.src = urlParam;
+      // If it doesn't end in slash and has no extension, assume directory and add slash
+      // This prevents mixed-content redirects from mod_dir
+      if (!urlParam.endsWith('/') && !urlParam.includes('.')) {
+        iframe.src = urlParam + '/';
+      } else {
+        iframe.src = urlParam;
+      }
     } else {
       activateTab(window.location.hash);
     }

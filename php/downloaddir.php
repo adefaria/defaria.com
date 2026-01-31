@@ -180,24 +180,40 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
     }
     
     .dark-mode td {
-        background-color: white !important;
-        color: black !important;
-        border-color: #ccc !important;
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
     }
     
-    /* Ensure links are readable on the white td background */
+    /* Ensure links are readable on the dark td background */
     .dark-mode td a {
-        color: #0000EE !important; /* Standard blue for visibility on white */
+        color: #64b5f6 !important; /* Lighter blue for visibility on dark */
     }
     
     .dark-mode td a:visited {
-        color: #551A8B !important;
+        color: #ce93d8 !important; /* Lighter purple for visited on dark */
     }
     
     /* Fix button text color in dark mode (override generic link color) */
     .dark-mode .button a, .dark-mode .button a:visited {
         color: white !important;
         text-decoration: none !important;
+    }
+    /* Default: Invert icons for visibility (White on Dark) */
+    .dark-mode img {
+        filter: invert(1);
+    }
+
+    /* Exception: Directory icon looks good as is (Original colors) */
+    .dark-mode img[src*="dir.gif"] {
+        filter: none;
+    }
+
+    /* Gold/Yellow for MP3 (Audio) and Binary */
+    .dark-mode img[src*="sound2.gif"],
+    .dark-mode img[src*="binary.gif"] {
+        /* Approximate Gold Color (#FFD700) from Black */
+        filter: invert(75%) sepia(70%) saturate(900%) hue-rotate(360deg) brightness(103%) contrast(105%);
     }
     </style>
     <script>
@@ -221,18 +237,12 @@ function generateDirectoryListing(string $directory, string $baseUrl, bool $show
                 }
             }
         } else {
-             // Standalone: User said "default to light mode".
-             // Bonus: Redirect to iframe wrapper
-             // Check if we are already in the "content" frame or similar? No, strict "standalone" means top.
-             // We'll implement the redirect here.
-             const currentPath = window.location.pathname + window.location.search;
-             // Don't redirect if we are just testing or if user doesn't want it forced? 
-             // User asked for "Bonus point if you can redirect".
-             // We need to know the structure. Usually /?page=... or similar.
-             // Based on typical index.php, let's assume we can pass the URL.
-             // Warning: This could cause loops if index.php includes this file immediately.
-             // Let's implement the theme logic first.
-             isLight = true; 
+             // Standalone: Check system preference
+             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                 isLight = false;
+             } else {
+                 isLight = true;
+             }
         }
 
         if (isLight) {
@@ -486,6 +496,9 @@ if (isset($_GET['dir'])) {
     }
 } // if
 
+// Decode the directory path to handle spaces and other special characters
+$directory = urldecode($directory);
+
 if (strpos($directory, documentRoot) !== 0) {
     $directory = '/web' . $directory;
 }
@@ -518,7 +531,7 @@ if (isset($_GET['download'])) {
 }
 
 // Construct the base URL.
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
 $baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'];
 if (isset($directory)) {
     $baseUrl .= '/' . ltrim($directory, '/');
