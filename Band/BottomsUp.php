@@ -108,7 +108,7 @@
                 and strong.</p>
 
             <p>Check out our album produced from a cassette recording off the soundboard:
-                <a href="https://earth.defariahome.com/Media/Bottoming%20Out%20in%20Monterey/">
+                <a href="https://defaria.com/Media/Bottoming%20Out%20in%20Monterey/">
                     Bottoming Out in Monterey
                 </a>.
             </p>
