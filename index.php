@@ -263,6 +263,8 @@
         page = '/music.php';
       } else if (route === 'maps') {
         page = '/maps/php/main.php';
+      } else if (route === 'mapsmobile') {
+        page = '/maps/mobile/?bypass=true';
       } else if (route === 'clearscm') {
         page = '/clearscm/index.php';
       } else if (route === 'contact') {

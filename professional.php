@@ -18,23 +18,15 @@ include 'includes/frame_header.php'; ?>
 <main class="container">
     <h1 class="page-title">Professional</h1>
     <p class="page-description">This section focuses on my professional life. I am a Linux administrator who often
-        writes in Perl and performs Build and Release and Devops role for corporation. ClearSCM was my old corporation
         where I focused on Clearcase and Clearquest. If you want to employ me check out my resume. Historical
-        information about me and computers is an interesting read. MAPS is my home grown spam filter that I've been
-        using since ~2001. CPAN Modules are coming and also Mobile MAPS - a mobile app for MAPS.</p>
+        information about me and computers is an interesting read. MAPS is my homegrown spam filter that I've been
+        using since ~2001.</p>
     <div class="link-grid">
         <a href="/clearscm" target="_top" class="link-card"
             style="text-decoration: none; color: inherit; cursor: pointer;">
             <div>
                 <h3>ClearSCM</h3>
                 <p>Advanced Software Configuration Management systems and tools.</p>
-            </div>
-        </a>
-
-        <a href="/maps" target="_top" class="link-card" style="text-decoration: none; color: inherit; cursor: pointer;">
-            <div>
-                <h3>MAPS</h3>
-                <p>Mail Authorization and Permission System - A homegrown spam solution.</p>
             </div>
         </a>
 
@@ -64,6 +56,21 @@ include 'includes/frame_header.php'; ?>
             <div>
                 <h3>Computers</h3>
                 <p>My history of computers owned.</p>
+            </div>
+        </a>
+
+        <a href="/maps" target="_top" class="link-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div>
+                <h3>MAPS</h3>
+                <p>Mail Authorization and Permission System - A homegrown spam solution.</p>
+            </div>
+        </a>
+
+        <a href="/mapsmobile" target="_top" class="link-card"
+            style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div>
+                <h3>MAPS Mobile</h3>
+                <p>Mobile interface for the Mail Authorization and Permission System.</p>
             </div>
         </a>
     </div>
