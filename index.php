@@ -284,9 +284,9 @@
       } else if (route === 'bottomsup') {
         page = '/Band/BottomsUp.php';
       } else if (route === 'bottomingout') {
-        page = '/Media/Bottoming%20Out%20in%20Monterey/';
+        page = '/Media/Bottoming%20Out%20in%20Monterey/?bypass=true';
       } else if (route === 'arm') {
-        page = '/Media/ARM/';
+        page = '/Media/ARM/?bypass=true';
       } else if (route.toLowerCase() === 'broadcom') {
         page = '/Broadcom/?bypass=true';
       } else if (route.toLowerCase() === 'ibm') {
