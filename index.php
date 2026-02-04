@@ -3,15 +3,15 @@
 
 <div class="top-bar">
   <div class="top-bar-left">
-    <a href="/#welcome" class="home-icon">
+    <a href="/" class="home-icon">
       <img src="/Icons/NewHome.png" alt="Home" height="32" width="32">
     </a>
     <div class="brand-text-col">
-      <a href="/#welcome" style="text-decoration: none;">
+      <a href="/" style="text-decoration: none;">
         <span class="brand-name">Andrew DeFaria</span>
       </a>
       <span class="brand-tagline">
-        <a href="/Computers/" target="content-frame" id="link-computers"
+        <a href="/professional" target="content-frame" id="link-computers"
           style="display:inline-flex; align-items:center; gap:4px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -20,7 +20,7 @@
           </svg>
           Computers
         </a> /
-        <a href="#music" id="link-music" style="display:inline-flex; align-items:center; gap:4px;">
+        <a href="/music" id="link-music" style="display:inline-flex; align-items:center; gap:4px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18V5l12-2v13"></path>
@@ -29,7 +29,7 @@
           </svg>
           Music
         </a> /
-        <a href="/Vette/" target="content-frame" id="link-cars"
+        <a href="/vette" target="content-frame" id="link-cars"
           style="display:inline-flex; align-items:center; gap:4px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -103,12 +103,12 @@
       </svg>
     </button>
     <nav class="sidebar" id="sidebar-nav">
-      <a href="#personal" class="tab-btn" id="tab-personal">Personal</a>
-      <a href="#professional" class="tab-btn" id="tab-professional">Professional</a>
-      <a href="#music" class="tab-btn" id="tab-music">Music</a>
-      <a href="#projects" class="tab-btn" id="tab-projects">Projects</a>
-      <a href="#blogs" class="tab-btn" id="tab-blogs">Blogs</a>
-      <a href="#misc" class="tab-btn" id="tab-misc">Misc</a>
+      <a href="/personal" class="tab-btn" id="tab-personal">Personal</a>
+      <a href="/professional" class="tab-btn" id="tab-professional">Professional</a>
+      <a href="/music" class="tab-btn" id="tab-music">Music</a>
+      <a href="/projects" class="tab-btn" id="tab-projects">Projects</a>
+      <a href="/blogs" class="tab-btn" id="tab-blogs">Blogs</a>
+      <a href="/misc" class="tab-btn" id="tab-misc">Misc</a>
     </nav>
     <button class="nav-arrow right-arrow" id="scroll-right" aria-label="Scroll Right">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -241,160 +241,196 @@
       }
     });
 
-    function activateTab(hash) {
-      // Normalize hash (remove #)
-      // Default to 'welcome' if empty
-      const route = hash ? hash.substring(1) : 'welcome';
+    window.activateTab = function (path) {
+      // Normalize path (remove leading slash)
+      let route = path.replace(/^\//, '');
+      if (route === '' || route === 'index.php') route = 'welcome';
+
+      // Strip trailing slash if present (unless it's just root)
+      if (route.endsWith('/') && route.length > 1) {
+        route = route.slice(0, -1);
+      }
 
       // Map route to file
-      let page = route + '.php';
+      let page = '/' + route + '.php';
 
-      // Special Routes
-      if (route === 'resume') {
-        page = 'resume/index.php';
+      // Special Routes mappings
+      if (route === 'welcome') {
+        page = 'welcome.php';
+      } else if (route === 'resume') {
+        page = '/resume/index.php';
       } else if (route === 'music') {
-        page = 'music.php';
+        page = '/music.php';
       } else if (route === 'maps') {
         page = '/maps/php/main.php';
+      } else if (route === 'clearscm') {
+        page = '/clearscm/index.php';
       } else if (route === 'contact') {
-        page = 'contact.php';
+        page = '/contact.php';
       } else if (route === 'addresses') {
-        page = 'addresses.php';
+        page = '/addresses.php';
       } else if (route === 'family') {
-        page = 'Family/index.php';
+        page = '/Family/index.php';
       } else if (route === 'jokes') {
-        page = 'Jokes/index.php';
+        page = '/Jokes/index.php';
       } else if (route === 'quotes') {
-        page = 'libertarian.php';
+        page = '/libertarian.php';
       } else if (route === 'vette') {
-        page = 'Vette/index.html';
+        page = '/Vette/index.html';
       } else if (route === 'computers') {
-        page = 'Computers/index.php';
+        page = '/Computers/index.php';
       } else if (route === 'band' || route === 'cos') {
-        page = 'Band/index.php';
+        page = '/Band/index.php';
       } else if (route === 'bottomsup') {
-        page = 'Band/BottomsUp.php';
+        page = '/Band/BottomsUp.php';
+      } else if (route === 'bottomingout') {
+        page = '/Media/Bottoming%20Out%20in%20Monterey/';
+      } else if (route === 'arm') {
+        page = '/Media/ARM/';
+      } else if (route.toLowerCase() === 'broadcom') {
+        page = '/Broadcom/?bypass=true';
+      } else if (route.toLowerCase() === 'ibm') {
+        page = '/IBM/?bypass=true';
+      } else if (route.toLowerCase() === 'sanmelia') {
+        page = '/SanMelia/?bypass=true';
+      } else if (route.toLowerCase() === 'wellsfargo') {
+        page = '/wellsfargo/?bypass=true';
       } else if (route === 'upload') {
-        page = 'upload.php';
+        page = '/upload.php';
       } else if (route === 'ytdownload') {
-        page = '/yt/';
+        page = '/yt/?bypass=true';
       } else if (route === 'spleeter') {
         page = 'https://spleeter.defariahome.com';
       } else if (route === 'webmonitor') {
         page = '/php/logviewer.php';
+      } else if (route.toLowerCase() === 'tmp') {
+        page = '/tmp/?bypass=true';
+      } else {
+        // Default logic: ensure absolute path
+        // If the path maps to a real directory (like /Computers), we want to load that.
+        if (!page.startsWith('/') && !page.startsWith('http')) {
+          page = '/' + page;
+        }
+        // If route is just a directory name, maybe we should try that?
+        // Fallback: use route as is if it looks like a path
+        if (route.includes('/') && !route.endsWith('.php')) {
+          page = '/' + route;
+        }
       }
 
+      // Fix for infinite recursion if route is effectively current page
+      // But we handled 'tmp' specifically.
+
       // Update Iframe
-      // Check if we need to update src to avoid reload loops
-      // We must check the ACTUAL content location, not just the stale src attribute.
       let currentPath = '';
       let isCrossOrigin = false;
       try {
         currentPath = iframe.contentWindow.location.pathname;
       } catch (e) {
-        // Cross-origin or not loaded yet.
         isCrossOrigin = true;
       }
 
-      // If strict match fails, or if the content has drifted (e.g. navigation to contact.php)
-      // OR if we are cross-origin (map view)
       if (isCrossOrigin || !iframe.src.endsWith(page) || (currentPath && !currentPath.endsWith(page))) {
         iframe.src = page;
       }
 
       // Update Active Tab UI
       tabs.forEach(tab => {
-        const tabHash = tab.getAttribute('href').substring(1);
-        if (tabHash === route) {
-          tab.classList.add('active');
-        } else if ((route === 'resume' || route === 'clearscm' || route === 'maps' || route === 'computers') && tabHash === 'professional') {
-          // Extended logic for professional items if we want them highlighted
-          tab.classList.add('active');
-        } else if ((route === 'contact' || route === 'addresses' || route === 'family' || route === 'jokes' || route === 'quotes' || route === 'vette') && tabHash === 'personal') {
-          // Extended logic for personal items
-          tab.classList.add('active');
-        } else if ((route === 'band' || route === 'cos' || route === 'bottomsup') && tabHash === 'music') {
-          // Extended logic for music items
-          tab.classList.add('active');
-        } else if ((route === 'upload' || route === 'ytdownload' || route === 'spleeter' || route === 'webmonitor') && tabHash === 'projects') {
-          // Extended logic for project items
-          tab.classList.add('active');
+        // Tab Hrefs should now be Clean paths e.g. /personal
+        const tabPath = tab.getAttribute('href').replace(/^\//, '');
+
+        // Match logic
+        let isActive = false;
+        if (tabPath === route) {
+          isActive = true;
         } else {
-          tab.classList.remove('active');
+          // Child mappings
+          if (tabPath === 'professional') {
+            if (['resume', 'clearscm', 'maps', 'computers'].includes(route)) isActive = true;
+          } else if (tabPath === 'personal') {
+            if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route)) isActive = true;
+          } else if (tabPath === 'music') {
+            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm'].includes(route)) isActive = true;
+          } else if (tabPath === 'projects') {
+            if (['upload', 'ytdownload', 'spleeter'].includes(route)) isActive = true;
+          } else if (tabPath === 'misc') {
+            if (['broadcom', 'ibm', 'sanmelia', 'wellsfargo', 'webmonitor'].includes(route)) isActive = true;
+          }
         }
+
+        if (isActive) tab.classList.add('active');
+        else tab.classList.remove('active');
       });
     }
 
     // Handle Sidebar Tab Clicks
+    // With clean URLs, we can just let the link navigate?
+    // User wants "single page feel" maybe?
+    // If we navigate, the whole page reloads = Flash.
+    // Ideally we use pushState.
+
     tabs.forEach(tab => {
       tab.addEventListener('click', (e) => {
-        const hash = tab.getAttribute('href');
-        // If current hash matches clicked hash, force reload
-        if (window.location.hash === hash) {
-          e.preventDefault(); // Prevent default anchor jump
-          activateTab(hash); // Retrieve default page
-        }
+        e.preventDefault();
+        const href = tab.getAttribute('href');
+        window.history.pushState(null, '', href);
+        activateTab(window.location.pathname);
       });
     });
 
-    // Handle Tagline Link Clicks (Sync Sidebar)
+    // Handle Back/Forward
+    window.addEventListener('popstate', () => {
+      activateTab(window.location.pathname);
+    });
+
+    // Tagline and other Internal Link handling
+    // We need to catch clicks on internal links to avoid full reload
+    // Attach a global listener? Or specific ones.
+
+    // Tagline Links
     const linkComputers = document.getElementById('link-computers');
     const linkCars = document.getElementById('link-cars');
     const linkMusic = document.getElementById('link-music');
 
-
     if (linkComputers) {
-      linkComputers.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        const profTab = document.getElementById('tab-professional');
-        if (profTab) profTab.classList.add('active');
+      linkComputers.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.history.pushState(null, '', '/professional');
+        activateTab('/professional');
       });
     }
 
     if (linkCars) {
-      linkCars.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        const persTab = document.getElementById('tab-personal');
-        if (persTab) persTab.classList.add('active');
+      linkCars.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.history.pushState(null, '', '/vette'); // Or personal? Link says Cars -> Vette
+        activateTab('/vette');
       });
     }
 
     if (linkMusic) {
       linkMusic.addEventListener('click', (e) => {
-        if (window.location.hash === '#music') {
-          e.preventDefault();
-          activateTab('#music');
-        }
-        tabs.forEach(t => t.classList.remove('active'));
-        const musicTab = document.getElementById('tab-music');
-        if (musicTab) musicTab.classList.add('active');
+        e.preventDefault();
+        window.history.pushState(null, '', '/music');
+        activateTab('/music');
       });
     }
 
-    // Listen for hash changes
-    window.addEventListener('hashchange', () => {
-      activateTab(window.location.hash);
-    });
-
     // Initial Load
-    const urlParam = new URLSearchParams(window.location.search).get('url');
-    if (urlParam) {
-      // If it doesn't end in slash and has no extension, assume directory and add slash
-      // This prevents mixed-content redirects from mod_dir
-      if (!urlParam.endsWith('/') && !urlParam.includes('.')) {
-        iframe.src = urlParam + '/';
-      } else {
-        iframe.src = urlParam;
-      }
+    // Check for hash fallback (e.g. from cached redirects or bookmarks)
+    if (window.location.pathname === '/' && window.location.hash) {
+      const hashRoute = window.location.hash.substring(1);
+      activateTab('/' + hashRoute);
+      // Optional: Clean the URL
+      history.replaceState(null, '', '/' + hashRoute);
     } else {
-      activateTab(window.location.hash);
+      activateTab(window.location.pathname);
     }
 
     // Update Footer from Iframe & Sync Title
     iframe.addEventListener('load', () => {
       try {
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
         // Sync Title
         if (iframeDoc.title) {
           document.title = iframeDoc.title;

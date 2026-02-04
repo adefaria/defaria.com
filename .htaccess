@@ -5,11 +5,19 @@ Deny from 66.249.66.*
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+RewriteBase /
+Options -MultiViews
 
 # Force HTTPS (Proxy Aware)
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteRule ^contact/?$ /#contact [R=301,L,NE]
+# Generic Clean URL Routing
+RewriteCond %{QUERY_STRING} !bypass=true
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/(css|Icons|Images|JavaScript|php|bin|gitweb|sounds|video|upload)/ [NC]
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+
+
 </IfModule>

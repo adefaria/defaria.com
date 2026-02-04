@@ -4,10 +4,10 @@ include 'includes/frame_header.php'; ?>
 $music_links = [
     ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songbook/', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_blank'],
-    ['title' => 'Cast of Shadows', 'url' => '/Band/index.php', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
-    ['title' => 'Bottoms Up', 'url' => '/Band/BottomsUp.php', 'desc' => 'After COS I was in a band called Bottoms Up for a while.'],
-    ['title' => 'Bottoming Out in Monterey', 'url' => '/Media/Bottoming%20Out%20in%20Monterey/', 'desc' => 'One of Bottoms Up final performances at Doc Rickets in Monterey, CA. Captured on cassette from the sound board and preserved here.', 'target' => '_self'],
-    ['title' => 'ARM', 'url' => '/Media/ARM/', 'desc' => 'Andrew, Rick and Michele - a little acoustic group doing some memorable songs.', 'target' => '_self']
+    ['title' => 'Cast of Shadows', 'url' => '/cos', 'target' => '_top', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
+    ['title' => 'Bottoms Up', 'url' => '/bottomsup', 'target' => '_top', 'desc' => 'After COS I was in a band called Bottoms Up for a while.'],
+    ['title' => 'Bottoming Out in Monterey', 'url' => '/bottomingout', 'desc' => 'One of Bottoms Up final performances at Doc Rickets in Monterey, CA. Captured on cassette from the sound board and preserved here.', 'target' => '_top'],
+    ['title' => 'ARM', 'url' => '/arm', 'desc' => 'Andrew, Rick and Michele - a little acoustic group doing some memorable songs.', 'target' => '_top']
 ];
 ?>
 

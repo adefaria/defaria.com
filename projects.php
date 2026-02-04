@@ -2,9 +2,9 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $project_links = [
-    ['title' => 'Upload', 'url' => 'upload.php', 'desc' => 'File upload utility.'],
-    ['title' => 'YouTube Download', 'url' => '/yt/', 'desc' => 'Download videos from YouTube.'],
-    ['title' => 'Spleeter', 'url' => 'https://spleeter.defariahome.com', 'desc' => 'AI source separation tool.']
+    ['title' => 'Upload', 'url' => '/upload', 'target' => '_top', 'desc' => 'File upload utility.'],
+    ['title' => 'YouTube Download', 'url' => '/ytdownload', 'target' => '_top', 'desc' => 'Download videos from YouTube.'],
+    ['title' => 'Spleeter', 'url' => '/spleeter', 'target' => '_top', 'desc' => 'AI source separation tool.']
 ];
 ?>
 
@@ -17,9 +17,8 @@ $project_links = [
 
         <?php foreach ($project_links as $link): ?>
             <?php
-            // Default target logic similar to music.php, but override specifically for these internal tools
-            $is_tool = in_array($link['title'], ['Upload', 'YouTube Download', 'Spleeter']);
-            $target = $is_tool ? '_self' : '_blank';
+            // Use target from link data or default to _blank for external
+            $target = $link['target'] ?? '_blank';
             $is_external = ($target === '_blank');
             ?>
             <a href="<?php echo $link['url']; ?>"

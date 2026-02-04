@@ -200,8 +200,10 @@ a:hover {
   color: var(--text-color);
   outline: none;
   transition: all 0.2s ease;
-  width: 300px;
-  /* Reduced from 400px */
+  width: 240px;
+  /* Reduced from 300px (20% less) */
+  margin-right: 2rem;
+  /* Added spacing */
 }
 
 .search-widget input:focus {

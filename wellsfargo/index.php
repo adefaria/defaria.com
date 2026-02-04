@@ -1,7 +1,8 @@
 <?php include '../includes/frame_header.php'; ?>
 
 <main class="container">
-  <h1 class="page-title centered">Wells Fargo Security and treatment of their customers</h1>
+  <h1 class="page-title centered" style="color: var(--google-red);">Wells Fargo Security and treatment of their
+    customers</h1>
 
   <a href="https://www.youtube.com/watch?v=fPoT24YdoJE" target="_blank">Watch this</a>.
   <h2>And they cashed the check!</h2>

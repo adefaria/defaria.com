@@ -3,7 +3,7 @@
 
 <main class="container">
 
-  <h1 class="page-title centered">Broadcom Termination of Contract</h1>
+  <h1 class="page-title centered" style="color: var(--google-red);">Broadcom Termination of Contract</h1>
 
   <p>My corporation, ClearSCM Inc., had entered into a contract with
     Broadcom Inc. on 12/12/2011 for computer consulting services. The

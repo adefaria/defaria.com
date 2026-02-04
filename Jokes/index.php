@@ -21,7 +21,8 @@
 
   <div class="content-container">
     <div class="heading">
-      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Jokes</h1>
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem; color: var(--google-blue);">Jokes
+      </h1>
     </div>
 
     <!-- Removed Navigation Bar -->

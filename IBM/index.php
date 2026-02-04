@@ -31,7 +31,7 @@
 
 <main class="container">
 
-  <h1 class="page-title centered">The IBM Issue</h1>
+  <h1 class="page-title centered" style="color: var(--google-red);">The IBM Issue</h1>
 
   <p>I run a personal web site, <a href="/" target="_top">defaria.com</a>
     that is located in my apartment and have been running that site since

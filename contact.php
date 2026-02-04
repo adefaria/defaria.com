@@ -4,7 +4,8 @@ include 'includes/frame_header.php';
 ?>
 
 <main class="container">
-  <h1 class="page-title">Contact Information</h1>
+  <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem; color: var(--google-blue);">Contact
+    Information</h1>
 
   <h2>Home</h2>
   <div class="info-grid" style="margin-bottom: 2rem;">

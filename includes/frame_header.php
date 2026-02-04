@@ -39,22 +39,6 @@
         }
     </style>
     <script>
-        // Redirect standalone pages to App Shell
-        if (window.self === window.top) {
-            var path = window.location.pathname;
-            var hash = '';
-            if (path.indexOf('resume') !== -1) hash = 'resume';
-            else if (path.indexOf('personal.php') !== -1) hash = 'personal';
-            else if (path.indexOf('professional.php') !== -1) hash = 'professional';
-            else if (path.indexOf('music.php') !== -1) hash = 'music';
-            else if (path.indexOf('projects.php') !== -1) hash = 'projects';
-            else if (path.indexOf('welcome.php') !== -1) hash = 'welcome';
-
-            if (hash) {
-                window.location.replace('/#' + hash);
-            }
-        }
-
         // Apply theme immediately to prevent flash
         (function () {
             try {

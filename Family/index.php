@@ -71,7 +71,8 @@
 
   <div class="content-container">
     <div class="heading">
-      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Danielle Rosemary DeFaria</h1>
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem; color: var(--google-blue);">
+        Danielle Rosemary DeFaria</h1>
     </div>
 
     <p>

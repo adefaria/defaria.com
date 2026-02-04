@@ -1,7 +1,7 @@
 <?php include '../includes/frame_header.php'; ?>
 
 <main class="container">
-  <h1 class="page-title centered">An Example of Bad Management</h1>
+  <h1 class="page-title centered" style="color: var(--google-red);">An Example of Bad Management</h1>
 
   <h2>My Review of San Melia</h2>
   <p>Man this place has really gone downhill, especially since they were bought out by Avenue5. Service sucks, you

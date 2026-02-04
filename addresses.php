@@ -5,14 +5,13 @@ include 'includes/frame_header.php';
 
 <div class="content-container">
   <div class="heading">
-    <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Previous
+    <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem; color: var(--google-blue);">Previous
       Addresses</h1>
   </div>
 
   <!-- Removed Navigation Bar -->
 
-  <center><img src="/Images/Address.png"
-      style="background: white; padding: 10px; border-radius: 8px; margin-bottom: 2rem;"></center>
+  <center><img src="/Images/Address.png" style="padding: 10px; border-radius: 8px; margin-bottom: 2rem;"></center>
 
   <h2>Addresses</h2>
 

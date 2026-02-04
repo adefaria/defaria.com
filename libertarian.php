@@ -20,7 +20,8 @@
 
   <div class="content-container">
     <div class="heading">
-      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem;">Libertarian Quotes</h1>
+      <h1 class="centered brand-name" style="text-align: center; margin-bottom: 2rem; color: var(--google-blue);">
+        Libertarian Quotes</h1>
     </div>
 
     <ol class="quotes-list">
