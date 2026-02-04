@@ -387,8 +387,7 @@ EOF;
             echo "</button>";
 
             echo '<button class="button download-button">';
-            echo "<a href=\"#\" onclick=\"downloadFile('" . $_SERVER['REQUEST_URI'] . '/'
-                . str_replace("'", "\\'", $item) . "', '" . urlencode($item) . "', '"
+            echo "<a href=\"#\" onclick=\"downloadFile('" . str_replace("'", "\\'", $itemPath) . "', '" . urlencode($item) . "', '"
                 . str_replace("'", "\\'", $item) . "'); return false;\">";
             echo '<span class="icon download-icon"><font size=+2>&#x1F4E5;</font></span> Download';
             echo "</a>";
