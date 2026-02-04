@@ -303,6 +303,10 @@
         page = '/yt/?bypass=true';
       } else if (route === 'spleeter') {
         page = 'https://spleeter.defariahome.com';
+      } else if (route.toLowerCase() === 'rr') {
+        page = '/rr/?bypass=true';
+      } else if (route.toLowerCase() === 'rockready') {
+        page = '/rockready/?bypass=true';
       } else if (route === 'webmonitor') {
         page = '/php/logviewer.php';
       } else if (route.toLowerCase() === 'tmp') {
