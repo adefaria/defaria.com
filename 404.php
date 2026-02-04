@@ -2,8 +2,8 @@
 include 'includes/frame_header.php'; ?>
 <style>
     body {
-        background-color: #0d0d0d;
-        color: #e0e0e0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
         overflow: hidden;
         /* For stars */
         height: 100vh;
@@ -11,6 +11,7 @@ include 'includes/frame_header.php'; ?>
         align-items: center;
         justify-content: center;
         text-align: center;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .container-404 {
@@ -95,8 +96,9 @@ include 'includes/frame_header.php'; ?>
     /* Starry Background */
     .star {
         position: absolute;
-        background: #fff;
+        background-color: var(--text-color); /* Adaptive color */
         border-radius: 50%;
+        opacity: 0.8;
     }
 </style>
 
@@ -119,13 +121,14 @@ include 'includes/frame_header.php'; ?>
             star.className = 'star';
             let xy = Math.random() * 100;
             let duration = Math.random() * 1 + 0.5;
-            let size = Math.random() * 2;
+            let size = Math.random() * 2 + 1; // Slightly larger for visibility
 
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
             star.style.width = size + 'px';
             star.style.height = size + 'px';
-            star.style.backgroundColor = Math.random() > 0.5 ? '#fff' : 'rgba(255,255,255,0.5)';
+            // Opacity for twinkling effect or depth
+            star.style.opacity = Math.random() * 0.5 + 0.3; 
 
             body.appendChild(star);
         }
