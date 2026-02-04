@@ -21,3 +21,5 @@ RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
 
 
 </IfModule>
+
+ErrorDocument 404 /404.php
