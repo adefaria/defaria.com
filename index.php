@@ -313,7 +313,6 @@
         page = '/tmp/?bypass=true';
       } else {
         // Default logic: ensure absolute path
-        // If the path maps to a real directory (like /Computers), we want to load that.
         if (!page.startsWith('/') && !page.startsWith('http')) {
           page = '/' + page;
         }
@@ -321,6 +320,12 @@
         // Fallback: use route as is if it looks like a path
         if (route.includes('/') && !route.endsWith('.php')) {
           page = '/' + route;
+        }
+
+        // AUTO-BYPASS: If it's a local path (starts with /) and doesn't explicitly have bypass, add it.
+        // This solves the issue for ANY directory the user adds (e.g. /rr, /share, etc.) without manual updates.
+        if (page.startsWith('/') && !page.includes('?bypass=true')) {
+            page += (page.includes('?') ? '&' : '?') + 'bypass=true';
         }
       }
 
