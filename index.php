@@ -46,24 +46,18 @@
   </div>
 
   <!-- Theme Toggle (Moved) -->
-  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode" style="margin-right: 1rem;">
-    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </button>
+  <!-- Theme Toggle (Moved) -->
+  <div id="theme-toggle-wrapper" style="margin-right: 1rem; display: flex; align-items: center;">
+    <!-- Go to dark mode (Moon) - Visible in Light Mode -->
+    <button id="btn-to-dark" aria-label="Switch to dark theme"
+      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors hover:bg-sky-600 dark:hover:bg-sky-500 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      type="button" style="display:none;">🌙</button>
+
+    <!-- Go to light mode (Sun) - Visible in Dark Mode -->
+    <button id="btn-to-light" aria-label="Switch to light theme"
+      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors hover:bg-sky-600 dark:hover:bg-sky-500 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      type="button" style="display:none;">☀️</button>
+  </div>
 
   <!-- Search Widget -->
   <div class="search-widget">
@@ -132,9 +126,9 @@
   document.addEventListener('DOMContentLoaded', () => {
     const iframe = document.getElementById('content-frame');
     const tabs = document.querySelectorAll('.tab-btn');
-    const themeToggle = document.getElementById('theme-toggle');
-    const sunIcon = themeToggle.querySelector('.sun-icon');
-    const moonIcon = themeToggle.querySelector('.moon-icon');
+    // const themeToggle = document.getElementById('theme-toggle'); // No longer used directly
+    // const sunIcon = themeToggle.querySelector('.sun-icon');
+    // const moonIcon = themeToggle.querySelector('.moon-icon');
 
     // Mobile Sidebar Scrolling
     const sidebar = document.getElementById('sidebar-nav');
@@ -194,19 +188,22 @@
       return 'dark'; // Default to dark at night
     }
 
+    const btnToDark = document.getElementById('btn-to-dark');
+    const btnToLight = document.getElementById('btn-to-light');
+
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       setCookie('theme', theme, 365); // Save to Cookie for 1 year
 
-      // Update Icons
-      // Standard: Sun shows in Dark Mode (to switch to Light). Moon shows in Light Mode (to switch to Dark).
-      // Icon visibility logic:
+      // Update Buttons Visibility
       if (theme === 'light') {
-        sunIcon.style.display = 'none';
-        moonIcon.style.display = 'block';
+        // In Light mode, we want to go to Dark (Moon)
+        if (btnToDark) btnToDark.style.display = 'block';
+        if (btnToLight) btnToLight.style.display = 'none';
       } else {
-        sunIcon.style.display = 'block';
-        moonIcon.style.display = 'none';
+        // In Dark mode, we want to go to Light (Sun)
+        if (btnToDark) btnToDark.style.display = 'none';
+        if (btnToLight) btnToLight.style.display = 'block';
       }
 
       // Sync Iframe
@@ -223,11 +220,17 @@
     setTheme(getPreferredTheme());
 
     // Toggle Handler
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      setTheme(newTheme);
-    });
+    if (btnToDark) {
+      btnToDark.addEventListener('click', () => {
+        setTheme('dark');
+      });
+    }
+
+    if (btnToLight) {
+      btnToLight.addEventListener('click', () => {
+        setTheme('light');
+      });
+    }
 
     // Re-apply theme when iframe loads
     iframe.addEventListener('load', () => {
@@ -325,7 +328,7 @@
         // AUTO-BYPASS: If it's a local path (starts with /) and doesn't explicitly have bypass, add it.
         // This solves the issue for ANY directory the user adds (e.g. /rr, /share, etc.) without manual updates.
         if (page.startsWith('/') && !page.includes('?bypass=true')) {
-            page += (page.includes('?') ? '&' : '?') + 'bypass=true';
+          page += (page.includes('?') ? '&' : '?') + 'bypass=true';
         }
       }
 

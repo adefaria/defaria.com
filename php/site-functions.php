@@ -85,9 +85,21 @@ function copyright(
 
   print <<<END
 <footer class="copyright">
-<div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
-<div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
-<div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
+  <button class="footer-nav-btn left" onclick="history.back()" aria-label="Previous Page" title="Go Back">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+  
+  <div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
+  <div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
+  <div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
+
+  <button class="footer-nav-btn right" onclick="history.forward()" aria-label="Next Page" title="Go Forward">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
 </footer>
 END;
 } // copyright

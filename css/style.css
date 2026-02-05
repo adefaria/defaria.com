@@ -740,6 +740,46 @@ footer {
   margin: 0;
 }
 
+/* Footer Navigation Buttons */
+.footer-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--muted-color);
+  cursor: pointer;
+  padding: 0 1rem;
+  z-index: 2003;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  height: 100%;
+  /* Full height of footer for easier clicking? Or just button size */
+  height: auto;
+  border-radius: 4px;
+}
+
+.footer-nav-btn:hover {
+  color: var(--text-color);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.footer-nav-btn.left {
+  left: 0;
+}
+
+.footer-nav-btn.right {
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-nav-btn {
+    padding: 0 0.5rem;
+  }
+}
+
 /* Desktop-specific adjustments */
 @media (min-width: 769px) {
   .copyright {
@@ -963,4 +1003,50 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Utility functions for user requested buttons */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.transition-colors {
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover\:bg-sky-600:hover {
+  background-color: rgb(2, 132, 199);
+}
+
+[data-theme="dark"] .dark\:hover\:bg-sky-500:hover {
+  background-color: rgb(14, 165, 233);
+}
+
+.active\:scale-95:active {
+  transform: scale(0.95);
+}
+
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus\:ring-2:focus {
+  box-shadow: 0 0 0 2px var(--ring-color, #38bdf8);
+}
+
+.focus\:ring-sky-500:focus {
+  --ring-color: rgb(14, 165, 233);
+}
+
+/* Ensure theme-toggle in header overrides default button styles appropriately if they conflict */
+.theme-toggle.nav-menu-item {
+  /* Ensuring flex is set if not already handled by .theme-toggle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
