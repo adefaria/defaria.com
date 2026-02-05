@@ -806,7 +806,7 @@ footer {
 
 /* Common Content Page Styles (Moved from contact.php) */
 .iframe-body {
-  background-color: var(--surface-color);
+  background-color: var(--bg-color);
   padding: 2rem;
   overflow-y: auto;
 }
