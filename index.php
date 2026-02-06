@@ -266,6 +266,8 @@
         page = '/resume/index.php';
       } else if (route === 'music') {
         page = '/music.php';
+      } else if (route === 'songbook' || route === 'songs') {
+        page = '/songbook/index.php';
       } else if (route === 'maps') {
         page = '/maps/php/main.php';
       } else if (route === 'mapsmobile') {
@@ -366,7 +368,7 @@
           } else if (tabPath === 'personal') {
             if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route)) isActive = true;
           } else if (tabPath === 'music') {
-            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm'].includes(route)) isActive = true;
+            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route)) isActive = true;
           } else if (tabPath === 'projects') {
             if (['upload', 'ytdownload', 'spleeter'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {
