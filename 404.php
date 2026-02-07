@@ -96,7 +96,8 @@ include 'includes/frame_header.php'; ?>
     /* Starry Background */
     .star {
         position: absolute;
-        background-color: var(--text-color); /* Adaptive color */
+        background-color: var(--text-color);
+        /* Adaptive color */
         border-radius: 50%;
         opacity: 0.8;
     }
@@ -107,9 +108,7 @@ include 'includes/frame_header.php'; ?>
     <h2>System Failure</h2>
     <p>The coordinates you entered led to a black hole. <br> This page has been lost in the void.</p>
 
-    <a href="/welcome"
-        onclick="if(window.parent && window.parent.activateTab) { window.parent.activateTab('welcome'); return false; }"
-        class="home-btn">Return to Base</a>
+    <a href="/welcome" target="_top" class="home-btn">Return to Base</a>
 </div>
 
 <script>
@@ -128,9 +127,9 @@ include 'includes/frame_header.php'; ?>
             star.style.width = size + 'px';
             star.style.height = size + 'px';
             // Opacity for twinkling effect or depth
-            star.style.opacity = Math.random() * 0.5 + 0.3; 
+            star.style.opacity = Math.random() * 0.5 + 0.3;
 
-            body.appendChild(star);
+           body.appendChild(star);
         }
     }
     createStars();
