@@ -47,15 +47,15 @@
 
   <!-- Theme Toggle (Moved) -->
   <!-- Theme Toggle (Moved) -->
-  <div id="theme-toggle-wrapper" style="margin-right: 1rem; display: flex; align-items: center;">
+  <div id="theme-toggle-wrapper" style="display: flex; align-items: center;">
     <!-- Go to dark mode (Moon) - Visible in Light Mode -->
     <button id="btn-to-dark" aria-label="Switch to dark theme"
-      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors hover:bg-sky-600 dark:hover:bg-sky-500 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors active:scale-95 focus:outline-none"
       type="button" style="display:none;">🌙</button>
 
     <!-- Go to light mode (Sun) - Visible in Dark Mode -->
     <button id="btn-to-light" aria-label="Switch to light theme"
-      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors hover:bg-sky-600 dark:hover:bg-sky-500 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors active:scale-95 focus:outline-none"
       type="button" style="display:none;">☀️</button>
   </div>
 

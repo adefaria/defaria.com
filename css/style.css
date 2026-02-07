@@ -1,5 +1,6 @@
 :root {
   --bg-color: #121212;
+
   --surface-color: #1e1e1e;
   --primary-color: #bb86fc;
   --secondary-color: #03dac6;
@@ -14,8 +15,8 @@
   --google-purple: rgb(161, 66, 244);
   /* For Hidden tab */
 
-  --sidebar-width: 80px;
-  --topbar-height: 75px;
+  --sidebar-width: 45px;
+  --topbar-height: 55px;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', sans-serif;
   --font-fancy: 'Dancing Script', cursive;
@@ -93,8 +94,9 @@ a:hover {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -108,8 +110,8 @@ a:hover {
   /* Allow growth */
   overflow: visible;
   /* Show all content */
-  padding-right: 2rem;
-  /* Spacing from search */
+  padding-right: 0;
+  /* Reduced spacing */
 }
 
 .home-icon {
@@ -189,7 +191,7 @@ a:hover {
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .search-widget input {
@@ -200,10 +202,10 @@ a:hover {
   color: var(--text-color);
   outline: none;
   transition: all 0.2s ease;
-  width: 240px;
-  /* Reduced from 300px (20% less) */
-  margin-right: 2rem;
-  /* Added spacing */
+  width: 200px;
+  /* Reduced from 240px */
+  margin-right: 0;
+  /* Reduced spacing */
 }
 
 .search-widget input:focus {
@@ -233,7 +235,7 @@ a:hover {
   color: var(--text-color);
   outline: none;
   transition: all 0.2s ease;
-  width: 250px;
+  width: 260px;
   font-size: 0.9rem;
 }
 
@@ -254,15 +256,16 @@ a:hover {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tab-btn {
   display: block;
-  width: 50px;
-  min-height: 100px;
+  width: 23px;
+  min-height: 80px;
   padding: 0.5rem 0.2rem;
   text-align: center;
   background: rgba(255, 255, 255, 0.03);
@@ -304,7 +307,7 @@ a:hover {
   background-color: var(--tab-active-bg);
   border-left: none;
   /* Was right: none */
-  width: 50px;
+  width: 23px;
   /* Keep consistent width */
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   /* Flip shadow x? */
