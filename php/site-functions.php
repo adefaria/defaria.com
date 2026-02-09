@@ -81,19 +81,32 @@ function copyright(
 
   $mod_time = date("F d Y @ g:i a", filemtime($this_file));
 
-  $year_str = ($start_year ? "$start_year - " : "") . $current_year;
+  $search_html = "";
+  if (strpos($_SERVER['REQUEST_URI'], '/songbook') !== false || strpos($_SERVER['REQUEST_URI'], '/songs') !== false || strpos($_SERVER['REQUEST_URI'], 'webchord.cgi') !== false) {
+    $search_html = <<<HTML
+    <form method="get" action="/songbook/search.php" style="display: inline-flex; align-items: center; margin: 0;">
+      <input type="text" name="q" class="search-input" placeholder="Search title or lyrics" onclick="this.value=''">
+    </form>
+HTML;
+  }
 
   print <<<END
-<footer class="copyright">
-  <button class="footer-nav-btn left" onclick="history.back()" aria-label="Previous Page" title="Go Back">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="15 18 9 12 15 6"></polyline>
-    </svg>
-  </button>
-  
-  <div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
-  <div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
-  <div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
+<footer class="copyright" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <button class="footer-nav-btn left" onclick="history.back()" aria-label="Previous Page" title="Go Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    $search_html
+  </div>
+
+  <div style="flex-grow: 1; text-align: center;">
+    <div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
+    <div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
+    <div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
+  </div>
 
   <button class="footer-nav-btn right" onclick="history.forward()" aria-label="Next Page" title="Go Forward">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
