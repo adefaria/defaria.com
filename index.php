@@ -247,8 +247,12 @@
     });
 
     window.activateTab = function (path) {
+      // Split path and query string
+      let [routePath, queryString] = path.split('?');
+      queryString = queryString ? '?' + queryString : '';
+
       // Normalize path (remove leading slash)
-      let route = path.replace(/^\//, '');
+      let route = routePath.replace(/^\//, '');
       if (route === '' || route === 'index.php') route = 'welcome';
 
       // Strip trailing slash if present (unless it's just root)
@@ -257,41 +261,55 @@
       }
 
       // Map route to file
-      let page = '/' + route + '.php';
+      let page = '/' + route + '.php' + queryString;
 
       // Special Routes mappings
       if (route === 'welcome') {
-        page = 'welcome.php';
+        page = 'welcome.php' + queryString;
       } else if (route === 'resume') {
-        page = '/resume/index.php';
+        page = '/resume/index.php' + queryString;
       } else if (route === 'music') {
-        page = '/music.php';
+        page = '/music.php' + queryString;
+      } else if (route === 'personal') {
+        page = '/personal.php' + queryString;
+      } else if (route === 'professional') {
+        page = '/professional.php' + queryString;
+      } else if (route === 'projects') {
+        page = '/projects.php' + queryString;
+      } else if (route === 'blogs') {
+        page = '/blogs.php' + queryString;
+      } else if (route === 'misc') {
+        page = '/misc.php' + queryString;
       } else if (route === 'songbook' || route === 'songs') {
-        page = '/songbook/index.php';
+        page = '/songbook/index.php' + queryString;
+      } else if (route.startsWith('songs/')) {
+        // Deep link to specific song: /songs/webchord.cgi?chordpro=Song.pro
+        const songPath = route.substring(6); // Remove 'songs/' prefix
+        page = '/songbook/' + songPath + queryString;
       } else if (route === 'maps') {
-        page = '/maps/php/main.php';
+        page = '/maps/php/main.php' + queryString;
       } else if (route === 'mapsmobile') {
-        page = '/maps/mobile/?bypass=true';
+        page = '/maps/mobile/?bypass=true'; // Has its own query params
       } else if (route === 'clearscm') {
-        page = '/clearscm/index.php';
+        page = '/clearscm/index.php' + queryString;
       } else if (route === 'contact') {
-        page = '/contact.php';
+        page = '/contact.php' + queryString;
       } else if (route === 'addresses') {
-        page = '/addresses.php';
+        page = '/addresses.php' + queryString;
       } else if (route === 'family') {
-        page = '/Family/index.php';
+        page = '/Family/index.php' + queryString;
       } else if (route === 'jokes') {
-        page = '/Jokes/index.php';
+        page = '/Jokes/index.php' + queryString;
       } else if (route === 'quotes') {
-        page = '/libertarian.php';
+        page = '/libertarian.php' + queryString;
       } else if (route === 'vette') {
-        page = '/Vette/index.html';
+        page = '/Vette/index.html' + queryString;
       } else if (route === 'computers') {
-        page = '/Computers/index.php';
+        page = '/Computers/index.php' + queryString;
       } else if (route === 'band' || route === 'cos') {
-        page = '/Band/index.php';
+        page = '/Band/index.php' + queryString;
       } else if (route === 'bottomsup') {
-        page = '/Band/BottomsUp.php';
+        page = '/Band/BottomsUp.php' + queryString;
       } else if (route === 'bottomingout') {
         page = '/Media/Bottoming%20Out%20in%20Monterey/?bypass=true';
       } else if (route === 'arm') {
@@ -305,7 +323,7 @@
       } else if (route.toLowerCase() === 'wellsfargo') {
         page = '/wellsfargo/?bypass=true';
       } else if (route === 'upload') {
-        page = '/upload.php';
+        page = '/upload.php' + queryString;
       } else if (route === 'ytdownload') {
         page = '/yt/?bypass=true';
       } else if (route === 'spleeter') {
@@ -315,23 +333,26 @@
       } else if (route.toLowerCase() === 'rockready') {
         page = '/rockready/?bypass=true';
       } else if (route === 'webmonitor') {
-        page = '/php/logviewer.php';
+        page = '/php/logviewer.php' + queryString;
       } else if (route.toLowerCase() === 'tmp') {
         page = '/tmp/?bypass=true';
       } else {
         // Default logic: ensure absolute path
+        page = '/' + route;
         if (!page.startsWith('/') && !page.startsWith('http')) {
           page = '/' + page;
         }
-        // If route is just a directory name, maybe we should try that?
-        // Fallback: use route as is if it looks like a path
-        if (route.includes('/') && !route.endsWith('.php')) {
-          page = '/' + route;
+
+        // Append query string if not already present in page (some pages above have hardcoded params)
+        if (queryString && !page.includes('?')) {
+          page += queryString;
+        } else if (queryString && page.includes('?')) {
+          page += '&' + queryString.substring(1);
         }
 
         // AUTO-BYPASS: If it's a local path (starts with /) and doesn't explicitly have bypass, add it.
         // This solves the issue for ANY directory the user adds (e.g. /rr, /share, etc.) without manual updates.
-        if (page.startsWith('/') && !page.includes('?bypass=true')) {
+        if (page.startsWith('/') && !page.includes('?bypass=true') && !page.includes('&bypass=true')) {
           page += (page.includes('?') ? '&' : '?') + 'bypass=true';
         }
       }
@@ -343,12 +364,26 @@
       let currentPath = '';
       let isCrossOrigin = false;
       try {
-        currentPath = iframe.contentWindow.location.pathname;
+        currentPath = iframe.contentWindow.location.pathname + iframe.contentWindow.location.search;
       } catch (e) {
         isCrossOrigin = true;
       }
 
-      if (isCrossOrigin || !iframe.src.endsWith(page) || (currentPath && !currentPath.endsWith(page))) {
+      // Check if we need to update src
+      // If page has query params, we must match them.
+      // Simplest check: does logic require update?
+      // We can just set it?
+      // To avoid reloading same page: check logic.
+
+      // Let's use a simplified check:
+      // If the desired page is different from current src, update.
+      // Note: iframe.src might be full URL. page is relative.
+
+      const absolutePage = page.startsWith('http') ? page : window.location.origin + page;
+
+      if (isCrossOrigin || iframe.src !== absolutePage) {
+        // Also check contentWindow location to avoid reloading if user navigated nicely inside
+        // But for deep linking, we want to force it.
         iframe.src = page;
       }
 
@@ -368,7 +403,7 @@
           } else if (tabPath === 'personal') {
             if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route)) isActive = true;
           } else if (tabPath === 'music') {
-            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route)) isActive = true;
+            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0])) isActive = true;
           } else if (tabPath === 'projects') {
             if (['upload', 'ytdownload', 'spleeter'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {
@@ -392,13 +427,13 @@
         e.preventDefault();
         const href = tab.getAttribute('href');
         window.history.pushState(null, '', href);
-        activateTab(window.location.pathname);
+        activateTab(window.location.pathname + window.location.search);
       });
     });
 
     // Handle Back/Forward
     window.addEventListener('popstate', () => {
-      activateTab(window.location.pathname);
+      activateTab(window.location.pathname + window.location.search);
     });
 
     // Tagline and other Internal Link handling
@@ -442,7 +477,7 @@
       // Optional: Clean the URL
       history.replaceState(null, '', '/' + hashRoute);
     } else {
-      activateTab(window.location.pathname);
+      activateTab(window.location.pathname + window.location.search);
     }
 
     // Update Footer from Iframe & Sync Title
