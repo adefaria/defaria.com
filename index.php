@@ -286,6 +286,14 @@
         // Deep link to specific song: /songs/webchord.cgi?chordpro=Song.pro
         const songPath = route.substring(6); // Remove 'songs/' prefix
         page = '/songbook/' + songPath + queryString;
+      } else if (route.startsWith('sets/')) {
+        // Deep link to set: /sets/SetName -> /songbook/displayset.php?set=SetName.lst
+        const setName = route.substring(5);
+        let setParam = setName;
+        if (!setParam.toLowerCase().endsWith('.lst')) {
+          setParam += '.lst';
+        }
+        page = '/songbook/displayset.php?set=' + setParam + (queryString ? '&' + queryString.substring(1) : '');
       } else if (route === 'maps') {
         page = '/maps/php/main.php' + queryString;
       } else if (route === 'mapsmobile') {
