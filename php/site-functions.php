@@ -82,37 +82,72 @@ function copyright(
   $mod_time = date("F d Y @ g:i a", filemtime($this_file));
 
   $search_html = "";
-  if (strpos($_SERVER['REQUEST_URI'], '/songbook') !== false || strpos($_SERVER['REQUEST_URI'], '/songs') !== false || strpos($_SERVER['REQUEST_URI'], 'webchord.cgi') !== false) {
-    $search_html = <<<HTML
-    <form method="get" action="/songbook/search.php" style="display: inline-flex; align-items: center; margin: 0;">
-      <input type="text" name="q" class="search-input" placeholder="Search title or lyrics" onclick="this.value=''">
+  $is_webchord = (strpos($_SERVER['REQUEST_URI'], 'webchord.cgi') !== false) ||
+    (isset($_SERVER['REDIRECT_URL']) && strpos($_SERVER['REDIRECT_URL'], 'webchord.cgi') !== false);
+
+  // Check if we are in the songbook area
+  $omni_search = "";
+  $song_search = "";
+
+  if (strpos($_SERVER['REQUEST_URI'], '/songbook') !== false || strpos($_SERVER['REQUEST_URI'], '/songs') !== false || $is_webchord) {
+    // Generate the Omni Search form (Column 2)
+    $omni_search = <<<HTML
+    <form method="get" action="/songs/search.php" style="display: inline-flex; align-items: center; margin: 0;">
+      <input type="hidden" name="type" value="omni">
+      <input type="text" name="q" class="uniform-input-width" placeholder="Omni Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
+    </form>
+HTML;
+
+    // Generate the Song Search form (Column 4)
+    $song_search = <<<HTML
+    <form method="get" action="/songs/search.php" class="footer-search-form" style="display: inline-flex; align-items: center; margin: 0; position: relative;">
+      <input type="hidden" name="type" value="song">
+      <input type="text" name="q" id="song-search" class="uniform-input-width song-search-input" placeholder="Song Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
+      <div id="song-results" class="autocomplete-results"></div>
     </form>
 HTML;
   }
 
   print <<<END
-<footer class="copyright" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">
-  <div style="display: flex; align-items: center; gap: 15px;">
-    <button class="footer-nav-btn left" onclick="history.back()" aria-label="Previous Page" title="Go Back">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
-    </button>
-    
-    $search_html
-  </div>
+<footer class="copyright" style="padding: 10px 20px;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <!-- Column 1: Prev Arrow -->
+      <td width="5%" align="left" valign="middle">
+        <button class="footer-nav-btn left" onclick="history.back()" aria-label="Previous Page" title="Go Back">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      </td>
 
-  <div style="flex-grow: 1; text-align: center;">
-    <div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
-    <div class="footer-line">Copyright &copy; $year_str - All rights reserved <a href="mailto:$email">$email</a></div>
-    <div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
-  </div>
+      <!-- Column 2: Omni Search -->
+      <td width="20%" align="center" valign="middle">
+        $omni_search
+      </td>
 
-  <button class="footer-nav-btn right" onclick="history.forward()" aria-label="Next Page" title="Go Forward">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </button>
+      <!-- Column 3: Copyright Block -->
+      <td width="50%" align="center" valign="middle">
+        <div class="footer-line"><span id="footer-mod-date">This page was last modified: $mod_time</span></div>
+        <div class="footer-line">Copyright &copy; $current_year - All rights reserved <a href="mailto:$email">$email</a></div>
+        <div class="footer-line">Website by Andrew DeFaria with the help of his AI friend - Gemini</div>
+      </td>
+
+      <!-- Column 4: Song Search -->
+      <td width="20%" align="center" valign="middle">
+        $song_search
+      </td>
+
+      <!-- Column 5: Next Arrow -->
+      <td width="5%" align="right" valign="middle">
+        <button class="footer-nav-btn right" onclick="history.forward()" aria-label="Next Page" title="Go Forward">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </td>
+    </tr>
+  </table>
 </footer>
 END;
 } // copyright
