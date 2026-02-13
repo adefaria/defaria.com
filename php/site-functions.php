@@ -99,12 +99,89 @@ function copyright(
 HTML;
 
     // Generate the Song Search form (Column 4)
+    global $songs;
+    $mySongs = $songs; // pointer
+
+    // If global songs not found, try to find them
+    if (empty($mySongs)) {
+      if (!function_exists('getSongs')) {
+        if (file_exists("/opt/songbook/web/songbook.php")) {
+          include_once "/opt/songbook/web/songbook.php";
+        }
+      }
+      if (function_exists('getSongs')) {
+        $mySongs = getSongs("/opt/songbook");
+      }
+    }
+
+    $allSongsScript = "";
+
+    if (!empty($mySongs) && is_array($mySongs)) {
+      $js_songs = [];
+      // Helper if function missing
+      if (!function_exists('getSearchableLyrics')) {
+        // Define local helper or skip lyrics? 
+        // Ideally songbook.php is included so it exists.
+        // If not, we skip lyrics to avoid fatal error.
+      }
+
+      foreach ($mySongs as $song_item) {
+        $title = basename($song_item, ".pro");
+        $lyrics = "";
+        if (function_exists('getSearchableLyrics')) {
+          $lyrics = getSearchableLyrics($song_item);
+        }
+        $js_songs[] = [
+          'title' => $title,
+          'file' => $song_item,
+          'lyrics' => $lyrics
+        ];
+      }
+      if (!empty($js_songs)) {
+        $json = json_encode($js_songs);
+        $allSongsScript = "<script>var allSongs = $json; console.log('allSongs loaded from footer: ' + allSongs.length);</script>";
+      }
+    }
+
     $song_search = <<<HTML
     <form method="get" action="/songs/search.php" class="footer-search-form" style="display: inline-flex; align-items: center; margin: 0; position: relative;">
       <input type="hidden" name="type" value="song">
-      <input type="text" name="q" id="song-search" class="uniform-input-width song-search-input" placeholder="Song Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
-      <div id="song-results" class="autocomplete-results"></div>
+      <input type="text" name="q" id="footer-song-search" class="uniform-input-width song-search-input" placeholder="Song Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
+      <div id="footer-song-results" class="autocomplete-results"></div>
+      $allSongsScript
     </form>
+    <style>
+    .footer-search-form .autocomplete-results {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px 8px 0 0;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+        box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+    .footer-search-form .autocomplete-results.show {
+        display: block;
+    }
+    .autocomplete-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        color: #333;
+    }
+    .autocomplete-item:last-child {
+        border-bottom: none;
+    }
+    .autocomplete-item:hover, .autocomplete-item.active {
+        background-color: #f0f0f0;
+    }
+    </style>
 HTML;
   }
 
