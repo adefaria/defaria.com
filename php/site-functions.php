@@ -143,45 +143,160 @@ HTML;
       }
     }
 
+    // Use NOWDOC for JS to avoid PHP interpolation of ${} variables
+    $footer_js = <<<'JS'
+    (function() {
+        function initFooterSearch() {
+            const input = document.getElementById("footer-song-search");
+            const results = document.getElementById("footer-song-results");
+            
+            if (!input || !results) {
+                return;
+            }
+
+            // Close list when clicking outside
+            document.addEventListener("click", function(e) {
+                if (e.target !== input && e.target !== results && !results.contains(e.target)) {
+                    results.classList.remove("show");
+                }
+            });
+
+            input.addEventListener("input", function() {
+                const query = this.value;
+                if (!query) {
+                    results.classList.remove("show");
+                    return;
+                }
+
+                if (typeof allSongs === 'undefined' || !Array.isArray(allSongs)) {
+                    console.error("allSongs not loaded yet or invalid", typeof allSongs);
+                    return;
+                }
+
+                const lowerQuery = query.toLowerCase();
+                const matches = allSongs.filter(song => 
+                    song.title.toLowerCase().includes(lowerQuery) || 
+                    (song.lyrics && song.lyrics.toLowerCase().includes(lowerQuery))
+                );
+
+                displayResults(matches, lowerQuery);
+            });
+            
+            function displayResults(matches, query) {
+                results.innerHTML = "";
+                if (matches.length === 0) {
+                    results.classList.remove("show");
+                    return;
+                }
+
+                // Escape special characters for regex
+                const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${safeQuery})`, "gi");
+
+                matches.forEach(song => {
+                    const item = document.createElement("div");
+                    item.className = "autocomplete-item";
+                    
+                    let displayHTML = "";
+                    if (song.title.toLowerCase().includes(query)) {
+                         displayHTML = song.title.replace(regex, "<strong>$1</strong>");
+                    } else {
+                         displayHTML = song.title;
+                    }
+                    if (!song.title.toLowerCase().includes(query) && song.lyrics && song.lyrics.toLowerCase().includes(query)) {
+                        displayHTML += " <small style='opacity:0.7'><i>(Lyrics match)</i></small>";
+                    }
+
+                    item.innerHTML = displayHTML;
+                    
+                    item.addEventListener("click", function() {
+                        const targetUrl = "/songs/webchord.cgi?chordpro=" + encodeURIComponent(song.file);
+                        window.location.href = targetUrl;
+                        
+                        results.classList.remove("show");
+                        input.value = ""; 
+                    });
+
+                    results.appendChild(item);
+                });
+                
+                results.classList.add("show");
+            }
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initFooterSearch);
+        } else {
+            initFooterSearch();
+        }
+    })();
+JS;
+
     $song_search = <<<HTML
     <form method="get" action="/songs/search.php" class="footer-search-form" style="display: inline-flex; align-items: center; margin: 0; position: relative;">
       <input type="hidden" name="type" value="song">
-      <input type="text" name="q" id="footer-song-search" class="uniform-input-width song-search-input" placeholder="Song Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
-      <div id="footer-song-results" class="autocomplete-results"></div>
+      <input type="text" name="q" id="footer-song-search" class="uniform-input-width song-search-input" placeholder="Search song title / lyrics" autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
+      <div id="footer-song-results" class="footer-autocomplete-results"></div>
       $allSongsScript
     </form>
     <style>
-    .footer-search-form .autocomplete-results {
+    .footer-search-form {
+        position: relative;
+    }
+    .footer-search-form .footer-autocomplete-results {
         position: absolute;
-        bottom: 100%;
+        bottom: 100%; /* Positions it directly above the input */
         left: 0;
         right: 0;
-        z-index: 9999;
+        z-index: 10000; /* Ensure it's above everything including footer and iframe */
         background: #fff;
         border: 1px solid #ccc;
         border-radius: 8px 8px 0 0;
-        max-height: 300px;
+        max-height: 400px; /* More height */
         overflow-y: auto;
         display: none;
-        box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
         text-align: left;
+        margin-bottom: 5px; /* Tiny gap */
     }
-    .footer-search-form .autocomplete-results.show {
+    .footer-search-form .footer-autocomplete-results.show {
         display: block;
     }
-    .autocomplete-item {
-        padding: 8px 12px;
+    .footer-search-form .autocomplete-item {
+        padding: 10px 15px;
         cursor: pointer;
-        border-bottom: 1px solid #eee;
         color: #333;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        line-height: 1.4;
     }
-    .autocomplete-item:last-child {
+    .footer-search-form .autocomplete-item:last-child {
         border-bottom: none;
     }
-    .autocomplete-item:hover, .autocomplete-item.active {
-        background-color: #f0f0f0;
+    .footer-search-form .autocomplete-item:hover,
+    .footer-search-form .autocomplete-item.active {
+        background-color: #e8f0fe;
+        color: #1967d2;
+    }
+    /* Dark mode support if parent has data-theme */
+    [data-theme="dark"] .footer-search-form .footer-autocomplete-results {
+        background: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    [data-theme="dark"] .footer-search-form .autocomplete-item {
+        background: #2d2d2d;
+        color: #e0e0e0;
+        border-color: #444;
+    }
+    [data-theme="dark"] .footer-search-form .autocomplete-item:hover {
+        background: #3d3d3d;
+        color: #fff;
     }
     </style>
+    <script>
+    $footer_js
+    </script>
 HTML;
   }
 
