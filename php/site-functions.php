@@ -301,6 +301,19 @@ HTML;
   }
 
   print <<<END
+<style>
+@media (max-width: 768px) {
+  /* Hide the copyright text cell (3rd column) */
+  footer.copyright td:nth-child(3), footer.copyright .footer-line {
+    display: none !important;
+  }
+  /* Ensure nav buttons are big enough */
+  .footer-nav-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+</style>
 <footer class="copyright" style="padding: 10px 20px;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>

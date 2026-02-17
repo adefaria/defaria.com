@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../songbook"
+		},
+		{
+			"path": "../clearscm"
+		}
+	],
+	"settings": {}
+}

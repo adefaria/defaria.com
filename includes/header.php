@@ -5,7 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andrew DeFaria</title>
-    <link rel="icon" href="/Icons/Home.ico" type="image/x-icon">
+    <?php
+    $favicon = "/Icons/Home.ico";
+    $reltype = "image/x-icon";
+
+    // Check URL to set specific favicons
+    $req_url = $_SERVER['REQUEST_URI'];
+    if (isset($_GET['url'])) {
+        $req_url = $_GET['url'];
+    }
+
+    // Simple substring matching for context
+    if (stripos($req_url, 'song') !== false || stripos($req_url, 'music') !== false) {
+        $favicon = "/songbook/Music.ico";
+        $reltype = "image/png"; // It is actually an ico file but served as png sometimes? Let's check. 
+        // The file is Music.ico. Browser handles mime type usually.
+        // But let's stick to valid types.
+        $reltype = "image/x-icon";
+    } elseif (stripos($req_url, 'maps') !== false) {
+        $favicon = "/maps/MAPS.png";
+        $reltype = "image/png";
+    }
+    ?>
+    <link rel="icon" href="<?php echo $favicon; ?>?v=<?php echo time(); ?>" type="<?php echo $reltype; ?>">
+    <link rel="shortcut icon" href="<?php echo $favicon; ?>?v=<?php echo time(); ?>" type="<?php echo $reltype; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link

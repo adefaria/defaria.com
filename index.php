@@ -488,14 +488,49 @@
       activateTab(window.location.pathname + window.location.search);
     }
 
-    // Update Footer from Iframe & Sync Title
+    // Favicon Logic
+    function updateFavicon(path) {
+      let iconPath = '/Icons/Home.ico';
+      let type = 'image/x-icon';
+
+      if (path.includes('/songbook/') || path.includes('/music') || path.includes('songs/')) {
+        iconPath = '/songbook/Music.ico';
+      } else if (path.includes('/maps/')) {
+        iconPath = '/maps/MAPS.png';
+        type = 'image/png';
+      }
+
+      // Update standard icon
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.type = type;
+      link.href = iconPath + '?v=' + new Date().getTime();
+
+      // Update shortcut icon if it exists (for some browsers)
+      let shortcutLink = document.querySelector("link[rel~='shortcut']");
+      if (shortcutLink) {
+        shortcutLink.type = type;
+        shortcutLink.href = iconPath + '?v=' + new Date().getTime();
+      }
+    }
+
+    // Update Footer from Iframe & Sync Title & Favicon
     iframe.addEventListener('load', () => {
       try {
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const currentPath = iframe.contentWindow.location.pathname;
+
         // Sync Title
         if (iframeDoc.title) {
           document.title = iframeDoc.title;
         }
+
+        // Sync Favicon
+        updateFavicon(currentPath);
 
         const meta = iframeDoc.querySelector('meta[name="last-modified"]');
         if (meta) {
@@ -509,6 +544,11 @@
         }
       } catch (e) {
         console.log('Cross-origin iframe access restricted or other error.');
+        // Fallback: Use the src attribute of the iframe or the current route we navigated to
+        // This is less accurate for internal navigation but better than nothing
+        if (iframe.src) {
+          updateFavicon(iframe.src);
+        }
       }
     });
   });
