@@ -83,7 +83,8 @@
       <label for="email" class="email-label">Can you email me?</label>
       <input type="text" id="email" name="email" value="Type your email address and hit return"
         onfocus="if(this.value=='Type your email address and hit return') this.value='';"
-        onblur="if(this.value=='') this.value='Type your email address and hit return';" class="email-input-box">
+        onblur="if(this.value=='') this.value='Type your email address and hit return';" class="email-input-box"
+        data-bwignore="true" autocomplete="off">
     </form>
   </div>
 </div>
@@ -209,12 +210,16 @@
       }
 
       // Sync Iframe
-      try {
-        if (iframe.contentDocument) {
-          iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
+      if (iframe) {
+        try {
+          // Check if iframe is same-origin before accessing contentDocument
+          if (iframe.contentDocument) {
+            iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
+          }
+        } catch (e) {
+          // Cross-origin: cannot sync theme via DOM manipulation
+          console.log('Cannot access iframe content for theme sync (cross-origin)');
         }
-      } catch (e) {
-        console.log('Cannot access iframe content for theme sync');
       }
     }
 
@@ -529,7 +534,7 @@
           document.title = iframeDoc.title;
         }
 
-        // Sync Favicon
+        // Update Favicon
         updateFavicon(currentPath);
 
         const meta = iframeDoc.querySelector('meta[name="last-modified"]');
@@ -543,9 +548,7 @@
           }
         }
       } catch (e) {
-        console.log('Cross-origin iframe access restricted or other error.');
-        // Fallback: Use the src attribute of the iframe or the current route we navigated to
-        // This is less accurate for internal navigation but better than nothing
+        // Fallback for cross-origin or other errors
         if (iframe.src) {
           updateFavicon(iframe.src);
         }

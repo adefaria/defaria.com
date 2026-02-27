@@ -80,8 +80,8 @@
             <label for="email" class="email-label">Can you email me?</label>
             <input type="text" id="email" name="email" value="Type your email address and hit return"
                 onfocus="if(this.value=='Type your email address and hit return') this.value='';"
-                onblur="if(this.value=='') this.value='Type your email address and hit return';"
-                class="email-input-box">
+                onblur="if(this.value=='') this.value='Type your email address and hit return';" class="email-input-box"
+                data-bwignore="true" autocomplete="off">
         </form>
     </div>
 </div>
