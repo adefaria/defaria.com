@@ -4,6 +4,7 @@ Use this file to track bugs, issues, and feature requests.
 
 - [ ] ClearSCM needs to be internalized
 - [ ] Upload page has a dark mode and light mode. Can we set it to agree with our current light/dark mode setting?
+- [ ] Top 20 displays extra copyright and doesn't display prev/next arrows properly
 
 
 ## Closed
