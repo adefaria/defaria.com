@@ -34,6 +34,7 @@ include 'includes/frame_header.php';
 
   <h2>Employer</h2>
   <div class="info-grid" style="margin-bottom: 1rem;">
+    <b>Senior Perl Developer</b><br>
     <address>
       <a href="https://www.wolterskluwer.com/" target="_blank">
         <img src="/Images/WoltersKluwer.png" alt="Wolters Kluwer"
