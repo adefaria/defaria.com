@@ -178,25 +178,26 @@
 
     // Theme Logic
     function getPreferredTheme() {
-      const storedTheme = getCookie('theme'); // Read from Cookie
+      const storedTheme = getCookie('user_theme'); // Read from Cookie
       if (storedTheme) {
         return storedTheme;
       }
 
-      // Auto-switch based on time of day (7am - 7pm = light)
-      const hour = new Date().getHours();
-      if (hour >= 7 && hour < 19) {
-        return 'light';
+      // Auto-switch based on system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
       }
-      return 'dark'; // Default to dark at night
+      return 'light';
     }
 
     const btnToDark = document.getElementById('btn-to-dark');
     const btnToLight = document.getElementById('btn-to-light');
 
-    function setTheme(theme) {
+    function setTheme(theme, saveCookie = false) {
       document.documentElement.setAttribute('data-theme', theme);
-      setCookie('theme', theme, 365); // Save to Cookie for 1 year
+      if (saveCookie) {
+        setCookie('user_theme', theme, 365); // Save to Cookie for 1 year
+      }
 
       // Update Buttons Visibility
       if (theme === 'light') {
@@ -226,16 +227,26 @@
     // Initial Theme Set
     setTheme(getPreferredTheme());
 
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        // Only auto-switch if the user hasn't set an explicit cookie preference
+        if (!getCookie('user_theme')) {
+          setTheme(e.matches ? 'dark' : 'light', false);
+        }
+      });
+    }
+
     // Toggle Handler
     if (btnToDark) {
       btnToDark.addEventListener('click', () => {
-        setTheme('dark');
+        setTheme('dark', true);
       });
     }
 
     if (btnToLight) {
       btnToLight.addEventListener('click', () => {
-        setTheme('light');
+        setTheme('light', true);
       });
     }
 

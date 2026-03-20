@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="<?php echo isset($_COOKIE['theme']) ? htmlspecialchars($_COOKIE['theme']) : 'dark'; ?>">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['user_theme']) ? htmlspecialchars($_COOKIE['user_theme']) : 'dark'; ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -50,21 +50,23 @@
 
                 // Fallback to cookie (matching index.php) or parent
                 if (!theme) {
-                    var match = document.cookie.match(new RegExp('(^| )theme=([^;]+)'));
+                    var match = document.cookie.match(new RegExp('(^| )user_theme=([^;]+)'));
                     if (match) theme = match[2];
                 }
 
-                // Fallback to light
-                if (!theme) theme = 'light';
+                // Fallback to system preference or light
+                if (!theme) {
+                    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
 
                 if (theme) {
                     document.documentElement.setAttribute('data-theme', theme);
                 }
             } catch (e) {
-                var theme = 'light';
+                var theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 // Try cookie in catch block too
                 try {
-                    var match = document.cookie.match(new RegExp('(^| )theme=([^;]+)'));
+                    var match = document.cookie.match(new RegExp('(^| )user_theme=([^;]+)'));
                     if (match) theme = match[2];
                 } catch (err) { }
                 document.documentElement.setAttribute('data-theme', theme);
