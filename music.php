@@ -2,7 +2,7 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $music_links = [
-    ['title' => 'Rock Ready', 'url' => 'https://defaria.com/rockready', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
+    ['title' => 'Rock Ready', 'url' => 'https://rockready.band', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songs', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_top'],
     ['title' => 'Cast of Shadows', 'url' => '/cos', 'target' => '_top', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
     ['title' => 'Bottoms Up', 'url' => '/bottomsup', 'target' => '_top', 'desc' => 'After COS I was in a band called Bottoms Up for a while.'],
