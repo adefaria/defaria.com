@@ -241,15 +241,11 @@
       });
     }
 
-    // Re-apply theme when iframe loads
+    // Re-apply theme when iframe loads (use postMessage to avoid CORS issues)
     iframe.addEventListener('load', () => {
       const theme = document.documentElement.getAttribute('data-theme');
-      try {
-        if (iframe.contentDocument) {
-          iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
-        }
-      } catch (e) {
-        // Ignore cross-origin
+      if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'themeChange', theme: theme }, '*');
       }
     });
 
