@@ -42,33 +42,29 @@
         // Apply theme immediately to prevent flash
         (function () {
             try {
-                // Try to get from parent first (most accurate if in sync)
                 var theme;
-                if (window.parent && window.parent.document) {
+                // 1. Try localStorage first (works in Brave where cookies may be blocked)
+                try { theme = localStorage.getItem('user_theme'); } catch(e) {}
+
+                // 2. Try parent document attribute
+                if (!theme && window.parent && window.parent.document) {
                     theme = window.parent.document.documentElement.getAttribute('data-theme');
                 }
 
-                // Fallback to cookie (matching index.php) or parent
+                // 3. Fallback to cookie
                 if (!theme) {
-                    var match = document.cookie.match(new RegExp('(^| )user_theme=([^;]+)'));
+                    var match = document.cookie.match(/(^| )user_theme=([^;]+)/);
                     if (match) theme = match[2];
                 }
 
-                // Fallback to system preference or light
+                // 4. Fallback to system preference
                 if (!theme) {
                     theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
 
-                if (theme) {
-                    document.documentElement.setAttribute('data-theme', theme);
-                }
+                if (theme) document.documentElement.setAttribute('data-theme', theme);
             } catch (e) {
                 var theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                // Try cookie in catch block too
-                try {
-                    var match = document.cookie.match(new RegExp('(^| )user_theme=([^;]+)'));
-                    if (match) theme = match[2];
-                } catch (err) { }
                 document.documentElement.setAttribute('data-theme', theme);
             }
         })();
@@ -127,6 +123,8 @@
         window.addEventListener('message', function (event) {
             if (event.data && event.data.type === 'themeChange' && event.data.theme) {
                 document.documentElement.setAttribute('data-theme', event.data.theme);
+                // Persist to localStorage so it survives navigation in Brave (where cookies may be blocked)
+                try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
             }
         });
     </script>

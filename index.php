@@ -153,36 +153,36 @@
       });
     }
 
-    // Cookie Helpers
-    function setCookie(name, value, days) {
-      let expires = "";
-      if (days) {
+    // Theme Storage Helpers
+    // Use localStorage as primary (not blocked by Brave Shields).
+    // Also write a cookie as a fallback for PHP server-side reads.
+    function saveTheme(theme) {
+      try { localStorage.setItem('user_theme', theme); } catch(e) {}
+      try {
         const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+        document.cookie = 'user_theme=' + theme + '; expires=' + date.toUTCString() + '; path=/';
+      } catch(e) {}
     }
 
-    function getCookie(name) {
-      const nameEQ = name + "=";
-      const ca = document.cookie.split(';');
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-      }
+    function getStoredTheme() {
+      try {
+        const ls = localStorage.getItem('user_theme');
+        if (ls) return ls;
+      } catch(e) {}
+      // Fallback: read from cookie
+      try {
+        const match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+        if (match) return match[2];
+      } catch(e) {}
       return null;
     }
 
     // Theme Logic
     function getPreferredTheme() {
-      const storedTheme = getCookie('user_theme'); // Read from Cookie
-      if (storedTheme) {
-        return storedTheme;
-      }
-
-      // Auto-switch based on system preference
+      const storedTheme = getStoredTheme();
+      if (storedTheme) return storedTheme;
+      // Fall back to system preference
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         return 'dark';
       }
@@ -192,10 +192,10 @@
     const btnToDark = document.getElementById('btn-to-dark');
     const btnToLight = document.getElementById('btn-to-light');
 
-    function setTheme(theme, saveCookie = false) {
+    function setTheme(theme, save = false) {
       document.documentElement.setAttribute('data-theme', theme);
-      if (saveCookie) {
-        setCookie('user_theme', theme, 365); // Save to Cookie for 1 year
+      if (save) {
+        saveTheme(theme);
       }
 
       // Update Buttons Visibility
