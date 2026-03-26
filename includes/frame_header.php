@@ -118,10 +118,17 @@
                         }
                     }
                 } catch (e) {
-                    // Ignore cross-origin issues
+                    console.log('Cross-origin theme sync failed, falling back to message listener');
                 }
             });
         }
+        
+        // Listen for robust postMessage theme updates from parent (Bypasses CORS entirely)
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
     </script>
 </head>
 

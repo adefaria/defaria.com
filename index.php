@@ -122,8 +122,7 @@
   </main>
 </div>
 
-<!-- Shell Footer -->
-<?php include 'includes/footer.php'; ?>
+<!-- Shell Footer include moved to EOF -->
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -210,17 +209,9 @@
         if (btnToLight) btnToLight.style.display = 'block';
       }
 
-      // Sync Iframe
-      if (iframe) {
-        try {
-          // Check if iframe is same-origin before accessing contentDocument
-          if (iframe.contentDocument) {
-            iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
-          }
-        } catch (e) {
-          // Cross-origin: cannot sync theme via DOM manipulation
-          console.log('Cannot access iframe content for theme sync (cross-origin)');
-        }
+      // Sync Iframe using postMessage to bypass CORS
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'themeChange', theme: theme }, '*');
       }
     }
 
@@ -568,6 +559,5 @@
   });
 </script>
 
-</body>
-
-</html>
+<!-- Shell Footer -->
+<?php include 'includes/footer.php'; ?>
