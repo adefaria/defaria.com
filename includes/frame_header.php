@@ -44,12 +44,12 @@
             var theme = null;
 
             // 1. Try localStorage first
-            try { theme = localStorage.getItem('user_theme'); } catch(e) {}
+            try { theme = localStorage.getItem('user_theme_override'); } catch(e) {}
 
             // 2. Try cookie
             if (!theme) {
                 try {
-                    var match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+                    var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
                     if (match) theme = match[2];
                 } catch(e) {}
             }
@@ -80,10 +80,10 @@
             if (window.self === window.top && window.matchMedia) {
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
                     var manualTheme = null;
-                    try { manualTheme = localStorage.getItem('user_theme'); } catch(err) {}
+                    try { manualTheme = localStorage.getItem('user_theme_override'); } catch(err) {}
                     if (!manualTheme) {
                         try {
-                            var match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+                            var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
                             if (match) manualTheme = match[2];
                         } catch(err) {}
                     }
@@ -102,9 +102,9 @@
                 document.documentElement.setAttribute('data-theme', event.data.theme);
                 // Persist to localStorage only if it was a manual user action
                 if (event.data.save === true) {
-                    try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
+                    try { localStorage.setItem('user_theme_override', event.data.theme); } catch(e) {}
                 } else if (event.data.save === false) {
-                    try { localStorage.removeItem('user_theme'); } catch(e) {}
+                    try { localStorage.removeItem('user_theme_override'); } catch(e) {}
                 }
             }
         });

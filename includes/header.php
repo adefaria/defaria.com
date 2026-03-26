@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="<?php echo isset($_COOKIE['user_theme']) ? htmlspecialchars($_COOKIE['user_theme']) : ''; ?>">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['user_theme_override']) ? htmlspecialchars($_COOKIE['user_theme_override']) : ''; ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -39,10 +39,10 @@
         // Apply theme immediately to prevent visual flash on the shell page
         (function () {
             var theme = null;
-            try { theme = localStorage.getItem('user_theme'); } catch(e) {}
+            try { theme = localStorage.getItem('user_theme_override'); } catch(e) {}
             if (!theme) {
                 try {
-                    var match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+                    var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
                     if (match) theme = match[2];
                 } catch(e) {}
             }

@@ -157,27 +157,27 @@
     // Use localStorage as primary (not blocked by Brave Shields).
     // Also write a cookie as a fallback for PHP server-side reads.
     function saveTheme(theme) {
-      try { localStorage.setItem('user_theme', theme); } catch(e) {}
+      try { localStorage.setItem('user_theme_override', theme); } catch(e) {}
       try {
         const date = new Date();
         date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
-        document.cookie = 'user_theme=' + theme + '; expires=' + date.toUTCString() + '; path=/';
+        document.cookie = 'user_theme_override=' + theme + '; expires=' + date.toUTCString() + '; path=/';
       } catch(e) {}
     }
 
     function clearStoredTheme() {
-      try { localStorage.removeItem('user_theme'); } catch(e) {}
-      try { document.cookie = 'user_theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; } catch(e) {}
+      try { localStorage.removeItem('user_theme_override'); } catch(e) {}
+      try { document.cookie = 'user_theme_override=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; } catch(e) {}
     }
 
     function getStoredTheme() {
       try {
-        const ls = localStorage.getItem('user_theme');
+        const ls = localStorage.getItem('user_theme_override');
         if (ls) return ls;
       } catch(e) {}
       // Fallback: read from cookie
       try {
-        const match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+        const match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
         if (match) return match[2];
       } catch(e) {}
       return null;
