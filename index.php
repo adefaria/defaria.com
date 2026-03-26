@@ -221,8 +221,8 @@
     // Listen for system theme changes
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        // Only auto-switch if the user hasn't set an explicit cookie preference
-        if (!getCookie('user_theme')) {
+        // Only auto-switch if the user hasn't set an explicit stored preference
+        if (!getStoredTheme()) {
           setTheme(e.matches ? 'dark' : 'light', false);
         }
       });

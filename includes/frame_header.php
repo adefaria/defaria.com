@@ -69,18 +69,32 @@
             }
         })();
 
-        // Keep theme in sync with parent dynamically
-        if (window.parent && window.parent.document !== document) {
+        // PRIMARY: Listen for postMessage theme updates from parent.
+        // This MUST be registered first, before any risky parent.document access,
+        // so it works even in Brave/Firefox where parent.document may throw SecurityError.
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+                // Persist to localStorage so it survives navigation
+                try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
+            }
+        });
+
+        // SECONDARY: Try direct parent DOM sync (same-origin only).
+        // Use window.self !== window.top as the iframe check (doesn't access parent.document).
+        // All parent.document access is wrapped in try/catch for Firefox/Brave safety.
+        if (window.self !== window.top) {
             try {
-                // Determine preferred theme from parent immediately
                 var parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
                 if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
 
                 var observer = new MutationObserver(function (mutations) {
                     mutations.forEach(function (mutation) {
-                        if (mutation.type === "attributes" && mutation.attributeName === "data-theme") {
-                            var newTheme = window.parent.document.documentElement.getAttribute('data-theme');
-                            document.documentElement.setAttribute('data-theme', newTheme);
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                            try {
+                                var newTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                                document.documentElement.setAttribute('data-theme', newTheme);
+                            } catch(e) {}
                         }
                     });
                 });
@@ -90,43 +104,25 @@
                     attributeFilter: ['data-theme']
                 });
             } catch (e) {
-                console.log('Error syncing theme with parent:', e);
+                // Cross-origin or Brave/Firefox security restriction - postMessage will handle it
             }
 
-            // Sync Title and Footer Date
+            // Sync Title and Footer Date with parent (best-effort, same-origin only)
             window.addEventListener('DOMContentLoaded', function () {
                 try {
-                    if (window.parent && window.parent.document !== document) {
-                        // Update parent title
-                        if (document.title) {
-                            window.parent.document.title = document.title;
-                        }
-
-                        // Update parent footer if accessible
-                        var footerDate = window.parent.document.getElementById('footer-mod-date');
-                        if (footerDate) {
-                            var meta = document.querySelector('meta[name="last-modified"]');
-                            if (meta) {
-                                var pageName = document.title.replace(' - Andrew DeFaria', '');
-                                if (pageName === 'Andrew DeFaria') pageName = 'Welcome';
-                                footerDate.textContent = pageName + ': Last modified ' + meta.getAttribute('content');
-                            }
+                    if (document.title) window.parent.document.title = document.title;
+                    var footerDate = window.parent.document.getElementById('footer-mod-date');
+                    if (footerDate) {
+                        var meta = document.querySelector('meta[name="last-modified"]');
+                        if (meta) {
+                            var pageName = document.title.replace(' - Andrew DeFaria', '');
+                            if (pageName === 'Andrew DeFaria') pageName = 'Welcome';
+                            footerDate.textContent = pageName + ': Last modified ' + meta.getAttribute('content');
                         }
                     }
-                } catch (e) {
-                    console.log('Cross-origin theme sync failed, falling back to message listener');
-                }
+                } catch (e) { /* cross-origin - silently ignore */ }
             });
         }
-        
-        // Listen for robust postMessage theme updates from parent (Bypasses CORS entirely)
-        window.addEventListener('message', function (event) {
-            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
-                document.documentElement.setAttribute('data-theme', event.data.theme);
-                // Persist to localStorage so it survives navigation in Brave (where cookies may be blocked)
-                try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
-            }
-        });
     </script>
 </head>
 
