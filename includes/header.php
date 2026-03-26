@@ -35,26 +35,6 @@
     <script language="JavaScript1.2" src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>"
         type="text/javascript"></script>
 
-    <script>
-        // Apply theme immediately to prevent visual flash on the shell page
-        (function () {
-            var theme = null;
-            try { theme = localStorage.getItem('user_theme_override'); } catch(e) {}
-            if (!theme) {
-                try {
-                    var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
-                    if (match) theme = match[2];
-                } catch(e) {}
-            }
-            if (!theme) {
-                try {
-                    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                } catch(e) {}
-            }
-            if (!theme) theme = 'dark'; // Ultimate fallback
-            try { document.documentElement.setAttribute('data-theme', theme); } catch(e) {}
-        })();
-    </script>
 </head>
 
 <?php include_once __DIR__ . '/../php/site-functions.php'; ?>

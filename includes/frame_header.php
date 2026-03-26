@@ -39,61 +39,6 @@
         }
     </style>
     <script>
-        // Apply theme immediately to prevent flash
-        (function () {
-            var theme = null;
-
-            // 1. Try localStorage first
-            try { theme = localStorage.getItem('user_theme_override'); } catch(e) {}
-
-            // 2. Try cookie
-            if (!theme) {
-                try {
-                    var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
-                    if (match) theme = match[2];
-                } catch(e) {}
-            }
-
-            // 3. Try parent document attribute
-            if (!theme) {
-                try {
-                    if (window.parent && window.parent.document) {
-                        theme = window.parent.document.documentElement.getAttribute('data-theme');
-                    }
-                } catch(e) {}
-            }
-
-            // 4. Fallback to system preference
-            if (!theme) {
-                try {
-                    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                } catch(e) {}
-            }
-            
-            if (!theme) theme = 'dark'; // Ultimate fallback
-
-            try { document.documentElement.setAttribute('data-theme', theme); } catch(e) {}
-        })();
-
-        // Standalone OS theme listener (for direct PHP page access without iframe)
-        try {
-            if (window.self === window.top && window.matchMedia) {
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                    var manualTheme = null;
-                    try { manualTheme = localStorage.getItem('user_theme_override'); } catch(err) {}
-                    if (!manualTheme) {
-                        try {
-                            var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
-                            if (match) manualTheme = match[2];
-                        } catch(err) {}
-                    }
-                    if (!manualTheme) {
-                        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-                    }
-                });
-            }
-        } catch(e) {}
-
         // PRIMARY: Listen for postMessage theme updates from parent.
         // This MUST be registered first, before any risky parent.document access,
         // so it works even in Brave/Firefox where parent.document may throw SecurityError.

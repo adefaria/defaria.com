@@ -385,3 +385,89 @@ function display_code($file)
   print "</table>\n</div>";
 } // display_code
 ?>
+<script>
+// Universal Theme Synchronizer (Injects cleanly on any page including site-functions.php)
+(function () {
+    if (window.__themeSyncLoaded) return;
+    window.__themeSyncLoaded = true;
+
+    var theme = null;
+
+    // 1. Try localStorage first
+    try { theme = localStorage.getItem('user_theme_override'); } catch(e) {}
+
+    // 2. Try cookie
+    if (!theme) {
+        try {
+            var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
+            if (match) theme = match[2];
+        } catch(e) {}
+    }
+
+    // 3. Try parent document attribute (only if inside iframe)
+    if (!theme) {
+        try {
+            if (window.parent && window.parent.document && window.self !== window.top) {
+                theme = window.parent.document.documentElement.getAttribute('data-theme');
+            }
+        } catch(e) {}
+    }
+
+    // 4. Fallback to system preference
+    if (!theme) {
+        try {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        } catch(e) {}
+    }
+    
+    if (!theme) theme = 'dark'; // Ultimate fallback
+
+    try { document.documentElement.setAttribute('data-theme', theme); } catch(e) {}
+
+    // PRIMARY: Listen for postMessage theme updates from parent shell.
+    window.addEventListener('message', function (event) {
+        if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+            document.documentElement.setAttribute('data-theme', event.data.theme);
+            if (event.data.save === true) {
+                try { localStorage.setItem('user_theme_override', event.data.theme); } catch(e) {}
+            } else if (event.data.save === false) {
+                try { localStorage.removeItem('user_theme_override'); } catch(e) {}
+            }
+        }
+    });
+
+    // SECONDARY: Standalone OS theme listener (for direct access without iframe)
+    try {
+        if (window.self === window.top && window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                var manualTheme = null;
+                try { manualTheme = localStorage.getItem('user_theme_override'); } catch(err) {}
+                if (!manualTheme) {
+                    try {
+                        var match = document.cookie.match(/(^| )user_theme_override=([^;]+)/);
+                        if (match) manualTheme = match[2];
+                    } catch(err) {}
+                }
+                if (!manualTheme) {
+                    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+    } catch(e) {}
+
+    // TERTIARY: Safe fallback mutation observer for aggressive tracking 
+    if (window.self !== window.top) {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    try {
+                        var newTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                        document.documentElement.setAttribute('data-theme', newTheme);
+                    } catch(e) {}
+                }
+            });
+        });
+        try { observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch(e) {}
+    }
+})();
+</script>
