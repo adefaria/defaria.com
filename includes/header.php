@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['user_theme']) ? htmlspecialchars($_COOKIE['user_theme']) : ''; ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -18,9 +18,6 @@
     // Simple substring matching for context
     if (stripos($req_url, 'song') !== false || stripos($req_url, 'music') !== false) {
         $favicon = "/songbook/Music.ico";
-        $reltype = "image/png"; // It is actually an ico file but served as png sometimes? Let's check. 
-        // The file is Music.ico. Browser handles mime type usually.
-        // But let's stick to valid types.
         $reltype = "image/x-icon";
     } elseif (stripos($req_url, 'maps') !== false) {
         $favicon = "/maps/MAPS.png";
@@ -38,7 +35,26 @@
     <script language="JavaScript1.2" src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>"
         type="text/javascript"></script>
 
-
+    <script>
+        // Apply theme immediately to prevent visual flash on the shell page
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem('user_theme'); } catch(e) {}
+            if (!theme) {
+                try {
+                    var match = document.cookie.match(/(^| )user_theme=([^;]+)/);
+                    if (match) theme = match[2];
+                } catch(e) {}
+            }
+            if (!theme) {
+                try {
+                    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                } catch(e) {}
+            }
+            if (!theme) theme = 'dark'; // Ultimate fallback
+            try { document.documentElement.setAttribute('data-theme', theme); } catch(e) {}
+        })();
+    </script>
 </head>
 
 <?php include_once __DIR__ . '/../php/site-functions.php'; ?>
