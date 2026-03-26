@@ -165,6 +165,11 @@
       } catch(e) {}
     }
 
+    function clearStoredTheme() {
+      try { localStorage.removeItem('user_theme'); } catch(e) {}
+      try { document.cookie = 'user_theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; } catch(e) {}
+    }
+
     function getStoredTheme() {
       try {
         const ls = localStorage.getItem('user_theme');
@@ -211,7 +216,7 @@
 
       // Sync Iframe using postMessage to bypass CORS
       if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'themeChange', theme: theme }, '*');
+        iframe.contentWindow.postMessage({ type: 'themeChange', theme: theme, save: save }, '*');
       }
     }
 
@@ -221,10 +226,10 @@
     // Listen for system theme changes
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        // Only auto-switch if the user hasn't set an explicit stored preference
-        if (!getStoredTheme()) {
-          setTheme(e.matches ? 'dark' : 'light', false);
-        }
+        // When the OS theme is explicitly changed by the user, we clear any manual website override
+        // so the website resumes tracking the system's preferred color scheme.
+        clearStoredTheme();
+        setTheme(e.matches ? 'dark' : 'light', false);
       });
     }
 

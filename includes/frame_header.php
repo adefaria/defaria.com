@@ -75,8 +75,12 @@
         window.addEventListener('message', function (event) {
             if (event.data && event.data.type === 'themeChange' && event.data.theme) {
                 document.documentElement.setAttribute('data-theme', event.data.theme);
-                // Persist to localStorage so it survives navigation
-                try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
+                // Persist to localStorage only if it was a manual user action
+                if (event.data.save === true) {
+                    try { localStorage.setItem('user_theme', event.data.theme); } catch(e) {}
+                } else if (event.data.save === false) {
+                    try { localStorage.removeItem('user_theme'); } catch(e) {}
+                }
             }
         });
 
