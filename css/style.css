@@ -17,6 +17,7 @@
 
   --sidebar-width: 45px;
   --topbar-height: 55px;
+  --footer-height: 44px;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', sans-serif;
   --font-fancy: 'Dancing Script', cursive;
@@ -100,7 +101,7 @@ a:hover {
 /* Layout Grid */
 .app-container {
   display: flex;
-  height: calc(100vh - var(--topbar-height));
+  height: calc(100vh - var(--topbar-height) - var(--footer-height));
   margin-top: var(--topbar-height);
   overflow: hidden;
 }
@@ -373,9 +374,11 @@ a:hover {
 .main-content {
   flex: 1;
   margin-left: var(--sidebar-width);
-  padding: 2rem;
+  padding: 0;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Tab Content */
@@ -498,8 +501,8 @@ footer {
   .app-container {
     flex-direction: column;
     margin-top: var(--topbar-height);
-    /* Adjust height for mobile: 100vh - topbar - bottombar (approx 60px) */
-    height: calc(100vh - var(--topbar-height) - 60px);
+    /* Adjust height for mobile: 100vh - topbar - footer - bottombar (approx 60px) */
+    height: calc(100vh - var(--topbar-height) - var(--footer-height) - 60px);
   }
 
   /* Top Bar Adjustments */
@@ -710,8 +713,7 @@ footer {
   .main-content {
     margin-left: 0;
     /* No margin bottom needed as container height excludes bottom bar */
-    padding: 1rem;
-    /* Reduced padding */
+    padding: 0;
   }
 
 

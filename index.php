@@ -74,6 +74,9 @@
     <!-- Theme Toggle -->
     <!-- Theme Toggle -->
 
+    <!-- UIUtils.js script -->
+    <script src="/JavaScript/UIUtils.js?v=<?php echo time(); ?>" type="text/javascript"></script>
+    
     <!-- CheckAddress.js script -->
     <script src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>" type="text/javascript"></script>
 
@@ -118,7 +121,7 @@
   <!-- Main Content -->
   <main class="main-content" style="padding: 0; display: flex; flex-direction: column;">
     <iframe id="content-frame" name="content-frame" src="welcome.php"
-      style="width: 100%; flex: 1; border: none;"></iframe>
+      style="width: 100%; flex: 1; height: 100%; border: none; overflow: auto;"></iframe>
   </main>
 </div>
 

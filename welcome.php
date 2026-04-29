@@ -95,7 +95,8 @@
 
         <!-- Mobile-only Email Form -->
         <div class="mobile-email-form">
-            <script src="/maps/JavaScript/CheckAddress.js" type="text/javascript"></script>
+            <script src="/JavaScript/UIUtils.js?v=<?php echo time(); ?>" type="text/javascript"></script>
+            <script src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>" type="text/javascript"></script>
             <form method="post" action="javascript:void(0);" name="address"
                 onsubmit="return checkaddress(this, 'andrew');" class="email-form"
                 style="display: flex; flex-direction: column; margin-top: 0.5rem; width: 100%;">
