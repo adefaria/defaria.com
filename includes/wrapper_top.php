@@ -72,7 +72,7 @@
         <!-- Theme Toggle -->
 
         <!-- CheckAddress.js script -->
-        <script src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>" type="text/javascript"></script>
+        <script src="/maps/JavaScript/CheckAddress.js" type="text/javascript"></script>
 
         <!-- Email Form -->
         <form method="post" action="javascript:void(0);" name="address" onsubmit="return checkaddress(this, 'andrew');"

@@ -31,10 +31,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=<?php echo time(); ?>">
-    <script language="JavaScript1.2" src="/JavaScript/UIUtils.js?v=<?php echo time(); ?>"
+    <link rel="stylesheet" href="/css/style.css">
+    <script language="JavaScript1.2" src="/JavaScript/UIUtils.js"
         type="text/javascript"></script>
-    <script language="JavaScript1.2" src="/maps/JavaScript/CheckAddress.js?v=<?php echo time(); ?>"
+    <script language="JavaScript1.2" src="/maps/JavaScript/CheckAddress.js"
         type="text/javascript"></script>
 
 </head>
