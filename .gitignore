@@ -1,13 +1,8 @@
-tmp
-node_modules
-playback.log
-.history
-ali
-bob
-bobbie
-rt
-silvia
-vb2
-Media
-COS
-rr
+MAPSMobile.apk
+Media/.htaccess
+Media/Bottoming Out in Monterey/.htaccess
+Media/index.php
+pm/.history
+pm/node_modules/
+pm/playback.log
+tmp/
