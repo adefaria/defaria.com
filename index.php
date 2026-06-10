@@ -340,7 +340,9 @@
       } else if (route.toLowerCase() === 'sanmelia') {
         page = '/SanMelia/?bypass=true';
       } else if (route.toLowerCase() === 'wellsfargo') {
-        page = '/wellsfargo/?bypass=true';
+        page = '/WellsFargo/?bypass=true';
+      } else if (route === 'recruiters') {
+        page = '/Recruiters/?bypass=true';
       } else if (route === 'upload') {
         page = '/upload.php' + queryString;
       } else if (route === 'ytdownload') {
@@ -351,7 +353,7 @@
         page = '/rr/?bypass=true';
       } else if (route.toLowerCase() === 'rockready') {
         page = '/rockready/?bypass=true';
-      } else if (route === 'webmonitor') {
+      } else if (route === 'webmonitor' || route === 'wm') {
         page = '/php/logviewer.php' + queryString;
       } else if (route.toLowerCase() === 'tmp') {
         page = '/tmp/?bypass=true';
