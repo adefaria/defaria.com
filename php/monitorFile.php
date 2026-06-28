@@ -184,7 +184,7 @@ $msg .= "<p>Full URL: $fullURL</p>";
 $msg .= "<p>Here's what I know about them:</p>";
 
 $me = false;
-$myip = '75.80.5.95';
+$myip = '172.117.188.75';
 
 if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
     $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
