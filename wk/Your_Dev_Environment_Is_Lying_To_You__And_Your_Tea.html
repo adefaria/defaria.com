@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Your Dev Environment Is Lying To You (And Your Team Doesn't Care)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>Your Dev Environment Is Lying To You (And Your Team Doesn't Care)</h1>
+    <div><h2 style="text-align: left;">Maintaining a stable environment</h2><div><p data-path-to-node="3">Imagine this: You’re deep in the zone, fixing a bug, and you need a solid way to validate email addresses. You check your local environment, see <code data-index-in-node="145" data-path-to-node="3">Email::Valid</code> it sitting right there, use it, and write some clean, beautiful code. Local tests pass. Life is good.</p><p data-path-to-node="4">Except life <i data-index-in-node="12" data-path-to-node="4">isn't</i> good, because you just stepped into a deployment minefield.</p><p data-path-to-node="5">I just found out that our development Perl setup is fundamentally different from production. Not only are the core versions mismatched, but the CPAN modules are completely out of sync. That <code data-index-in-node="190" data-path-to-node="5">Email::Valid</code> module I used? It doesn't exist in QA, Integration, or Production. If that code gets pushed, it’s an instant, catastrophic runtime crash on launch.</p><p data-path-to-node="6">But wait, it gets better. When I raised the red flag to the powers that be, expecting a quick <i data-index-in-node="94" data-path-to-node="6">"Oh damn, good catch, let's fix that,"</i> I got a shrug and a literal, <b data-index-in-node="162" data-path-to-node="6">"That's just how it is."</b></p><p data-path-to-node="7">Apparently, environment parity is just a myth we tell junior devs at bedtime. We’re out here playing Russian Roulette with our deployments, and management is completely fine with it.</p></div></div>
+</body>
+</html>

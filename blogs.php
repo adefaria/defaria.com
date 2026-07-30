@@ -6,7 +6,8 @@ $blog_links = [
     ['title' => 'Work Blog', 'url' => 'https://defaria-status.blogspot.com/', 'desc' => 'Blog about things I do at work or for clients'],
     ['title' => 'MAPS Blog', 'url' => 'https://defaria-maps.blogspot.com/', 'desc' => 'Updates on the Mail Authorization and Permission System.'],
     ['title' => 'Personal Blog', 'url' => 'https://defaria-personal.blogspot.com/', 'desc' => 'Personal thoughts and musings.'],
-    ['title' => 'General Blog', 'url' => 'https://defaria-general.blogspot.com/', 'desc' => 'General topics and commentary.']
+    ['title' => 'General Blog', 'url' => 'https://defaria-general.blogspot.com/', 'desc' => 'General topics and commentary.'],
+    ['title' => 'Wolters Kluwer', 'url' => 'https://defaria-wk.blogspot.com/', 'desc' => 'Blogs about my experiences at Wolters Kluwer.']
 ];
 ?>
 

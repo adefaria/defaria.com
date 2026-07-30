@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pitfalls of Global Settings Caching</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>Pitfalls of Global Settings Caching</h1>
+    <div><h2 style="text-align: left;">&nbsp;Caching and UX Design Challenges</h2><div><p data-path-to-node="1">I’m currently grappling with a frustrating issue where long-standing functionality suddenly collapses. Navigating the Ovid app is no small feat—it’s a massive, 20-year-old legacy system with a convoluted history and a labyrinth of operational "flows."</p><p data-path-to-node="2">Recently, the system's reliability has been hit-or-miss. For example, upon logging into OvidUI, the system now defaults to <b data-index-in-node="123" data-path-to-node="2">Advanced Search</b> instead of <b data-index-in-node="150" data-path-to-node="2">Basic Search</b>. Even more baffling: clicking the "Basic Search" link does absolutely nothing. From a UX perspective, rendering a functional-looking link that provides zero feedback is inexcusable; even an error message would be preferable to total silence.</p></div><h2 style="text-align: left;">The Root Cause</h2><div>My investigation revealed that "basic" was inadvertently stripped from <code data-index-in-node="71" data-path-to-node="4">modeTabOrder</code> in <code data-index-in-node="87" data-path-to-node="4">ovidsp.ini</code> during a consolidation of the <code data-index-in-node="128" data-path-to-node="4">.ini</code> files and the subsequent Docker containerization. While this change was pushed back in February, it didn't surface until mid-May. This delay highlights a significant gap in our testing protocols.</div><h2 style="text-align: left;">The Pitfalls of Caching</h2><div><p data-path-to-node="7">While caching is a fundamental computer science tool for optimization, it can be a nightmare for debugging. In this instance, cached settings preserved the "correct" behavior for two months before finally expiring and revealing the bug.</p><p data-path-to-node="8">I would argue that <b data-index-in-node="19" data-path-to-node="8">INI settings and defaults should never be cached.</b> These files are small enough that the performance gains are negligible, yet they are critical to the software’s fundamental operation. We should focus on <b data-index-in-node="223" data-path-to-node="8">caching results, not configurations.</b></p></div></div>
+</body>
+</html>

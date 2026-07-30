@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Technical Debt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>Technical Debt</h1>
+    <div><h2 style="text-align: left;">&nbsp;When and How to treat "technical debt"</h2><div>The term technical debt&nbsp;is the implied future cost of choosing a quick, "good enough" software solution today instead of a more comprehensive, optimal approach. In practice, though, most people view it as cleaning up the code and/or updating to newer/better ways of doing things.</div><div><br /></div><div>I was recently challenged:</div><div><br /></div><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-family: inherit; font-size: medium;">We need to avoid including changes (no matter how small or beneficial) that have nothing to do with the ticket. I understand that this isn't Live code and the containerized version is still a work in progress, but it will make things more difficult for tracking purposes later on. Those changes should be tracked in separate tickets and PRs.</span></div></blockquote><p>I beg to differ. If you only address technical debt, be it a spelling mistake, formatting, or just better error handling, if you put the requirement that every change needs to be documented and accounted for by some sort of issue tracking system, the overhead and non-sexiness of cleanup will rarely, if ever, get done.</p><p>And Gemini agrees with me:<br /></p><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">You have hit on one of the most frustrating, universal truths of software engineering: <b data-index-in-node="87" data-path-to-node="0">if technical debt requires a dedicated ticket, a product manager will eventually bury it at the bottom of the backlog to die.</b></span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">&nbsp;&nbsp;</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">Your experience is totally valid. When debt is formalized into a ticket, it suddenly has to compete with new features that bring immediate revenue. Features almost always win.</span></div></blockquote><blockquote style="border: none; margin: 0 0 0 40px; padding: 0px;"><p style="text-align: left;"><span style="font-size: medium;">&nbsp;The short answer? <b data-index-in-node="18" data-path-to-node="2">You should do both, but you need to draw a hard line between "Micro-Debt" and "Macro-Debt."</b></span></p></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">Here is how to strike the right balance so things actually get fixed without you getting bogged down in endless paperwork.</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><h2 style="text-align: left;"><b>1. The Boy Scout Rule: Handle "Micro-Debt" In-Stride</b>&nbsp;</h2></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-family: inherit; font-size: medium;">If you are already working in a file and notice messy formatting, confusing variable names, lack of test coverage, or minor code duplication, <b data-index-in-node="142" data-path-to-node="6">fix it right there.</b> Do not create a ticket.</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">&nbsp;</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">Think of tech debt like dishes in a kitchen. You don't file a ticket to wipe down the counter after making a sandwich; you just do it as part of the process.</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><ul data-path-to-node="8" style="text-align: left;"><li><div><span style="font-size: medium;"><b data-index-in-node="0" data-path-to-node="8,0,0">The 20% Rule:</b> A good rule of thumb is that up to 20% of your time on a feature ticket can be implicitly spent on cleaning up the immediate area you are touching.</span></div></li></ul></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><ul data-path-to-node="8" style="text-align: left;"><li><div><b data-index-in-node="0" data-path-to-node="8,1,0" style="font-size: large;">How to frame it:</b><span style="font-size: large;"> If anyone asks, this isn't "extra work." This is the cost of implementing the feature correctly and safely. You are keeping the codebase maintainable.</span></div></li></ul></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><blockquote data-path-to-node="9"><div style="text-align: left;"><span style="font-size: medium;"><b data-index-in-node="0" data-path-to-node="9,0">Crucial Rule:</b> The clean-up must match the scope of your ticket. If you are fixing a bug in <code data-index-in-node="91" data-path-to-node="9,0">user_profile.py</code>, don't rewrite the entire <code data-index-in-node="133" data-path-to-node="9,0">authentication</code> module in the same pull request. That leads to scope creep and risky code reviews.</span></div></blockquote></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><h2 data-path-to-node="11" style="text-align: left;">2. When to Actually Fill Out the "Paperwork" (Macro-Debt)</h2></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">You cannot—and should not—sneak massive architectural changes into a minor feature ticket. If the refactor requires rewriting an entire database schema, switching a major library, or will take more than a few hours, it needs a ticket.&nbsp;</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">&nbsp;</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><div style="text-align: left;"><span style="font-size: medium;">If you try to slide massive changes under the radar, your pull requests will become unreviewable, deployments will get risky, and you will frustrate your team.</span></div></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><h2 data-path-to-node="15" style="text-align: left;">3. How to Make Sure Tech Debt Tickets <i data-index-in-node="38" data-path-to-node="15">Actually</i> Get Done</h2><p data-path-to-node="16"><span style="font-size: medium;">If you do have to create a ticket for Macro-Debt, here is how to prevent it from dying in the backlog graveyard:</span></p></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><ul data-path-to-node="17" style="text-align: left;"><li><div><span style="font-size: medium;"><b data-index-in-node="0" data-path-to-node="17,0,0">Tie it to Pain, Not Aesthetics:</b> Don't write a ticket that says <i data-index-in-node="63" data-path-to-node="17,0,0">"Clean up old API code because it's messy."</i> PMs will ignore it. Write: <i data-index-in-node="134" data-path-to-node="17,0,0">"Refactor old API code to reduce page load time by 400ms and stop flaky CI test failures."</i> Translate the debt into business pain (speed, stability, developer velocity).</span></div></li><li><div><span style="font-size: medium;"><b data-index-in-node="0" data-path-to-node="17,1,0">Advocate for a "Tax" System:</b> Work with your team to establish a dedicated capacity rule. For example: <i data-index-in-node="102" data-path-to-node="17,1,0">"80% of our sprint goes to features, 20% goes to technical debt and maintenance."</i> This keeps the pipeline moving without needing to beg for permission every single sprint.</span></div></li><li><div><span style="font-size: medium;"><b data-index-in-node="0" data-path-to-node="17,2,0">Group it into a "Fix-it" Day:</b> If tickets are piling up, lobby for a quarterly "Quality Sprint" or a monthly "Fix-It Friday" where the team tackles nothing but the top-voted debt tickets.</span></div></li></ul></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><h2 style="text-align: left;"><span style="font-size: medium;">The Bottom Line</span></h2></blockquote><blockquote style="border-color: currentcolor; border-image: none; border-style: none; border-width: medium; border: none; margin: 0px 0px 0px 40px; padding: 0px;"><p data-path-to-node="19" style="text-align: left;"><span style="font-size: medium;">Leave the campground cleaner than you found it for the daily stuff. For the massive, structural changes, write the ticket—but learn to pitch it as a performance and stability upgrade, not just a cleanup.</span></p></blockquote></div>
+</body>
+</html>

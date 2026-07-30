@@ -73,6 +73,14 @@ include 'includes/frame_header.php'; ?>
                 <p>Mobile interface for the Mail Authorization and Permission System.</p>
             </div>
         </a>
+
+        <a href="/wk" target="_top" class="link-card"
+            style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div>
+                <h3>Wolters Kluwer</h3>
+                <p>Back in the corporate world things are still messed up</p>
+            </div>
+        </a>
     </div>
 </main>
 

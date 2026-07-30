@@ -333,6 +333,10 @@
         page = '/Media/Bottoming%20Out%20in%20Monterey/?bypass=true';
       } else if (route === 'arm') {
         page = '/Media/ARM/?bypass=true';
+      } else if (route.toLowerCase() === 'media') {
+        page = '/Media/?bypass=true';
+      } else if (route.toLowerCase() === 'wk') {
+        page = '/wk/?bypass=true';
       } else if (route.toLowerCase() === 'broadcom') {
         page = '/Broadcom/?bypass=true';
       } else if (route.toLowerCase() === 'ibm') {

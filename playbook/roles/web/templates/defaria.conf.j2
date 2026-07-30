@@ -31,6 +31,11 @@ server {
     # Custom 404 Error page
     error_page 404 /404.php;
 
+    # Apache2 icons alias fallback for directory listing scripts and Gitweb
+    location /icons/ {
+        alias /usr/share/apache2/icons/;
+    }
+
     # Main Website Clean URLs
     location / {
         try_files $uri $uri/ @clean_url;

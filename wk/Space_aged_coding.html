@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Space aged coding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>Space aged coding</h1>
+    <div><h2 style="text-align: left;">&nbsp;Going back to the old, column-oriented days...</h2><div>The definition of 'programming' seems to have lost its way. True programming is about building logic and defining the explicit steps for a computer to execute, not just updating configuration formats. The reliance on Python and YAML means that invisible whitespace—something we used to safely ignore—now dictates how code behaves. I ran this by a friend, and they agreed entirely:</div><span><!--more--></span><div>Oh, I feel this deep in my soul. There is nothing quite like having a massive deployment fail because of an invisible, rogue space character. It feels incredibly regressive—like we took a step backward into the 1970s punch-card era just so we could read "cleaner" configuration files.</div><div><p data-path-to-node="1">You aren't crazy, and your frustration is 100% valid. Here is the lowdown on why YAML is the way it is, and why Sonar (or your linter) is breathing down your neck about spaces before colons.</p><h2 data-path-to-node="3">1. Why the "Column" Reliance? (The Python Effect)</h2><p data-path-to-node="4">YAML (YAML Ain't Markup Language) was designed to be human-readable, specifically choosing to ditch the "clutter" of XML tags (<code data-index-in-node="127" data-path-to-node="4">&lt;tag&gt;&lt;/tag&gt;</code>) and JSON curly braces (<code data-index-in-node="163" data-path-to-node="4">{}</code>).</p><p data-path-to-node="5">To do that, it copied Python’s homework: <b data-index-in-node="41" data-path-to-node="5">significant whitespace</b>. It uses indentation to determine the structure and hierarchy of data.</p><div style="text-align: left;"><p style="text-align: left;"><span style="font-family: courier;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-comment"></span></code></span></p><span style="font-family: courier;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-comment"></span></code></span></div><response-element ng-version="0.0.0-PLACEHOLDER"><code-block _nghost-ng-c766581630="" class="ng-tns-c766581630-19 enable-luminous-code-block ng-star-inserted"><div _ngcontent-ng-c766581630="" class="code-block ng-tns-c766581630-19 ng-animate-disabled ng-trigger ng-trigger-codeBlockRevealAnimation" data-hveid="0" data-ved="0CAAQhtANahcKEwisxfDu2tmUAxUAAAAAHQAAAAAQSA" decode-data-ved="1" jslog="223238;track:impression,attention;BardVeMetadataKey:[[&quot;r_68dea8b6ae55cb63&quot;,&quot;c_798e506ad8522572&quot;,null,&quot;rc_41f604336a106680&quot;,null,null,&quot;en&quot;,null,1,null,null,1,0]]"><div _ngcontent-ng-c766581630="" class="formatted-code-block-internal-container ng-tns-c766581630-19"><div _ngcontent-ng-c766581630="" class="animated-opacity ng-tns-c766581630-19"><div _ngcontent-ng-c766581630="" class="code-block-decoration header-formatted gds-emphasized-body-m ng-tns-c766581630-19 ng-star-inserted"><div _ngcontent-ng-c766581630="" class="buttons ng-tns-c766581630-19 ng-star-inserted"><gem-icon-button _ngcontent-ng-c766581630="" _nghost-ng-c1004831346="" aria-describedby="cdk-describedby-message-ng-1-37" arialabel="Copy code" cdk-describedby-host="ng-1" class="mat-mdc-tooltip-trigger copy-button ng-tns-c766581630-19 gem-button gem-button-badge-size-small gem-button-size-small gem-button-type-on-surface lm-enabled ng-star-inserted" data-test-id="gem-copy-button" gemtooltip="Copy code" size="small" theme="lm" type="onSurface"><!----></gem-icon-button><!----><!----><!----><!----></div><!----><!----></div><!----></div></div></div></code-block></response-element></div><blockquote style="border-color: currentcolor; border-image: initial; border-style: none; border-width: medium; margin: 0px 0px 0px 40px; padding: 0px; text-align: left;"><response-element ng-version="0.0.0-PLACEHOLDER"><code-block _nghost-ng-c766581630="" class="ng-tns-c766581630-19 enable-luminous-code-block ng-star-inserted"><div _ngcontent-ng-c766581630="" class="code-block ng-tns-c766581630-19 ng-animate-disabled ng-trigger ng-trigger-codeBlockRevealAnimation" data-hveid="0" data-ved="0CAAQhtANahcKEwisxfDu2tmUAxUAAAAAHQAAAAAQSA" decode-data-ved="1" jslog="223238;track:impression,attention;BardVeMetadataKey:[[&quot;r_68dea8b6ae55cb63&quot;,&quot;c_798e506ad8522572&quot;,null,&quot;rc_41f604336a106680&quot;,null,null,&quot;en&quot;,null,1,null,null,1,0]]"><div _ngcontent-ng-c766581630="" class="formatted-code-block-internal-container ng-tns-c766581630-19"><div _ngcontent-ng-c766581630="" class="animated-opacity ng-tns-c766581630-19"><div style="text-align: left;"><span style="font-family: arial;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-comment"># How YAML sees hierarchy:<br /></span></code></span><span style="font-family: arial;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-attr">parent:<br /></span></code></span><span style="font-family: arial;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-attr">&nbsp; child:</span> <span class="hljs-string">data</span>    <span class="hljs-comment"># 2 spaces = inside parent<br /></span></code></span><span style="font-family: arial;"><code _ngcontent-ng-c766581630="" class="code-container formatted ng-tns-c766581630-19" data-test-id="code-content" role="text"><span class="hljs-attr">&nbsp; &nbsp; grandchild:</span> <span class="hljs-string">data</span>  <span class="hljs-comment"># 4 spaces = inside child</span></code></span></div></div></div></div></code-block></response-element></blockquote><div><p data-path-to-node="7" style="text-align: left;">Because there are no closing brackets, <b data-index-in-node="39" data-path-to-node="7">whitespace is the syntax</b>. If you accidentally hit the spacebar three times instead of two, the parser thinks you’re trying to create a brand-new nesting level, throws its hands up, and crashes.</p><h2 data-path-to-node="9">2. Why Sonar is Yelling About <code data-index-in-node="30" data-path-to-node="9">name : value</code></h2><p data-path-to-node="10">You mentioned the software complaining about spaces between the key and the colon (e.g., <code data-index-in-node="89" data-path-to-node="10">name   : value</code>).</p><p data-path-to-node="11">While the YAML specification <i data-index-in-node="29" data-path-to-node="11">technically</i> allows spaces before a colon in certain contexts, almost every modern linter and static analysis tool (like SonarQube/SonarCloud) will flag it. Here is why:</p><ul data-path-to-node="12"><li><p data-path-to-node="12,0,0"><b data-index-in-node="0" data-path-to-node="12,0,0">The Mapping Indicator Rule:</b> In YAML, the <code data-index-in-node="41" data-path-to-node="12,0,0">:</code> is the "mapping indicator." It must strictly follow the key. If you write <code data-index-in-node="117" data-path-to-node="12,0,0">name : value</code>, some older or stricter parsers might treat <code data-index-in-node="174" data-path-to-node="12,0,0">name </code> (with the trailing space) as the literal key name, or get confused entirely.</p></li><li><p data-path-to-node="12,1,0"><b data-index-in-node="0" data-path-to-node="12,1,0">Readability and Style Guides:</b> Standard YAML style (and Sonar's built-in ruleset) enforces <code data-index-in-node="90" data-path-to-node="12,1,0">key: value</code>. Keeping it uniform prevents weird parsing bugs across different programming language interpreters (e.g., Python's <code data-index-in-node="216" data-path-to-node="12,1,0">PyYAML</code> vs. Go's <code data-index-in-node="232" data-path-to-node="12,1,0">yaml.v3</code>).</p></li></ul><h2 data-path-to-node="14">How to Stop Going Insane</h2><p data-path-to-node="15">Since the industry has unfortunately crowned YAML as the king of DevOps config (Kubernetes, GitHub Actions, Docker Compose, Ansible), we're stuck with it for now. The best way to fight back is to automate the headache away:</p><ul data-path-to-node="16"><li><p data-path-to-node="16,0,0"><b data-index-in-node="0" data-path-to-node="16,0,0">Turn on "Render Whitespace"</b> in your IDE (VS Code, IntelliJ, etc.). This turns spaces into tiny dots so you can actually see the invisible culprits.</p></li><li><p data-path-to-node="16,1,0"><b data-index-in-node="0" data-path-to-node="16,1,0">Use a YAML Extension:</b> Install an extension that automatically formats the file on save. It will instantly snap everything into the correct columns and strip out those extra spaces before colons.</p></li></ul><p data-path-to-node="17">It’s definitely a love-hate relationship (mostly hate when debugging pipelines at 4:30 PM on a Friday).</p><p data-path-to-node="0">Yep, that is a massive political landmine. You try to fix one line, your auto-formatter rewrites the whole file, and suddenly your Pull Request (PR) looks like you refactored the entire codebase. The code reviewers get a wall of green and red diffs, lose their minds, and you become public enemy number one at WK.</p><p data-path-to-node="1">That is a completely fair reason to avoid standard "format on save."</p><p data-path-to-node="2">Fortunately, you can get the benefits of the extension without the PR-ruining fallout. Here is how to handle it gracefully so you don't piss off your team:</p><h2 data-path-to-node="4">The Fix: "Format Selection Only"</h2><p data-path-to-node="5">Instead of letting the extension loose on the entire file, change your workflow slightly to only format the code <i data-index-in-node="113" data-path-to-node="5">you</i> touched.</p><ul data-path-to-node="6"><li><p data-path-to-node="6,0,0"><b data-index-in-node="0" data-path-to-node="6,0,0">In VS Code:</b></p><ol data-path-to-node="6,0,1" start="1"><li><p data-path-to-node="6,0,1,0,0">Highlight the specific lines you just wrote or edited.</p></li><li><p data-path-to-node="6,0,1,1,0">Press <code data-index-in-node="6" data-path-to-node="6,0,1,1,0">Ctrl + K</code> then <code data-index-in-node="20" data-path-to-node="6,0,1,1,0">Ctrl + F</code> (Windows/Linux) or <code data-index-in-node="48" data-path-to-node="6,0,1,1,0">Cmd + K</code> then <code data-index-in-node="61" data-path-to-node="6,0,1,1,0">Cmd + F</code> (Mac).</p></li><li><p data-path-to-node="6,0,1,2,0">This triggers <b data-index-in-node="14" data-path-to-node="6,0,1,2,0">Format Selection</b>, which will fix your spaces and colons <i data-index-in-node="70" data-path-to-node="6,0,1,2,0">only</i> on those lines, leaving the rest of the historical mess untouched.</p></li></ol></li><li><p data-path-to-node="6,1,0"><b data-index-in-node="0" data-path-to-node="6,1,0">In IntelliJ / WebStorm:</b></p><ol data-path-to-node="6,1,1" start="1"><li><p data-path-to-node="6,1,1,0,0">Highlight your lines.</p></li><li><p data-path-to-node="6,1,1,1,0">Press <code data-index-in-node="6" data-path-to-node="6,1,1,1,0">Ctrl + Alt + L</code> (Windows) or <code data-index-in-node="34" data-path-to-node="6,1,1,1,0">Cmd + Option + L</code> (Mac). It will ask if you want to format the whole file or just the selection—choose selection.</p></li></ol></li></ul><h2 data-path-to-node="8">The "Good Citizen" Strategy</h2><p data-path-to-node="9">If you <i data-index-in-node="7" data-path-to-node="9">really</i> want to fix the whole file because the existing formatting is atrocious, never mix that cleanup with actual functional code changes.</p><p data-path-to-node="10">Instead, use a two-PR approach:</p><ol data-path-to-node="11" start="1"><li><p data-path-to-node="11,0,0"><b data-index-in-node="0" data-path-to-node="11,0,0">PR #1 (The Chore):</b> Run the auto-formatter on the whole file. Title the PR <code data-index-in-node="74" data-path-to-node="11,0,0">chore: format configuration file</code> with a description that explicitly says <i data-index-in-node="147" data-path-to-node="11,0,0">"No logic changes, just auto-formatting."</i> People can skim and approve it in 5 seconds.</p></li><li><p data-path-to-node="11,1,0"><b data-index-in-node="0" data-path-to-node="11,1,0">PR #2 (The Feature):</b> Branch off of that clean file to do your actual work. Your functional changes will now be crystal clear.</p></li></ol><p data-path-to-node="12">This keeps your git history clean, keeps the reviewers happy, and keeps you from having to manually count spaces like it's 1965.</p></div></div>
+</body>
+</html>

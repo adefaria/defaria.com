@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>The LEO Paradox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>The LEO Paradox</h1>
+    <div><h2 style="text-align: left;">When Corporate Bots Strike Back</h2><p data-path-to-node="3">For a while now, I’ve been dodging a bot named LEO. Its sole mission in life? To pester me with a one-question "survey" to select my "language preference."</p><p data-path-to-node="4">I ignored it as long as I could because, frankly, the irony was too much to handle. LEO was asking me—<b data-index-in-node="102" data-path-to-node="4">in English</b>—what language I prefer. Logic dictates that if I didn’t understand the prompt, I wouldn't be able to answer it, and if I <i data-index-in-node="234" data-path-to-node="4">could</i> answer it, the question was already moot. It’s the digital equivalent of someone walking up to you and asking, "Excuse me, do you speak to people?"</p><p data-path-to-node="5">Eventually, I learned that this wasn't just a quirky bot; it was yet another piece of mandatory corporate administrative overhead. So, I finally gave in. I clicked "English." I confirmed what was already painfully obvious.</p><p data-path-to-node="6">My reward for finally complying? <b data-index-in-node="33" data-path-to-node="6">A mandatory class.</b></p><p data-path-to-node="7">Apparently, identifying my language preference wasn't the finish line; it was the enrollment trigger. Now, instead of focused coding time, I have a new calendar invite for "Corporate Training." It’s a classic example of how "simplifying the workflow" usually results in an extra hour of checking boxes.</p><p data-path-to-node="8">If only there were a language preference for "Let me get back to work."</p></div>
+</body>
+</html>

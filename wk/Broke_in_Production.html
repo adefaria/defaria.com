@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Broke in Production</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>Broke in Production</h1>
+    <div><p>&nbsp;</p><h2 style="font-family: &quot;Segoe UI&quot;;"><em>The Day I Couldn’t Answer the Simplest Production Question</em></h2><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">There’s a question every developer asks instinctively when something breaks:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><div style="text-align: left;"><em>“Is this also broken in production?”</em></div></blockquote><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">It’s not a sophisticated question. It doesn’t require deep observability, distributed tracing, or a fancy dashboard. It’s the most basic sanity check in software development.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">And yet, in some environments, answering it is surprisingly hard.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">The Setup</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">You’re working in a dev environment. You make a change—or maybe you just stumble into a bug—and something clearly isn’t working.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Your next step should be obvious:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><div style="text-align: left;">“Let me check production and see if this already exists.”</div></blockquote><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">In a healthy engineering environment, this is trivial:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>You log into production (or a read-only version of it), or</li><li>You hit the same endpoint in prod, or</li><li>You use a staging environment that mirrors production and runs the exact same version</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Within minutes, you know:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>✅ “Yes, this is already broken in prod”</li><li>✅ “No, this is something I just introduced”</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">That answer drives everything that follows.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">The Reality</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">But instead of that simple flow, you hit something very different:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>You <strong>don’t have access to production</strong></li><li>There is <strong>no clearly defined production-equivalent environment</strong></li><li>Environments are <strong>owned by different teams</strong></li><li>Each environment may be running a <strong>different version</strong></li><li>The configuration between environments is <strong>unknown or inconsistent</strong></li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">So now your simple question becomes an organizational problem instead of a technical one.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">You start asking:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>“Which environment is closest to production?”</li><li>“Who owns that environment?”</li><li>“What version is actually running there?”</li><li>“Can I get access?”</li><li>“Can I deploy my code there?”</li><li>“Will it even behave the same way?”</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">At some point, you may even consider rebuilding your code and pushing it into an environment you <em>can</em> access—just to approximate production behavior.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">And then comes the worst part:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p style="text-align: left;">You don’t actually trust the answer you get.</p></blockquote><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">When Environments Become Fiction</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">In theory, environments exist to increase confidence:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>dev → test → staging → prod</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">In practice, when they diverge in code, configuration, ownership, and access, they stop being useful.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">They become <strong>fictional representations</strong> of reality.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">You’re no longer verifying behavior—you’re guessing.</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>“This <em>should</em> be like production…”</li><li>“This is <em>probably</em> close enough…”</li><li>“I think this is the same version…”</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">But “probably” is not good enough when debugging.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">The Missing Capability</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">What’s missing here isn’t some advanced tooling. It’s a basic capability:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p><strong>The ability for a developer to independently run or access the exact version of the application that is currently in production.</strong></p></blockquote><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">That’s it.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">No coordination. No deployment gymnastics. No approval loops.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Just:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p style="text-align: left;">“Give me the thing that’s in production, and let me see what it does.”</p></blockquote><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">Why This Matters More Than It Seems</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">At first glance, this might feel like a minor inconvenience. It’s not.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">When developers cannot quickly answer, “Is this broken in prod?”:</p><h4 style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">1. Debugging Slows Down Dramatically</h4><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Every issue requires:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>coordination</li><li>validation across environments</li><li>second-guessing results</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Minutes turn into hours.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h4 style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">2. Confidence Drops</h4><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">If environments don’t match production:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>Fixes feel risky</li><li>Testing feels unreliable</li><li>Developers lose trust in the system</li></ul><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h4 style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">3. Ownership Gets Blurred</h4><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">When access is restricted and environments are siloed:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>Developers depend on other teams for basic checks</li><li>Responsibility becomes fragmented</li><li>Progress stalls behind organizational boundaries</li></ul><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h4 style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">4. Incidents Become Harder to Reason About</h4><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">During actual outages, the inability to quickly reproduce production behavior becomes a serious liability.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">How This Happens</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">This situation usually isn’t intentional. It emerges over time:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>Environments are created by different teams</li><li>Configuration differences accumulate</li><li>Access gets locked down “for safety”</li><li>Deployment pipelines diverge</li><li>Ownership boundaries harden</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">Eventually:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p>No single place reliably represents production, and no single person can easily access it.</p></blockquote><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">The Simple Fix (Not Easy, But Simple)</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">You don’t need to rebuild your platform to address this issue.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">You just need to restore a core invariant:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p><strong>There must be a place where developers can access or run the exact code that is in production.</strong></p></blockquote><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">That can take a few forms:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>Read-only access to the production system</li><li>A staging environment is automatically deployed from the same artifact as production</li><li>The ability to spin up the production version on demand</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">The implementation may vary. The requirement does not.</p><hr style="font-family: &quot;Segoe UI&quot;; font-size: 14px;" /><h3 style="font-family: &quot;Segoe UI&quot;;">The Bottom Line</h3><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">If a developer cannot answer:</p><blockquote style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><p style="text-align: left;">“Is this broken in production?”</p></blockquote><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">quickly, independently, and with confidence—<br />Then the development environment is missing something fundamental.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">This isn’t about maturity, scale, or tooling sophistication.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">It’s about preserving a basic feedback loop:</p><ul style="font-family: &quot;Segoe UI&quot;; font-size: 14px;"><li>observe behavior</li><li>compare environments</li><li>make informed decisions</li></ul><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">When that loop breaks, everything downstream becomes slower, riskier, and more frustrating.</p><p style="font-family: &quot;Segoe UI&quot;; font-size: 14px;">And all because a simple question became unnecessarily hard to answer.</p></div>
+</body>
+</html>

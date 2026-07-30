@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>More on Corporate VPNs and Software locks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            margin-top: 1.5em;
+        }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        [data-theme="dark"] h1 {
+            border-bottom-color: #334155;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        function updateTheme() {
+            const isStandalone = window === window.top;
+            let theme = 'light';
+            if (!isStandalone) {
+                try {
+                    const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                    if (parentTheme) theme = parentTheme;
+                } catch (e) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                }
+            } else {
+                try {
+                    const localTheme = localStorage.getItem('user_theme_override');
+                    if (localTheme) {
+                        theme = localTheme;
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = 'dark';
+                    }
+                } catch(e) {}
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.type === 'themeChange' && event.data.theme) {
+                document.documentElement.setAttribute('data-theme', event.data.theme);
+            }
+        });
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div><a href="./" class="back-link">&larr; Back to Articles</a></div>
+
+    <h1>More on Corporate VPNs and Software locks</h1>
+    <div><p>&nbsp;</p><h1 data-path-to-node="3" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The 10-Hour Display Nightmare: How Corporate VPNs and Software Locks Can Ruin a Local Workspace</h1><p data-path-to-node="4" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">As a professional engineer, you expect to have control over your environment. You expect that when you plug in a high-resolution display, you can use those pixels to write code. But when you mix corporate IT lockdown policies, aggressive VPN client routing, and the user-hostile design of modern remote desktop tools, you get a perfect storm of technical absurdity.</p><p data-path-to-node="5" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Here is the anatomy of a maddening, multi-day battle just to control a screen resolution.</p><h3 data-path-to-node="6" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The Objective: A Usable 4K Canvas</h3><p data-path-to-node="7" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The goal was simple: connect from a local Linux workstation ("Earth") to a corporate Windows laptop using a remote desktop client, and scale the display environment to a comfortable, readable 4K resolution.</p><p data-path-to-node="8" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Instead, the system hard-capped the resolution at <span class="math-inline" data-index-in-node="50" data-math="1920 \times 1080" style="line-height: 1.15 !important; margin-top: 0px !important;">1920x1080</span>, cramming a modern development environment into a tiny, unreadable box.</p><h3 data-path-to-node="9" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The Enemy: The Headless Display Driver and the Closed Lid</h3><p data-path-to-node="10" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The first roadblock is how Windows handles physical hardware versus virtual environments.</p><ul data-path-to-node="11" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important; padding-inline-start: 32px;"><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="11,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="11,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;">The Physical Lock:</b> When a laptop lid is open, Windows locks the graphics card's output to the physical properties of the built-in LCD panel. If that panel is physically manufactured at 1080p, Windows strictly caps the software resolution to <span class="math-inline" data-index-in-node="241" data-math="1920 \times 1080" style="line-height: 1.15 !important; margin-top: 0px !important;">1920x1080</span>. It refuses to process a single pixel more because it thinks you are looking at the laptop screen.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="11,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="11,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;">The Virtual Workaround:</b> The only way to break this lock is to close the laptop lid. When the lid is closed, remote software like TeamViewer is supposed to fire up a software-defined "Virtual Display Driver" in system memory. This virtual canvas isn't bound by physical pixels, meaning it can be scaled up to 4K to perfectly match the local workstation.</p></li></ul><h3 data-path-to-node="12" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Enter the Catch-22: The Corporate VPN Hammer</h3><p data-path-to-node="13" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">To get TeamViewer to drop into this magical 4K virtual mode, the laptop lid <i data-index-in-node="76" data-path-to-node="13" style="line-height: 1.15 !important; margin-top: 0px !important;">must</i> be closed. But closing the lid triggers a catastrophic chain reaction of IT restrictions:</p><ol data-path-to-node="14" start="1" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important; padding-inline-start: 32px;"><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="14,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="14,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;">The Sleep Cycle:</b> By default, closing the lid tells Windows to put the machine to sleep, immediately killing the network card and severing all remote access.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="14,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="14,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;">The App Lock:</b> Even if you modify the Windows power configuration to "Do Nothing" on lid close, TeamViewer's newer, heavily degraded free-tier interface locks down unattended access. It disables the ability to set a permanent, local password, forcing users to look at a random, rotating password on the physical screen to log in.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="14,2,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="14,2,0" style="line-height: 1.15 !important; margin-top: 0px !important;">The Catch-22:</b> If the lid is open so you can read the password, you are trapped in 1080p. If the lid is closed to get 4K, you can't see the password to connect.</p></li></ol><h3 data-path-to-node="15" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The "Two-Step" Technical Circus</h3><p data-path-to-node="16" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">To bypass this madness without hacking the Windows Registry, the workflow degenerated into a ridiculous, multi-step protocol involving two different remote desktop applications just to grab a password:</p><ul data-path-to-node="17" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important; padding-inline-start: 32px;"><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="17,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="17,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;">Step 1:</b> Use <b data-index-in-node="12" data-path-to-node="17,0,0" style="line-height: 1.15 !important; margin-top: 0px !important;">Remmina</b> (RDP) from the Linux desktop to connect to the laptop while the lid is closed. This allows a temporary peek at the Windows desktop without triggering the physical 1080p hardware monitor lock.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="17,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="17,1,0" style="line-height: 1.15 !important; margin-top: 0px !important;">Step 2:</b> In the RDP session, copy the temporary connection password.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="17,2,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="17,2,0" style="line-height: 1.15 !important; margin-top: 0px !important;">Step 3:</b> Fire up the actual TeamViewer connection from the local workstation, paste the password, and let the 4K virtual display driver initialize.</p></li><li style="line-height: 1.15 !important; margin-top: 0px !important;"><p data-path-to-node="17,3,0" style="line-height: 1.15 !important; margin-top: 0px !important;"><b data-index-in-node="0" data-path-to-node="17,3,0" style="line-height: 1.15 !important; margin-top: 0px !important;">Step 4:</b> Immediately sever the Remmina connection, because the exact second the corporate VPN client is turned on, it kills all local subnet routing—choking out RDP/Remmina entirely.</p></li></ul><h3 data-path-to-node="18" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">The Final Insult: The Free-Tier Ticking Clock</h3><p data-path-to-node="19" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Even with this brilliant workaround in place, the free tier of TeamViewer acts as a looming executioner. Because the connection routes through corporate infrastructure, automated algorithms trigger "Commercial Use Suspected" flags.</p><p data-path-to-node="20" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Instead of a stable, all-day connection, the server randomly drops the session after a few hours—or worse, hits the connection with a <b data-index-in-node="134" data-path-to-node="20" style="line-height: 1.15 !important; margin-top: 0px !important;">5-minute timeout penalty</b>. When the clock runs out, the connection dies, the password rotates, and you are forced to repeat the entire Remmina-to-TeamViewer circus multiple times a day.</p><h3 data-path-to-node="21" style="font-family: &quot;Google Sans&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Conclusion: IT-Enforced Inefficiency</h3><p data-path-to-node="22" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">Management's solution to this madness? "Use a physical docking station."</p><p data-path-to-node="23" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">But a hardware docking station assumes a complete separation of concerns. It forces a developer to constantly flip a physical KVM switch or toggle monitor inputs back and forth just to check a text message from a friend or coordinate a band rehearsal on their personal machine. It trades digital friction for physical friction.</p><p data-path-to-node="24" style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">When IT policies are so rigid that developers have to choreograph a multi-app dance just to get a readable screen resolution, the system is no longer protecting the network—it's just actively sabotaging productivity.</p></div>
+</body>
+</html>
