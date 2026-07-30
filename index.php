@@ -491,14 +491,22 @@
     }
 
     // Initial Load
+    let initialPath = window.location.pathname + window.location.search;
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlParam = urlParams.get('url');
+
+    if (urlParam) {
+      initialPath = urlParam;
+      window.history.replaceState(null, '', urlParam);
+    }
+
     // Check for hash fallback (e.g. from cached redirects or bookmarks)
     if (window.location.pathname === '/' && window.location.hash) {
       const hashRoute = window.location.hash.substring(1);
       activateTab('/' + hashRoute);
-      // Optional: Clean the URL
       history.replaceState(null, '', '/' + hashRoute);
     } else {
-      activateTab(window.location.pathname + window.location.search);
+      activateTab(initialPath);
     }
 
     // Favicon Logic
