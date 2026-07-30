@@ -69,7 +69,7 @@ server {
             include fastcgi_params;
             fastcgi_pass unix:{{ php_fpm_socket | default('/run/php/php8.4-fpm.sock') }};
             fastcgi_param SCRIPT_FILENAME $request_filename;
-            fastcgi_param PHP_VALUE "include_path=.:/opt/clearscm/maps/php:/opt/clearscm/lib:/usr/share/php";
+            fastcgi_param PHP_VALUE "include_path=.:/opt/defaria.com/php:/opt/clearscm/maps/php:/opt/clearscm/lib:/usr/share/php";
         }
 
         location ~ \.cgi$ {
