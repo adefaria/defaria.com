@@ -1,0 +1,46 @@
+# Nginx server configuration for RockReady (WordPress)
+
+# HTTP Server (Redirect to HTTPS in production, or serve directly in staging)
+server {
+    listen {{ nginx_port | default(80) }};
+    server_name rockready.defariahome.com rockready.band;
+
+{% if nginx_ssl_enabled | default(false) %}
+    # Force HTTPS in production
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS Server for Production
+server {
+    listen 443 ssl;
+    server_name rockready.band;
+
+    ssl_certificate /etc/letsencrypt/live/rockready.band/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/rockready.band/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+{% endif %}
+
+    root /opt/rockready;
+    index index.php index.html;
+
+    # WordPress Permalinks / Clean URLs
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    # PHP Execution
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:{{ php_fpm_socket | default('/run/php/php8.4-fpm.sock') }};
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    # Deny access to sensitive files
+    location ~ /\. {
+        deny all;
+    }
+    location ~* /(?:uploads|files)/.*\.php$ {
+        deny all;
+    }
+}

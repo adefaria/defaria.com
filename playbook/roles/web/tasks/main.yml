@@ -1,2 +1,2 @@
 ---
-- import_tasks: httpd.yml
+- import_tasks: "{{ web_server | default('nginx') }}.yml"
