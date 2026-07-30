@@ -23,6 +23,7 @@ server {
 
     root /web;
     index index.php index.html;
+    autoindex on; # Enable directory listings
 
     # Redirect /upload to main site
     rewrite ^/upload$ https://{{ server_name | default('defaria.com') }}/#upload permanent;
