@@ -107,35 +107,44 @@ function check_and_send_log_changes($filePath, &$lineCount)
 }
 
 if (!extension_loaded('inotify')) {
-    send_sse_message(['type' => 'error', 'message' => 'inotify extension not loaded on server. Real-time updates unavailable.']);
-    exit;
+    $useInotify = false;
+    debug_log("Inotify extension not loaded, using polling fallback.");
+} else {
+    $useInotify = true;
 }
 
-$inotify = inotify_init();
-if (!$inotify) {
-    send_sse_message(['type' => 'error', 'message' => 'Failed to initialize inotify.']);
-    exit;
+$inotify = null;
+$watch_descriptor = false;
+
+if ($useInotify) {
+    $inotify = inotify_init();
+    if (!$inotify) {
+        $useInotify = false;
+        debug_log("Failed to initialize inotify, falling back to polling.");
+    } else {
+        stream_set_blocking($inotify, 0); // Ensure non-blocking mode for select/read interaction
+    }
 }
-stream_set_blocking($inotify, 0); // Ensure non-blocking mode for select/read interaction
 
 // Attempt to add watch. If log file doesn't exist, inotify_add_watch will fail.
 // We'll try to create it if it's missing, then watch.
 if (!file_exists($logFile)) {
     if (@touch($logFile) === false) {
         send_sse_message(['type' => 'error', 'message' => "Log file '$logFile' does not exist and could not be created."]);
-        fclose($inotify);
+        if ($useInotify && $inotify) fclose($inotify);
         exit;
     }
     chmod($logFile, 0664); // Ensure web server can write if it creates it, and read
 }
 clearstatcache(true, $logFile);
 
-$watch_descriptor = @inotify_add_watch($inotify, $logFile, IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB | IN_DELETE_SELF | IN_MOVE_SELF | IN_CREATE);
+if ($useInotify) {
+    $watch_descriptor = @inotify_add_watch($inotify, $logFile, IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB | IN_DELETE_SELF | IN_MOVE_SELF | IN_CREATE);
 
-if ($watch_descriptor === false) {
-    send_sse_message(['type' => 'error', 'message' => "Failed to watch log file '$logFile'. Check permissions or if path is correct."]);
-    fclose($inotify);
-    exit;
+    if ($watch_descriptor === false) {
+        $useInotify = false;
+        debug_log("Failed to watch log file with inotify, falling back to polling.");
+    }
 }
 
 // Send the initial state of the log file
@@ -149,7 +158,6 @@ while (true) {
         break; // Client disconnected
     }
 
-    // Send a keep-alive comment every 20 seconds if no other data
     // Send a keep-alive comment every 5 seconds if no other data
     if (time() - $last_ping_time > 5) {
         echo ": keepalive " . time() . "\n\n"; // SSE comment with timestamp to ensure change
@@ -157,91 +165,90 @@ while (true) {
         $last_ping_time = time();
     }
 
-    // Use stream_select to wait for events or timeout
-    // This avoids busy waiting loop with usleep and allows instant response to events
-    $read = [$inotify];
-    $write = null;
-    $except = null;
-    $timeout = 10; // Wait up to 1 seconds (let loop handle heartbeat freq)
+    if ($useInotify) {
+        // Use stream_select to wait for events or timeout
+        $read = [$inotify];
+        $write = null;
+        $except = null;
+        $result = stream_select($read, $write, $except, 1);
 
-    // debug_log("Entering stream_select...");
-    $result = stream_select($read, $write, $except, 1);
-    // debug_log("stream_select returned: " . var_export($result, true));
+        if ($result === false) {
+            debug_log("stream_select failed/false.");
+            break; // Exit loop on error
+        }
 
-    if ($result === false) {
-        debug_log("stream_select failed/false.");
-        break; // Exit loop on error
-    }
+        if ($result > 0) {
+            $events = inotify_read($inotify); // reliable read since select said yes
 
-    if ($result > 0) {
-        $events = inotify_read($inotify); // reliable read since select said yes
-
-        if ($events) {
-            $last_ping_time = time(); // Reset ping timer on activity
-            $fileChanged = false;
-            foreach ($events as $event) {
-                if ($event['mask'] & (IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB)) {
-                    $fileChanged = true;
-                }
-                if ($event['mask'] & (IN_DELETE_SELF | IN_MOVE_SELF)) {
-                    // Log rotated or deleted. Don't exit. Wait for it to reappear.
-                    debug_log("Log file moved or deleted. Attempting recovery...");
-                    inotify_rm_watch($inotify, $watch_descriptor);
-
-                    // Blocking loop (with small sleeps) to wait for file recreation
-                    // But we must also keep sending heartbeats so client doesn't time out
-                    $recreateAttempts = 0;
-                    while (!file_exists($logFile)) {
-                        if (connection_aborted())
-                            break 2; // Break main loop
-                        if ($recreateAttempts % 5 == 0) { // Every 1 sec (5 * 200ms)
-                            echo ": keepalive " . time() . "\n\n";
-                            flush();
-                        }
-                        usleep(200000); // 200ms
-                        $recreateAttempts++;
-                        if ($recreateAttempts > 300) { // 60 seconds timeout
-                            send_sse_message(['type' => 'error', 'message' => 'Log file lost for too long.']);
-                            break 2;
-                        }
+            if ($events) {
+                $last_ping_time = time(); // Reset ping timer on activity
+                $fileChanged = false;
+                foreach ($events as $event) {
+                    if ($event['mask'] & (IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB)) {
+                        $fileChanged = true;
                     }
+                    if ($event['mask'] & (IN_DELETE_SELF | IN_MOVE_SELF)) {
+                        // Log rotated or deleted. Don't exit. Wait for it to reappear.
+                        debug_log("Log file moved or deleted. Attempting recovery...");
+                        inotify_rm_watch($inotify, $watch_descriptor);
 
-                    // File should exist now (or we broke loop)
-                    if (file_exists($logFile)) {
-                        // Re-add watch
-                        clearstatcache(true, $logFile);
-                        $watch_descriptor = @inotify_add_watch($inotify, $logFile, IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB | IN_DELETE_SELF | IN_MOVE_SELF | IN_CREATE);
-                        if ($watch_descriptor === false) {
-                            debug_log("Failed to re-watch log file.");
-                            // Maybe just sending full log or attempting blindly next loop?
-                            // Let's reset line count and treat as new file?
-                            $currentLineCount = 0;
-                            send_initial_log_state($logFile, $currentLineCount);
-                        } else {
-                            debug_log("Log file recovered. Re-watched.");
-                            $currentLineCount = 0; // Reset line count as it's a new file
-                            send_initial_log_state($logFile, $currentLineCount);
+                        // Blocking loop (with small sleeps) to wait for file recreation
+                        // But we must also keep sending heartbeats so client doesn't time out
+                        $recreateAttempts = 0;
+                        while (!file_exists($logFile)) {
+                            if (connection_aborted())
+                                break 2; // Break main loop
+                            if ($recreateAttempts % 5 == 0) { // Every 1 sec (5 * 200ms)
+                                echo ": keepalive " . time() . "\n\n";
+                                flush();
+                            }
+                            usleep(200000); // 200ms
+                            $recreateAttempts++;
+                            if ($recreateAttempts > 300) { // 60 seconds timeout
+                                send_sse_message(['type' => 'error', 'message' => 'Log file lost for too long.']);
+                                break 2;
+                            }
                         }
+
+                        // File should exist now (or we broke loop)
+                        if (file_exists($logFile)) {
+                            // Re-add watch
+                            clearstatcache(true, $logFile);
+                            $watch_descriptor = @inotify_add_watch($inotify, $logFile, IN_MODIFY | IN_CLOSE_WRITE | IN_ATTRIB | IN_DELETE_SELF | IN_MOVE_SELF | IN_CREATE);
+                            if ($watch_descriptor === false) {
+                                debug_log("Failed to re-watch log file.");
+                                $currentLineCount = 0;
+                                send_initial_log_state($logFile, $currentLineCount);
+                            } else {
+                                debug_log("Log file recovered. Re-watched.");
+                                $currentLineCount = 0; // Reset line count as it's a new file
+                                send_initial_log_state($logFile, $currentLineCount);
+                            }
+                        }
+                        continue; // Continue main loop
                     }
-                    continue; // Continue main loop
                 }
-            }
-            if ($fileChanged) {
-                if (!check_and_send_log_changes($logFile, $currentLineCount)) {
-                    debug_log("check_and_send_log_changes failed (unreadable?). Not exiting, just retrying next loop.");
-                    // Do not exit. Just continue.
-                    continue;
+                if ($fileChanged) {
+                    if (!check_and_send_log_changes($logFile, $currentLineCount)) {
+                        debug_log("check_and_send_log_changes failed (unreadable?). Not exiting, just retrying next loop.");
+                        continue;
+                    }
                 }
             }
         }
+    } else {
+        // Polling fallback
+        usleep(1000000); // Sleep for 1 second
+        if (!check_and_send_log_changes($logFile, $currentLineCount)) {
+            usleep(1000000);
+        }
     }
-    // Loop continues to check connection_aborted and send heartbeats
 }
 
-if ($watch_descriptor !== false && $inotify) {
+if ($useInotify && $watch_descriptor !== false && $inotify) {
     @inotify_rm_watch($inotify, $watch_descriptor);
 }
-if ($inotify) {
+if ($useInotify && $inotify) {
     @fclose($inotify);
 }
 ?>
