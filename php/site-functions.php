@@ -92,7 +92,7 @@ function copyright(
   if (strpos($_SERVER['REQUEST_URI'], '/songbook') !== false || strpos($_SERVER['REQUEST_URI'], '/songs') !== false || $is_webchord) {
     // Generate the Omni Search form (Column 2)
     $omni_search = <<<HTML
-    <form method="get" action="/songs/search.php" style="display: inline-flex; align-items: center; margin: 0;">
+    <form method="get" action="/songbook/search.php" target="content-frame" style="display: inline-flex; align-items: center; margin: 0;">
       <input type="hidden" name="type" value="omni">
       <input type="text" name="q" class="uniform-input-width" placeholder="Omni Search..." autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
     </form>
@@ -154,6 +154,8 @@ HTML;
                 return;
             }
 
+            let currentFocus = -1;
+
             // Close list when clicking outside
             document.addEventListener("click", function(e) {
                 if (e.target !== input && e.target !== results && !results.contains(e.target)) {
@@ -181,9 +183,45 @@ HTML;
 
                 displayResults(matches, lowerQuery);
             });
+
+            input.addEventListener("keydown", function(e) {
+                let x = results.getElementsByTagName("div");
+                if (e.keyCode === 40) { // Arrow Down
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode === 38) { // Arrow Up
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode === 13) { // Enter
+                    if (results.classList.contains("show")) {
+                        e.preventDefault();
+                        if (currentFocus > -1) {
+                            if (x) x[currentFocus].click();
+                        } else if (x && x.length > 0) {
+                            x[0].click();
+                        }
+                    }
+                }
+            });
+
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("active");
+                x[currentFocus].scrollIntoView({block: "nearest"});
+            }
+
+            function removeActive(x) {
+                for (let i = 0; i < x.length; i++) {
+                    x[i].classList.remove("active");
+                }
+            }
             
             function displayResults(matches, query) {
                 results.innerHTML = "";
+                currentFocus = -1;
                 if (matches.length === 0) {
                     results.classList.remove("show");
                     return;
@@ -230,10 +268,10 @@ HTML;
             initFooterSearch();
         }
     })();
-JS;
+    JS;
 
     $song_search = <<<HTML
-    <form method="get" action="/songs/search.php" class="footer-search-form" style="display: inline-flex; align-items: center; margin: 0; position: relative;">
+    <form method="get" action="/songbook/search.php" target="content-frame" class="footer-search-form" style="display: inline-flex; align-items: center; margin: 0; position: relative;">
       <input type="hidden" name="type" value="song">
       <input type="text" name="q" id="footer-song-search" class="uniform-input-width song-search-input" placeholder="Search song title / lyrics" autocomplete="off" style="background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; min-width: 250px;">
       <div id="footer-song-results" class="footer-autocomplete-results"></div>
