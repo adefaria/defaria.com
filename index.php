@@ -120,7 +120,7 @@
 
   <!-- Main Content -->
   <main class="main-content" style="padding: 0; display: flex; flex-direction: column;">
-    <iframe id="content-frame" name="content-frame" src="welcome.php"
+    <iframe id="content-frame" name="content-frame" src="/welcome.php"
       style="width: 100%; flex: 1; height: 100%; border: none; overflow: auto;"></iframe>
   </main>
 </div>
@@ -276,7 +276,7 @@
 
       // Special Routes mappings
       if (route === 'welcome') {
-        page = 'welcome.php' + queryString;
+        page = '/welcome.php' + queryString;
       } else if (route === 'resume') {
         page = '/resume/index.php' + queryString;
       } else if (route === 'music') {
