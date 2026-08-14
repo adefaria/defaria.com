@@ -21,11 +21,19 @@ include '../includes/frame_header.php'; ?>
     .link-card {
         border-top: 3px solid var(--google-blue);
     }
+    .page-note {
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        color: var(--google-grey-700, #5f6368);
+        font-style: italic;
+    }
 </style>
 
 <main class="container">
     <h1 class="page-title">Wolters Kluwer</h1>
     <p class="page-description">A collection of internal logs, experiences, and technical articles from my time at Wolters Kluwer.</p>
+    <p class="page-note"><strong>Note:</strong> If you feel that any of these posts violates some sort intellectual property or other violation, corrections are thoughtfully entertained by sending email to <a href="mailto:Andrew@DeFaria.com">Andrew@DeFaria.com</a>.</p>
     <div class="link-grid">
         <a href="Wolters_Kluwer.html" class="link-card">
             <h3>1. Wolters Kluwer</h3>
