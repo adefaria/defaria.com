@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
     if (!filter_var($videoUrl, FILTER_VALIDATE_URL)) {
         // Search Logic
         $ytBin = 'yt-dlp';
-        $cmd = $ytBin . ' --js-runtimes node --flat-playlist --dump-single-json --no-warnings ' . escapeshellarg('ytsearch10:' . $videoUrl);
+        $cmd = $ytBin . ' --js-runtimes node --extractor-args ' . escapeshellarg('youtube:player_client=ios,android,web') . ' --flat-playlist --dump-single-json --no-warnings ' . escapeshellarg('ytsearch10:' . $videoUrl);
         exec($cmd, $output, $ret);
         if ($ret === 0 && !empty($output)) {
             $data = json_decode(implode("\n", $output), true);
@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['video_url'])) {
         $cmdArgs[] = '--cookies ' . escapeshellarg($cookiesFile);
         // Explicitly use nodejs if available to avoid "No supported JavaScript runtime" warning/error
         $cmdArgs[] = '--js-runtimes node';
+        $cmdArgs[] = '--extractor-args ' . escapeshellarg('youtube:player_client=ios,android,web');
         $cmdArgs[] = '--output ' . escapeshellarg($outputTemplate);
         $cmdArgs[] = '--no-playlist';
         $cmdArgs[] = '--ffmpeg-location /bin';
