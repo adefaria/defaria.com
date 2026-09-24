@@ -93,12 +93,47 @@ function getFullUrl(string $relativeUrl): ?string
     } // if
 }
 
+/**
+ * Resolves the external IP address for earth.defariahome.com.
+ *
+ * @return string The resolved IP address or empty string on failure.
+ */
+function getHomeIp(): string
+{
+    $host = 'earth.defariahome.com';
+    $ip = gethostbyname($host);
+
+    // If local resolver returns loopback (e.g. from local /etc/hosts on earth) or lookup fails,
+    // resolve via DNS CNAME/A records.
+    if ($ip === '127.0.0.1' || $ip === '127.0.1.1' || $ip === $host) {
+        $cnameRecords = @dns_get_record($host, DNS_CNAME);
+        if (!empty($cnameRecords) && isset($cnameRecords[0]['target'])) {
+            $targetIp = gethostbyname($cnameRecords[0]['target']);
+            if ($targetIp !== $cnameRecords[0]['target']) {
+                return $targetIp;
+            }
+        }
+        $aRecords = @dns_get_record($host, DNS_A);
+        if (!empty($aRecords) && isset($aRecords[0]['ip'])) {
+            return $aRecords[0]['ip'];
+        }
+    }
+
+    return $ip !== $host ? $ip : '';
+}
+
 // --- Main ---
 $URL = "";
 $path = null; // Initialize $path to null
 
+$myip = getHomeIp();
+
 // Load the IP mapping
 $ipMapping = loadIpMapping($ipMappingFile);
+
+if ($myip && !isset($ipMapping[$myip])) {
+    $ipMapping[$myip] = 'Andrew DeFaria (Home LAN)';
+}
 
 $displayValue = replaceIpWithText($IPAddr, $ipMapping);
 
@@ -184,7 +219,6 @@ $msg .= "<p>Full URL: $fullURL</p>";
 $msg .= "<p>Here's what I know about them:</p>";
 
 $me = false;
-$myip = '172.117.188.75';
 
 if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
     $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
@@ -197,8 +231,8 @@ foreach ($_SERVER as $key => $value) {
         $msg .= "$key: $value<br>";
 
         if ($key == 'REMOTE_ADDR') {
-            // Skip me...
-            if ($value == $myip) {
+            // Skip me if request is from home LAN (earth.defariahome.com or local network)
+            if (($myip && $value == $myip) || $value == '127.0.0.1' || $value == '::1' || str_starts_with($value, '192.168.')) {
                 $me = true;
                 break;
             } // if
