@@ -94,32 +94,25 @@ function getFullUrl(string $relativeUrl): ?string
 }
 
 /**
- * Resolves the external IP address for earth.defariahome.com.
+ * Resolves the external IP address for defaria.synology.me.
  *
  * @return string The resolved IP address or empty string on failure.
  */
 function getHomeIp(): string
 {
-    $host = 'earth.defariahome.com';
+    $host = 'defaria.synology.me';
     $ip = gethostbyname($host);
 
-    // If local resolver returns loopback (e.g. from local /etc/hosts on earth) or lookup fails,
-    // resolve via DNS CNAME/A records.
-    if ($ip === '127.0.0.1' || $ip === '127.0.1.1' || $ip === $host) {
-        $cnameRecords = @dns_get_record($host, DNS_CNAME);
-        if (!empty($cnameRecords) && isset($cnameRecords[0]['target'])) {
-            $targetIp = gethostbyname($cnameRecords[0]['target']);
-            if ($targetIp !== $cnameRecords[0]['target']) {
-                return $targetIp;
-            }
-        }
-        $aRecords = @dns_get_record($host, DNS_A);
-        if (!empty($aRecords) && isset($aRecords[0]['ip'])) {
-            return $aRecords[0]['ip'];
-        }
+    if ($ip !== $host && $ip !== '127.0.0.1' && $ip !== '127.0.1.1') {
+        return $ip;
     }
 
-    return $ip !== $host ? $ip : '';
+    $aRecords = @dns_get_record($host, DNS_A);
+    if (!empty($aRecords) && isset($aRecords[0]['ip'])) {
+        return $aRecords[0]['ip'];
+    }
+
+    return '';
 }
 
 // --- Main ---
@@ -224,8 +217,9 @@ $isHomeLan = (
     $IPAddr === '::1' ||
     str_starts_with($IPAddr, '192.168.') ||
     str_starts_with($IPAddr, '10.') ||
-    (isset($ipMapping[$IPAddr]) && str_contains($ipMapping[$IPAddr], 'Home LAN')) ||
-    str_contains($displayValue, 'Home LAN')
+    (isset($ipMapping[$IPAddr]) && (str_contains($ipMapping[$IPAddr], 'Home LAN') || str_contains($ipMapping[$IPAddr], 'Andrew DeFaria'))) ||
+    str_contains($displayValue, 'Home LAN') ||
+    str_contains($displayValue, 'Andrew DeFaria')
 );
 
 $me = $isHomeLan;
