@@ -41,15 +41,6 @@ error_log("displayIP: {$displayIP}");
             /* Video frame itself can remain black or dark */
         }
 
-        #resumeButton {
-            display: none;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
     </style>
 </head>
 
@@ -59,13 +50,13 @@ error_log("displayIP: {$displayIP}");
         echo $src; ?>
         Your browser does not support the video tag.
     </video>
-    <!-- Hidden resume button logic kept in JS just in case, though usually overlays handle this -->
-    <button id="resumeButton">Resume Playback</button>
 
     <script>
         const videoID = document.getElementById('video');
         const videoFile = videoID.querySelector('source').getAttribute('src');
-        const resumeButton = document.getElementById('resumeButton');
+
+        // Ensure any previous resume state is cleared so playback always starts from 0
+        localStorage.removeItem('lastCurrentTime');
 
         let startTime = 0;
         let totalTimeWatched = 0;
@@ -94,17 +85,6 @@ error_log("displayIP: {$displayIP}");
         setVideoDimensions();
         window.addEventListener('resize', setVideoDimensions);
 
-        videoID.addEventListener('canplay', () => {
-            let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-            // Check if the video has been re-initialized (currentTime reset to 0)
-            if (videoID.currentTime === 0 && lastCurrentTime > 0) {
-                videoID.currentTime = lastCurrentTime; // Reset the currentTime
-                videoID.play().catch(error => {
-                    logmsg('Error attempting to resume playback: ' + error);
-                });
-            }
-        });
-
         videoID.addEventListener('play', () => {
             isPlaying = true;
             if (!videoStarted) {
@@ -113,9 +93,6 @@ error_log("displayIP: {$displayIP}");
             } else {
                 logmsg('Resumed @ ' + Math.round(videoID.currentTime) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', videoID.currentTime);
-            // Hide custom button if visible
-            if (resumeButton) resumeButton.style.display = 'none';
         });
 
         videoID.addEventListener('pause', () => {
@@ -123,7 +100,6 @@ error_log("displayIP: {$displayIP}");
                 totalTimeWatched = videoID.currentTime - startTime;
                 logmsg('Paused  @ ' + Math.round(totalTimeWatched) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', videoID.currentTime);
             isPlaying = false;
         });
 
@@ -147,19 +123,6 @@ error_log("displayIP: {$displayIP}");
         videoID.addEventListener('ended', () => {
             videoEnded = true;
             logmsg('Ended   @ ' + Math.round(videoID.currentTime) + ' seconds');
-            localStorage.removeItem('lastCurrentTime');
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                videoID.pause();
-            } else if (document.visibilityState === 'visible') {
-                let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-                if (lastCurrentTime > 0) {
-                    videoID.currentTime = lastCurrentTime;
-                    // Could show button here?
-                }
-            }
         });
 
         function logmsg(msg) {
@@ -183,14 +146,10 @@ error_log("displayIP: {$displayIP}");
         }
 
         window.addEventListener('beforeunload', (event) => {
-            // event.preventDefault(); // Removed to prevent popup
-            // event.returnValue = ''; // Removed to prevent popup
-
             if (!videoEnded) {
                 totalTimeWatched += videoID.currentTime - startTime;
                 logmsg('user bailed @ ' + Math.round(totalTimeWatched) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', 0);
         });
     </script>
 </body>

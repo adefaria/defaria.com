@@ -46,21 +46,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             max-width: 500px;
         }
 
-        #resumeButton {
-            display: none;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 1rem;
-        }
-
-        #resumeButton:hover {
-            background-color: #45a049;
-        }
     </style>
     <script>
         function updateTheme() {
@@ -95,11 +80,13 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         ?>
         Your browser does not support the audio tag.
     </audio>
-    <button id="resumeButton">Resume Playback</button>
+
     <script>
         const audioID = document.getElementById('audio');
         const audioFile = audioID.querySelector('source').getAttribute('src');
-        const resumeButton = document.getElementById('resumeButton');
+
+        // Ensure any previous resume state is cleared so playback always starts from 0
+        localStorage.removeItem('lastCurrentTime');
 
         let startTime = 0;
         let totalTimeListened = 0;
@@ -109,17 +96,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         let isSeeking = false;
         let seekTimeout = null;
 
-        audioID.addEventListener('canplay', () => {
-            let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-            // Check if the video has been re-initialized (currentTime reset to 0)
-            if (audioID.currentTime === 0 && lastCurrentTime > 0) {
-                audioID.currentTime = lastCurrentTime; // Reset the currentTime
-                audioID.play().catch(error => {
-                    logmsg('Error attempting to resume playback: ' + error);
-                });
-            }
-        });
-
         audioID.addEventListener('play', () => {
             isPlaying = true;
             if (!audioStarted) {
@@ -128,8 +104,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             } else {
                 logmsg('Resumed @ ' + Math.round(audioID.currentTime) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', audioID.currentTime);
-            resumeButton.style.display = 'none';
         });
 
         audioID.addEventListener('pause', () => {
@@ -137,7 +111,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
                 totalTimeListened = audioID.currentTime - startTime;
                 logmsg('Paused  @ ' + Math.round(totalTimeListened) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', audioID.currentTime);
             isPlaying = false;
         });
 
@@ -161,28 +134,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         audioID.addEventListener('ended', () => {
             audioEnded = true;
             logmsg('Ended   @ ' + Math.round(audioID.currentTime) + ' seconds');
-            localStorage.removeItem('lastCurrentTime');
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                localStorage.setItem('lastCurrentTime', audioID.currentTime);
-            } else if (document.visibilityState === 'visible') {
-                let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-                if (lastCurrentTime > 0) {
-                    resumeButton.style.display = 'block';
-                }
-            }
-        });
-
-        resumeButton.addEventListener('click', () => {
-            let lastCurrentTime = localStorage.getItem('lastCurrentTime');
-            if (lastCurrentTime > 0) {
-                audioID.currentTime = lastCurrentTime;
-                audioID.play().catch(error => {
-                    logmsg('Error attempting to resume playback: ' + error);
-                });
-            }
         });
 
         function logmsg(msg) {
@@ -207,14 +158,10 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         }
 
         window.addEventListener('beforeunload', (event) => {
-            // event.preventDefault();
-            // event.returnValue = ''; 
-
             if (!audioEnded) {
                 totalTimeListened += audioID.currentTime - startTime;
                 logmsg('user bailed @ ' + Math.round(totalTimeListened) + ' seconds');
             }
-            localStorage.setItem('lastCurrentTime', audioID.currentTime);
         });
     </script>
 </body>

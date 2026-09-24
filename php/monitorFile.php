@@ -218,7 +218,17 @@ if ($displayValue == $IPAddr) { // Corrected variable casing displayValue vs dis
 $msg .= "<p>Full URL: $fullURL</p>";
 $msg .= "<p>Here's what I know about them:</p>";
 
-$me = false;
+$isHomeLan = (
+    ($myip && $IPAddr === $myip) ||
+    $IPAddr === '127.0.0.1' ||
+    $IPAddr === '::1' ||
+    str_starts_with($IPAddr, '192.168.') ||
+    str_starts_with($IPAddr, '10.') ||
+    (isset($ipMapping[$IPAddr]) && str_contains($ipMapping[$IPAddr], 'Home LAN')) ||
+    str_contains($displayValue, 'Home LAN')
+);
+
+$me = $isHomeLan;
 
 if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
     $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
@@ -230,13 +240,7 @@ foreach ($_SERVER as $key => $value) {
     if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
         $msg .= "$key: $value<br>";
 
-        if ($key == 'REMOTE_ADDR') {
-            // Skip me if request is from home LAN (earth.defariahome.com or local network)
-            if (($myip && $value == $myip) || $value == '127.0.0.1' || $value == '::1' || str_starts_with($value, '192.168.')) {
-                $me = true;
-                break;
-            } // if
-
+        if ($key == 'REMOTE_ADDR' && !$me) {
             exec("whois $value", $output, $result);
 
             foreach ($output as $line) {
@@ -301,13 +305,6 @@ if (!$me) {
     $displayIP = replaceIpWithText($IPAddr, $ipMapping);
     $subject = str_replace($IPAddr, $displayIP, $subject);
     $msg = str_replace("REMOTE_ADDR: $_SERVER[REMOTE_ADDR]", "REMOTE_ADDR: $displayIP", $msg);
-
-    mail("andrew@defaria.com", $subject, $msg, $headers);
-} else {
-    $msg .= '</body></html>';
-
-    $headers = "MIME-Version: 1.0\r\n";
-    $subject = "";
 
     mail("andrew@defaria.com", $subject, $msg, $headers);
 } // if
