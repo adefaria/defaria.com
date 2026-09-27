@@ -2,6 +2,7 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $music_links = [
+    ['title' => 'Songs from the Heart', 'url' => 'https://andrewdefaria.bandcamp.com/album/andrews-intimate-songs-from-the-heart', 'desc' => 'A new album of originals composed with the help of Gemini. Check it out!'],
     ['title' => 'Rock Ready', 'url' => 'https://rockready.band', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songs', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_top'],
     ['title' => 'Cast of Shadows', 'url' => '/cos', 'target' => '_top', 'desc' => 'COS was perhaps my most successful band. We played Top 40 Dance music in the clubs of the South Bay Area and produced a CD of 10 original tunes'],
