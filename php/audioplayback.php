@@ -1,6 +1,6 @@
 <?php
-// Use __DIR__ and realpath() to construct the absolute path
 require_once realpath(__DIR__ . '/ip_mapping.php');
+require_once realpath(__DIR__ . '/media_functions.php');
 
 if (isset($_GET['audio'])) {
     $audio = $_GET['audio'];
@@ -10,18 +10,19 @@ if (isset($_GET['audio'])) {
 }
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
-
-// Load the IP mapping
 $ipMapping = loadIpMapping($ipMappingFile);
-
-// Replace IP with text if available
 $displayIP = replaceIpWithText($IPAddr, $ipMapping);
+
+$title = getMediaTitle($audio);
+$nav = getMediaNavigation($audio);
+$nextUrl = $nav['next'];
+$description = getMediaDescription($audio);
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title><?php echo basename($audio); ?></title>
+    <title><?php echo htmlspecialchars($title); ?></title>
     <style>
         body {
             margin: 0;
@@ -41,11 +42,72 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             color: white;
         }
 
-        audio {
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 80%;
-            max-width: 500px;
+            max-width: 600px;
         }
 
+        audio {
+            width: 100%;
+        }
+
+        .media-title {
+            margin: 15px 20px 10px 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0 15px 0;
+        }
+
+        .nav-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover:not(.disabled) {
+            background-color: #0056b3;
+        }
+
+        .nav-button.disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        body.dark-mode .nav-button.disabled {
+            background-color: #444;
+            color: #888;
+        }
+
+        .media-description {
+            width: 100%;
+            max-width: 700px;
+            margin: 10px 20px 30px 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        body.dark-mode .media-description {
+            border-top-color: #444;
+        }
     </style>
     <script>
         function updateTheme() {
@@ -73,20 +135,44 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
 </head>
 
 <body>
-    <audio id="audio" controls autoplay>
-        <?php
-        $src = "<source src=\"$audio\" type=\"audio/mpeg\">";
-        echo $src;
-        ?>
-        Your browser does not support the audio tag.
-    </audio>
+    <div class="player-container">
+        <audio id="audio" controls autoplay>
+            <source src="<?php echo htmlspecialchars($audio); ?>">
+            Your browser does not support the audio tag.
+        </audio>
+        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
+
+        <div class="nav-controls">
+            <?php if (!empty($nav['prev'])): ?>
+                <a href="<?php echo htmlspecialchars($nav['prev']); ?>" class="nav-button prev-button">&laquo; Previous</a>
+            <?php else: ?>
+                <span class="nav-button disabled">&laquo; Previous</span>
+            <?php endif; ?>
+
+            <?php if (!empty($nav['next'])): ?>
+                <a href="<?php echo htmlspecialchars($nav['next']); ?>" class="nav-button next-button">Next &raquo;</a>
+            <?php else: ?>
+                <span class="nav-button disabled">Next &raquo;</span>
+            <?php endif; ?>
+        </div>
+
+        <?php if (!empty($description)): ?>
+            <div class="media-description">
+                <?php echo $description; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
     <script>
         const audioID = document.getElementById('audio');
         const audioFile = audioID.querySelector('source').getAttribute('src');
+        const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
 
-        // Ensure any previous resume state is cleared so playback always starts from 0
-        localStorage.removeItem('lastCurrentTime');
+        // Ensure playback always starts from 0 when link is clicked
+        audioID.currentTime = 0;
+        audioID.addEventListener('loadedmetadata', () => {
+            audioID.currentTime = 0;
+        });
 
         let startTime = 0;
         let totalTimeListened = 0;
@@ -134,6 +220,9 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
         audioID.addEventListener('ended', () => {
             audioEnded = true;
             logmsg('Ended   @ ' + Math.round(audioID.currentTime) + ' seconds');
+            if (nextUrl) {
+                window.location.href = nextUrl;
+            }
         });
 
         function logmsg(msg) {
@@ -151,10 +240,6 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
             xhr.open('POST', '/php/log_action.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(data));
-        }
-
-        function debug(msg) {
-            logmsg("DEBUG: " + msg);
         }
 
         window.addEventListener('beforeunload', (event) => {

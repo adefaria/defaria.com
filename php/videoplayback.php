@@ -1,5 +1,6 @@
 <?php
 require_once realpath(__DIR__ . '/ip_mapping.php');
+require_once realpath(__DIR__ . '/media_functions.php');
 
 if (isset($_GET['video'])) {
     $video = $_GET['video'];
@@ -9,54 +10,171 @@ if (isset($_GET['video'])) {
 }
 
 $IPAddr = $_SERVER["REMOTE_ADDR"];
-
-// Load the IP mapping
-error_log("ipMappingFile: {$ipMappingFile}");
 $ipMapping = loadIpMapping($ipMappingFile);
-
-// Replace IP with text if available
-error_log("IPAddr: {$IPAddr}");
 $displayIP = replaceIpWithText($IPAddr, $ipMapping);
-error_log("displayIP: {$displayIP}");
+
+$title = getMediaTitle($video);
+$nav = getMediaNavigation($video);
+$nextUrl = $nav['next'];
+$description = getMediaDescription($video);
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title><?php echo basename($video); ?></title>
+    <title><?php echo htmlspecialchars($title); ?></title>
     <style>
         body {
             margin: 0;
-            overflow: hidden;
+            padding: 0;
             background-color: white;
-            /* Changed from black as requested */
             color: black;
             font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: black;
+            color: white;
+        }
+
+        .player-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         video {
             width: 100vw;
+            max-height: 80vh;
             object-fit: contain;
             background-color: black;
-            /* Video frame itself can remain black or dark */
         }
 
+        .media-title {
+            margin: 15px 20px 10px 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0 15px 0;
+        }
+
+        .nav-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover:not(.disabled) {
+            background-color: #0056b3;
+        }
+
+        .nav-button.disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        body.dark-mode .nav-button.disabled {
+            background-color: #444;
+            color: #888;
+        }
+
+        .media-description {
+            width: 80%;
+            max-width: 700px;
+            margin: 10px 20px 30px 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        body.dark-mode .media-description {
+            border-top-color: #444;
+        }
     </style>
+    <script>
+        function updateTheme() {
+            try {
+                const parentTheme = window.parent.document.documentElement.getAttribute('data-theme');
+                if (parentTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            } catch (e) {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('dark-mode');
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateTheme);
+        if (window !== window.top) {
+            try {
+                const observer = new MutationObserver(updateTheme);
+                observer.observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            } catch (e) { }
+        }
+    </script>
 </head>
 
 <body>
-    <video id="video" controls width="100%" height="auto" autoplay>
-        <?php $src = "<source src=\"$video\" type=\"video/mp4\">";
-        echo $src; ?>
-        Your browser does not support the video tag.
-    </video>
+    <div class="player-container">
+        <video id="video" controls autoplay>
+            <source src="<?php echo htmlspecialchars($video); ?>">
+            Your browser does not support the video tag.
+        </video>
+        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
+
+        <div class="nav-controls">
+            <?php if (!empty($nav['prev'])): ?>
+                <a href="<?php echo htmlspecialchars($nav['prev']); ?>" class="nav-button prev-button">&laquo; Previous</a>
+            <?php else: ?>
+                <span class="nav-button disabled">&laquo; Previous</span>
+            <?php endif; ?>
+
+            <?php if (!empty($nav['next'])): ?>
+                <a href="<?php echo htmlspecialchars($nav['next']); ?>" class="nav-button next-button">Next &raquo;</a>
+            <?php else: ?>
+                <span class="nav-button disabled">Next &raquo;</span>
+            <?php endif; ?>
+        </div>
+
+        <?php if (!empty($description)): ?>
+            <div class="media-description">
+                <?php echo $description; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
     <script>
         const videoID = document.getElementById('video');
         const videoFile = videoID.querySelector('source').getAttribute('src');
+        const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
 
-        // Ensure any previous resume state is cleared so playback always starts from 0
-        localStorage.removeItem('lastCurrentTime');
+        // Ensure playback always starts from 0 when link is clicked
+        videoID.currentTime = 0;
+        videoID.addEventListener('loadedmetadata', () => {
+            videoID.currentTime = 0;
+        });
 
         let startTime = 0;
         let totalTimeWatched = 0;
@@ -65,25 +183,6 @@ error_log("displayIP: {$displayIP}");
         let videoEnded = false;
         let isSeeking = false;
         let seekTimeout = null;
-
-        function setVideoDimensions() {
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight;
-            const videoAspectRatio = 16 / 9;
-            let videoWidth = screenWidth;
-            let videoHeight = screenWidth / videoAspectRatio;
-
-            if (videoHeight > screenHeight) {
-                videoHeight = screenHeight;
-                videoWidth = screenHeight * videoAspectRatio;
-            }
-
-            videoID.width = Math.round(videoWidth);
-            videoID.height = Math.round(videoHeight);
-        }
-
-        setVideoDimensions();
-        window.addEventListener('resize', setVideoDimensions);
 
         videoID.addEventListener('play', () => {
             isPlaying = true;
@@ -123,6 +222,9 @@ error_log("displayIP: {$displayIP}");
         videoID.addEventListener('ended', () => {
             videoEnded = true;
             logmsg('Ended   @ ' + Math.round(videoID.currentTime) + ' seconds');
+            if (nextUrl) {
+                window.location.href = nextUrl;
+            }
         });
 
         function logmsg(msg) {
@@ -136,13 +238,9 @@ error_log("displayIP: {$displayIP}");
                 msg: msg,
             };
 
-            xhr.open('POST', '/php/log_action.php', true); // Updated endpoint
+            xhr.open('POST', '/php/log_action.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(data));
-        }
-
-        function debug(msg) {
-            // logmsg("DEBUG: " + msg);
         }
 
         window.addEventListener('beforeunload', (event) => {
