@@ -2,6 +2,7 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $music_links = [
+    ['title' => 'Jersey 80s', 'url' => 'https://andrewdefaria.bandcamp.com/album/jersey-80s-2', 'desc' => 'A collection of original songs from the 80s in New Jersey. Check it out!'],
     ['title' => 'Songs from the Heart', 'url' => 'https://andrewdefaria.bandcamp.com/album/andrews-intimate-songs-from-the-heart', 'desc' => 'A new album of originals composed with the help of Gemini. Check it out!'],
     ['title' => 'Rock Ready', 'url' => 'https://rockready.band', 'desc' => 'My current band - we are ready to rock you! See the band\'s website for more information.'],
     ['title' => 'Songbook', 'url' => '/songs', 'desc' => 'My personal songbook. Contains lyrics and chords of various songs. Even plays them!', 'target' => '_top'],
