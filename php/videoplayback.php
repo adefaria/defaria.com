@@ -16,6 +16,7 @@ $displayIP = replaceIpWithText($IPAddr, $ipMapping);
 $title = getMediaTitle($video);
 $nav = getMediaNavigation($video);
 $nextUrl = $nav['next'];
+$prevUrl = $nav['prev'];
 $description = getMediaDescription($video);
 ?>
 <!DOCTYPE html>
@@ -138,21 +139,21 @@ $description = getMediaDescription($video);
 
 <body>
     <div class="player-container">
-        <video id="video" controls autoplay>
+        <video id="video" controls autoplay playsinline>
             <source src="<?php echo htmlspecialchars($video); ?>">
             Your browser does not support the video tag.
         </video>
         <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <div class="nav-controls">
-            <?php if (!empty($nav['prev'])): ?>
-                <a href="<?php echo htmlspecialchars($nav['prev']); ?>" class="nav-button prev-button">&laquo; Previous</a>
+            <?php if (!empty($prevUrl)): ?>
+                <a href="<?php echo htmlspecialchars($prevUrl); ?>" class="nav-button prev-button">&laquo; Previous</a>
             <?php else: ?>
                 <span class="nav-button disabled">&laquo; Previous</span>
             <?php endif; ?>
 
-            <?php if (!empty($nav['next'])): ?>
-                <a href="<?php echo htmlspecialchars($nav['next']); ?>" class="nav-button next-button">Next &raquo;</a>
+            <?php if (!empty($nextUrl)): ?>
+                <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
             <?php else: ?>
                 <span class="nav-button disabled">Next &raquo;</span>
             <?php endif; ?>
@@ -169,12 +170,55 @@ $description = getMediaDescription($video);
         const videoID = document.getElementById('video');
         const videoFile = videoID.querySelector('source').getAttribute('src');
         const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
+        const prevUrl = "<?php echo htmlspecialchars($prevUrl, ENT_QUOTES); ?>";
+        const mediaTitle = "<?php echo htmlspecialchars($title, ENT_QUOTES); ?>";
 
         // Ensure playback always starts from 0 when link is clicked
         videoID.currentTime = 0;
         videoID.addEventListener('loadedmetadata', () => {
             videoID.currentTime = 0;
         });
+
+        // --- Screen Wake Lock API ---
+        let wakeLock = null;
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator && wakeLock === null) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (err) {}
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => { wakeLock = null; }).catch(() => {});
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && isPlaying) {
+                requestWakeLock();
+            }
+        });
+
+        // --- Media Session API ---
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: mediaTitle,
+                artist: 'DeFaria.com',
+                album: 'Video Playback'
+            });
+
+            navigator.mediaSession.setActionHandler('play', () => { videoID.play(); });
+            navigator.mediaSession.setActionHandler('pause', () => { videoID.pause(); });
+
+            if (prevUrl) {
+                navigator.mediaSession.setActionHandler('previoustrack', () => { window.location.href = prevUrl; });
+            }
+            if (nextUrl) {
+                navigator.mediaSession.setActionHandler('nexttrack', () => { window.location.href = nextUrl; });
+            }
+        }
 
         let startTime = 0;
         let totalTimeWatched = 0;
@@ -186,6 +230,10 @@ $description = getMediaDescription($video);
 
         videoID.addEventListener('play', () => {
             isPlaying = true;
+            requestWakeLock();
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'playing';
+            }
             if (!videoStarted) {
                 videoStarted = true;
                 logmsg('Started for the first time @ ' + Math.round(startTime) + ' seconds');
@@ -195,6 +243,10 @@ $description = getMediaDescription($video);
         });
 
         videoID.addEventListener('pause', () => {
+            releaseWakeLock();
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'paused';
+            }
             if (isPlaying && !isSeeking && !videoEnded) {
                 totalTimeWatched = videoID.currentTime - startTime;
                 logmsg('Paused  @ ' + Math.round(totalTimeWatched) + ' seconds');
@@ -221,6 +273,10 @@ $description = getMediaDescription($video);
 
         videoID.addEventListener('ended', () => {
             videoEnded = true;
+            releaseWakeLock();
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'none';
+            }
             logmsg('Ended   @ ' + Math.round(videoID.currentTime) + ' seconds');
             if (nextUrl) {
                 window.location.href = nextUrl;
@@ -244,6 +300,7 @@ $description = getMediaDescription($video);
         }
 
         window.addEventListener('beforeunload', (event) => {
+            releaseWakeLock();
             if (!videoEnded) {
                 totalTimeWatched += videoID.currentTime - startTime;
                 logmsg('user bailed @ ' + Math.round(totalTimeWatched) + ' seconds');
