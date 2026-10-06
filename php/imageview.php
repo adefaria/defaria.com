@@ -14,6 +14,7 @@ if (isset($_GET['image'])) {
 $title = getMediaTitle($image);
 $nav = getMediaNavigation($image);
 $nextUrl = $nav['next'];
+$prevUrl = $nav['prev'];
 $description = getMediaDescription($image);
 ?>
 <!DOCTYPE html>
@@ -140,14 +141,14 @@ $description = getMediaDescription($image);
         <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <div class="nav-controls">
-            <?php if (!empty($nav['prev'])): ?>
-                <a href="<?php echo htmlspecialchars($nav['prev']); ?>" class="nav-button prev-button">&laquo; Previous</a>
+            <?php if (!empty($prevUrl)): ?>
+                <a href="<?php echo htmlspecialchars($prevUrl); ?>" class="nav-button prev-button">&laquo; Previous</a>
             <?php else: ?>
                 <span class="nav-button disabled">&laquo; Previous</span>
             <?php endif; ?>
 
-            <?php if (!empty($nav['next'])): ?>
-                <a href="<?php echo htmlspecialchars($nav['next']); ?>" class="nav-button next-button">Next &raquo;</a>
+            <?php if (!empty($nextUrl)): ?>
+                <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
             <?php else: ?>
                 <span class="nav-button disabled">Next &raquo;</span>
             <?php endif; ?>
@@ -162,9 +163,21 @@ $description = getMediaDescription($image);
 
     <script>
         const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
+
+        // Keep screen awake during slideshow
+        let wakeLock = null;
+        if ('wakeLock' in navigator && nextUrl) {
+            navigator.wakeLock.request('screen').then(lock => {
+                wakeLock = lock;
+            }).catch(() => {});
+        }
+
         if (nextUrl) {
             // Auto-advance slideshow to next media file after 5 seconds
             setTimeout(() => {
+                if (wakeLock) {
+                    wakeLock.release().catch(() => {});
+                }
                 window.location.href = nextUrl;
             }, 5000);
         }
