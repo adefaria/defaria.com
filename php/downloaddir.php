@@ -1,5 +1,7 @@
 <?php
 
+require_once realpath(__DIR__ . '/media_functions.php');
+
 const audioImg = "/icons/sound2.gif";
 const videoImg = "/icons/movie.gif";
 const binaryImg = '/icons/binary.gif';
@@ -337,8 +339,8 @@ EOF;
             continue;
         }
 
-        // Skip the index.php file.
-        if ($item == 'index.php' || $item == 'playback.log') {
+        // Skip index.php, playback.log, or description HTML files matching a media file in this directory
+        if ($item == 'index.php' || $item == 'playback.log' || isMediaDescriptionFile($directory, $item)) {
             continue;
         }
 

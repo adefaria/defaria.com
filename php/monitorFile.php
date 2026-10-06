@@ -303,18 +303,21 @@ if (!$me) {
     mail("andrew@defaria.com", $subject, $msg, $headers);
 } // if
 
-// Determine if it's a video or audio file based on extension
-$fileExtension = pathinfo($URL, PATHINFO_EXTENSION); // Use $URL for extension check as it's the web path
+// Require media helper functions
+require_once realpath(__DIR__ . '/media_functions.php');
 
-if (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg', 'mkv'])) {
-    header("Location: /php/videoplayback.php?video=" . urlencode($URL)); // urlencode the parameter
-} elseif (in_array(strtolower($fileExtension), ['m4a', 'mp3', 'wav', 'ogg'])) {
-    header("Location: /php/audioplayback.php?audio=" . urlencode($URL)); // urlencode the parameter
-} elseif (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
-    header("Location: /php/imageview.php?image=" . urlencode($URL)); // New image wrapper
+// Determine file type based on extension
+$fileExtension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
+
+if (in_array($fileExtension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'], true)) {
+    header("Location: /php/videoplayback.php?video=" . urlencode($URL));
+} elseif (in_array($fileExtension, ['m4a', 'mp3', 'wav', 'ogg'], true)) {
+    header("Location: /php/audioplayback.php?audio=" . urlencode($URL));
+} elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'], true)) {
+    header("Location: /php/imageview.php?image=" . urlencode($URL));
 } else {
-    header("Location: " . $URL); // Redirect directly to the file URL
-} // if
+    header("Location: " . $URL);
+}
 
 exit;
 ?>
