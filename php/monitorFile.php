@@ -254,7 +254,7 @@ if (!$me) {
         $verb = "Downloading";
     } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
         $verb = "Viewing";
-    } elseif (in_array($extension, ['mp3', 'm4a', 'wav', 'ogg'])) {
+    } elseif (in_array($extension, ['mp3', 'm4a', 'wav', 'ogg', 'flac', 'aac'])) {
         $verb = "Playing";
     } elseif (in_array($extension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'])) {
         $verb = "Watching";
@@ -311,7 +311,7 @@ $fileExtension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
 
 if (in_array($fileExtension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'], true)) {
     header("Location: /php/videoplayback.php?video=" . urlencode($URL));
-} elseif (in_array($fileExtension, ['m4a', 'mp3', 'wav', 'ogg'], true)) {
+} elseif (in_array($fileExtension, ['m4a', 'mp3', 'wav', 'ogg', 'flac', 'aac'], true)) {
     header("Location: /php/audioplayback.php?audio=" . urlencode($URL));
 } elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'], true)) {
     header("Location: /php/imageview.php?image=" . urlencode($URL));

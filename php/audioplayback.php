@@ -138,7 +138,7 @@ $description = getMediaDescription($audio);
 <body>
     <div class="player-container">
         <audio id="audio" controls autoplay>
-            <source src="<?php echo htmlspecialchars($audio); ?>">
+            <source src="<?php echo htmlspecialchars($audio); ?>" type="<?php echo htmlspecialchars(getAudioMimeType($audio)); ?>">
             Your browser does not support the audio tag.
         </audio>
         <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>

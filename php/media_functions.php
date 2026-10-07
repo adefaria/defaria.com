@@ -3,19 +3,55 @@
  * Media helper functions for video, audio, and image playback.
  */
 
+function getSupportedAudioExtensions(): array
+{
+    return ['mp3', 'm4a', 'wav', 'ogg', 'flac', 'aac'];
+}
+
+function getSupportedVideoExtensions(): array
+{
+    return ['mp4', 'webm', 'ogv', 'mkv', 'mov'];
+}
+
+function getSupportedImageExtensions(): array
+{
+    return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+}
+
 /**
  * Get array of supported media extensions.
  */
 function getSupportedMediaExtensions(): array
 {
-    return [
-        // Video
-        'mp4', 'webm', 'ogv', 'mkv', 'mov',
-        // Audio
-        'mp3', 'm4a', 'wav', 'ogg',
-        // Image (slideshow)
-        'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'
-    ];
+    return array_merge(
+        getSupportedVideoExtensions(),
+        getSupportedAudioExtensions(),
+        getSupportedImageExtensions()
+    );
+}
+
+/**
+ * Get MIME type for audio file.
+ */
+function getAudioMimeType(string $url): string
+{
+    $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+    switch ($ext) {
+        case 'mp3':
+            return 'audio/mpeg';
+        case 'flac':
+            return 'audio/flac';
+        case 'm4a':
+            return 'audio/mp4';
+        case 'wav':
+            return 'audio/wav';
+        case 'ogg':
+            return 'audio/ogg';
+        case 'aac':
+            return 'audio/aac';
+        default:
+            return 'audio/' . $ext;
+    }
 }
 
 /**
