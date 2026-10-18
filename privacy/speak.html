@@ -18,12 +18,11 @@
   <strong>Developer:</strong> Andrew DeFaria (<a href="mailto:Andrew@DeFaria.com">Andrew@DeFaria.com</a>)</p>
 
   <h2>1. Overview</h2>
-  <p>Speak Pro (<code>com.defaria.speak</code>) and Speak Lite (<code>com.defaria.speak.lite</code>) are hands-free notification and text-to-speech utility applications for Android. We do not sell, rent, or share your personal data with any third parties, advertisers, or analytics networks.</p>
+  <p>Speak Pro (<code>com.defaria.speak</code>) and Speak Lite (<code>com.defaria.speaklite</code>) are hands-free notification and text-to-speech utility applications for Android. We do not sell, rent, or share your personal data with any third parties, advertisers, or analytics networks.</p>
 
   <h2>2. Permissions & Data Processing</h2>
   <ul>
     <li><strong>Notification Listener Service (<code>android.service.notification.NotificationListenerService</code>):</strong> Used only when explicitly enabled by the user to read aloud incoming notifications from user-selected apps (such as Messages, Email, or Tasks). Notification text is processed transiently for speech synthesis and stored only in the local on-device speech history log.</li>
-    <li><strong>Read Contacts (<code>READ_CONTACTS</code>):</strong> Used locally on-device to match sender names for voice persona selection or gender-matched voice synthesis. Contact lists are never uploaded or shared.</li>
     <li><strong>Network Access (<code>INTERNET</code>):</strong> In Speak Pro, when the user configures a personal TTS synthesis server endpoint, notification text is sent over HTTPS exclusively to the user's configured synthesis server to generate speech audio. Speak Lite performs speech synthesis locally on-device using the Android system TextToSpeech engine.</li>
   </ul>
 
