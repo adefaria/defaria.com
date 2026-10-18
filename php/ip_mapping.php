@@ -3,6 +3,64 @@
 $ipMappingFile = realpath(__DIR__ . '/../pm/ips');
 
 /**
+ * Resolves the external IP address for defaria.synology.me.
+ *
+ * @return string The resolved IP address or empty string on failure.
+ */
+if (!function_exists('getHomeIp')) {
+    function getHomeIp(): string
+    {
+        $host = 'defaria.synology.me';
+        $ip = gethostbyname($host);
+
+        if ($ip !== $host && $ip !== '127.0.0.1' && $ip !== '127.0.1.1') {
+            return $ip;
+        }
+
+        $aRecords = @dns_get_record($host, DNS_A);
+        if (!empty($aRecords) && isset($aRecords[0]['ip'])) {
+            return $aRecords[0]['ip'];
+        }
+
+        return '';
+    }
+}
+
+/**
+ * Checks if the current HTTP request comes from a link-preview or social crawler bot.
+ *
+ * @return bool True if the User-Agent matches known link preview bots.
+ */
+if (!function_exists('isPreviewBot')) {
+    function isPreviewBot(): bool
+    {
+        $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        if ($ua === '') {
+            return false;
+        }
+        $bots = [
+            'facebookexternalhit',
+            'Facebot',
+            'Twitterbot',
+            'Slackbot',
+            'WhatsApp',
+            'Discordbot',
+            'TelegramBot',
+            'LinkedInBot',
+            'Applebot',
+            'Pinterest',
+            'SkypeUriPreview',
+        ];
+        foreach ($bots as $bot) {
+            if (stripos($ua, $bot) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+/**
  * Loads the IP mapping from the specified file.
  *
  * @param string $filePath The path to the IP mapping file.
@@ -28,6 +86,11 @@ function loadIpMapping(string $filePath): array
                 $ipMapping[$parts[0]] = $parts[1];
             }
         }
+    }
+
+    $homeIp = getHomeIp();
+    if ($homeIp && !isset($ipMapping[$homeIp])) {
+        $ipMapping[$homeIp] = 'Andrew DeFaria (Home LAN)';
     }
 
     return $ipMapping;
