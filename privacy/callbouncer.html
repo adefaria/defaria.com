@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CallBouncer — Privacy Policy</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #202124; }
+    h1 { color: #1A73E8; }
+    h2 { color: #174EA6; margin-top: 28px; }
+    .badge { display: inline-block; background: #E8F0FE; color: #1A73E8; padding: 6px 12px; border-radius: 6px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>CallBouncer Privacy Policy</h1>
+  <p class="badge">100% Offline • Zero Network Permissions • Zero Data Collection</p>
+  <p><strong>Effective Date:</strong> October 17, 2026<br>
+  <strong>Developer:</strong> Andrew DeFaria (<a href="mailto:Andrew@DeFaria.com">Andrew@DeFaria.com</a>)</p>
+
+  <h2>1. Overview & Zero-Network Guarantee</h2>
+  <p>CallBouncer (<code>com.defaria.callbouncer</code>) is a local Android Call Screening application. CallBouncer does <strong>not</strong> request the Android <code>INTERNET</code> permission in its manifest. It is technically impossible for CallBouncer to transmit, upload, or share any data from your device to any external server or third party.</p>
+
+  <h2>2. Permissions & Local Data Usage</h2>
+  <ul>
+    <li><strong>Call Screening Service (<code>android.telecom.CallScreeningService</code>):</strong> Used strictly on-device to evaluate incoming caller phone numbers against your locally configured block rules (exact numbers, wildcards, regular expressions, and country codes).</li>
+    <li><strong>Read Contacts (<code>READ_CONTACTS</code>):</strong> Used strictly locally to check whether an incoming caller is in your address book (when "Allow All Contacts" is enabled) and to display contact names next to recent calls. Contact data never leaves your device.</li>
+    <li><strong>Read Call Log (<code>READ_CALL_LOG</code>):</strong> Used strictly locally to display your recent incoming calls inside the CallBouncer interface so you can easily create block rules.</li>
+  </ul>
+
+  <h2>3. Data Storage & Retention</h2>
+  <p>All block rules and bounce logs are stored exclusively in an on-device SQLite database within the application's private sandbox. You may clear your bounce history log or export/delete your rules at any time from within the application, or by uninstalling the app.</p>
+
+  <h2>4. Contact</h2>
+  <p>If you have any questions regarding this Privacy Policy, please contact Andrew DeFaria at <a href="mailto:Andrew@DeFaria.com">Andrew@DeFaria.com</a>.</p>
+</body>
+</html>
