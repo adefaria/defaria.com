@@ -93,28 +93,6 @@ function getFullUrl(string $relativeUrl): ?string
     } // if
 }
 
-/**
- * Resolves the external IP address for defaria.synology.me.
- *
- * @return string The resolved IP address or empty string on failure.
- */
-function getHomeIp(): string
-{
-    $host = 'defaria.synology.me';
-    $ip = gethostbyname($host);
-
-    if ($ip !== $host && $ip !== '127.0.0.1' && $ip !== '127.0.1.1') {
-        return $ip;
-    }
-
-    $aRecords = @dns_get_record($host, DNS_A);
-    if (!empty($aRecords) && isset($aRecords[0]['ip'])) {
-        return $aRecords[0]['ip'];
-    }
-
-    return '';
-}
-
 // --- Main ---
 $URL = "";
 $path = null; // Initialize $path to null
@@ -123,10 +101,6 @@ $myip = getHomeIp();
 
 // Load the IP mapping
 $ipMapping = loadIpMapping($ipMappingFile);
-
-if ($myip && !isset($ipMapping[$myip])) {
-    $ipMapping[$myip] = 'Andrew DeFaria (Home LAN)';
-}
 
 $displayValue = replaceIpWithText($IPAddr, $ipMapping);
 
@@ -165,14 +139,26 @@ if (isset($_GET['u'])) {
     exit;
 } // if
 
+function log_playback($msg, $ip)
+{
+    $logFile = '/web/pm/playback.log';
+    $timestamp = date('H:i:s');
+    $entry = "$timestamp [$ip] $msg\n";
+    file_put_contents($logFile, $entry, FILE_APPEND | LOCK_EX);
+}
+
+$isPreview = isPreviewBot();
+
 // Check if the download parameter is set in $_GET
 if (isset($download)) {
     $filename = urldecode($_GET['download']);
     $trimmedFilename = substr($filename, 1, -1);
 
-    // Log the download action to playback.log
-    $logMessage = "Downloaded " . $trimmedFilename;
-    log_playback($logMessage, $displayValue);
+    if (!$isPreview) {
+        // Log the download action to playback.log
+        $logMessage = "Downloaded " . $trimmedFilename;
+        log_playback($logMessage, $displayValue);
+    }
 
     // Set headers for file download.
     header('Content-Description: File Transfer');
@@ -186,16 +172,30 @@ if (isset($download)) {
     exit; // Important: Stop further execution after sending the file
 }
 
-function log_playback($msg, $ip)
-{
-    $logFile = '/web/pm/playback.log';
-    $timestamp = date('H:i:s'); // Format relative to expectation? 
-    // The previous JS sent JSON. The log viewer expects lines. 
-    // Let's assume simple text appending.
-    // Construct a log line similar to what playbackmonitor might have done or just readable text.
-    // "10:30:00 [IP] File: foo.mp3"
-    $entry = "$timestamp [$ip] $msg\n";
-    file_put_contents($logFile, $entry, FILE_APPEND);
+// Require media helper functions
+require_once realpath(__DIR__ . '/media_functions.php');
+
+// Determine file type based on extension and send redirect immediately
+// so slow whois/mail lookups do not stall playback or expire iOS user gestures.
+$fileExtension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
+$isVideoFile = in_array($fileExtension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'], true);
+$isAudioFile = in_array($fileExtension, ['m4a', 'mp3', 'wav', 'ogg', 'flac', 'aac'], true);
+$isImageFile = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'], true);
+
+if (isset($_GET['bg'])) {
+    http_response_code(204);
+} elseif ($isVideoFile) {
+    header("Location: /php/videoplayback.php?video=" . urlencode($URL));
+} elseif ($isAudioFile) {
+    header("Location: /php/audioplayback.php?audio=" . urlencode($URL));
+} elseif ($isImageFile) {
+    header("Location: /php/imageview.php?image=" . urlencode($URL));
+} else {
+    header("Location: " . $URL);
+}
+
+if (function_exists('fastcgi_finish_request')) {
+    fastcgi_finish_request();
 }
 
 $msg = '<html><body>';
@@ -224,56 +224,45 @@ $isHomeLan = (
 
 $me = $isHomeLan;
 
-if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-    $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
-} else {
-    $msg .= "HTTP_REFERER: URL Typed<br>";
-}
+if (!$me && !$isPreview) {
+    if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+        $msg .= "HTTP_REFERER: " . htmlspecialchars($_SERVER['HTTP_REFERER']) . "<br>";
+    } else {
+        $msg .= "HTTP_REFERER: URL Typed<br>";
+    }
 
-foreach ($_SERVER as $key => $value) {
-    if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
-        $msg .= "$key: $value<br>";
+    foreach ($_SERVER as $key => $value) {
+        if (preg_match("/^REMOTE/", $key) || preg_match("/^HTTP_USER_AGENT/", $key)) {
+            $msg .= "$key: $value<br>";
 
-        if ($key == 'REMOTE_ADDR' && !$me) {
-            exec("whois $value", $output, $result);
+            if ($key == 'REMOTE_ADDR') {
+                exec("whois $value", $output, $result);
 
-            foreach ($output as $line) {
-                $msg .= "$line<br>";
-            } // foreach
+                foreach ($output as $line) {
+                    $msg .= "$line<br>";
+                } // foreach
+            } // if
         } // if
-    } // if
-} // foreach
+    } // foreach
 
-if (!$me) {
     $histfile = fopen('/web/pm/.history', 'a');
     $date = date(DATE_RFC822);
 
-    // Determine verb based on file type
-    $extension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
-    if ($download) {
-        $verb = "Downloading";
-    } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
-        $verb = "Viewing";
-    } elseif (in_array($extension, ['mp3', 'm4a', 'wav', 'ogg', 'flac', 'aac'])) {
-        $verb = "Playing";
-    } elseif (in_array($extension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'])) {
-        $verb = "Watching";
-    } else {
-        $verb = "Opening"; // Default fallback
+    // Only log non-audio/video accesses here; audio/video files log "Started <file>" when playback actually begins
+    if (!$isAudioFile && !$isVideoFile) {
+        if ($download) {
+            $verb = "Downloading";
+        } elseif ($isImageFile) {
+            $verb = "Viewing";
+        } else {
+            $verb = "Opening";
+        }
+        $logMessage = "$verb " . basename($URL);
+        log_playback($logMessage, $displayValue);
     }
-
-    // Log to playback.log
-    // Format: "Viewed <filename>" (No "File:" prefix)
-    $logMessage = "$verb " . basename($URL);
-
-    log_playback($logMessage, $displayValue);
 
     // Logging to history file
     $accessVerb = $download ? 'downloaded' : 'accessed';
-    // Or just use $verb? $verb is "Viewing". History file format is "$ip $access $URL $date"
-    // Let's keep it compatible with old format or update it?
-    // Old format: "accessed" or "downloaded".
-    // I will stick to "accessed"/"downloaded" mapping for history file compatibility.
     fwrite($histfile, "$_SERVER[REMOTE_ADDR] $accessVerb $URL $date\n");
     fclose($histfile);
 
@@ -302,22 +291,6 @@ if (!$me) {
 
     mail("andrew@defaria.com", $subject, $msg, $headers);
 } // if
-
-// Require media helper functions
-require_once realpath(__DIR__ . '/media_functions.php');
-
-// Determine file type based on extension
-$fileExtension = strtolower(pathinfo($URL, PATHINFO_EXTENSION));
-
-if (in_array($fileExtension, ['mp4', 'webm', 'ogv', 'mkv', 'mov'], true)) {
-    header("Location: /php/videoplayback.php?video=" . urlencode($URL));
-} elseif (in_array($fileExtension, ['m4a', 'mp3', 'wav', 'ogg', 'flac', 'aac'], true)) {
-    header("Location: /php/audioplayback.php?audio=" . urlencode($URL));
-} elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'], true)) {
-    header("Location: /php/imageview.php?image=" . urlencode($URL));
-} else {
-    header("Location: " . $URL);
-}
 
 exit;
 ?>

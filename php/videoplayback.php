@@ -14,10 +14,24 @@ $ipMapping = loadIpMapping($ipMappingFile);
 $displayIP = replaceIpWithText($IPAddr, $ipMapping);
 
 $title = getMediaTitle($video);
+$fileName = basename($video);
 $nav = getMediaNavigation($video);
 $nextUrl = $nav['next'];
 $prevUrl = $nav['prev'];
 $description = getMediaDescription($video);
+
+if (isset($_GET['ajax'])) {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'video' => $video,
+        'fileName' => $fileName,
+        'title' => $title,
+        'nextUrl' => $nextUrl,
+        'prevUrl' => $prevUrl,
+        'description' => $description,
+    ]);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -143,41 +157,44 @@ $description = getMediaDescription($video);
             <source src="<?php echo htmlspecialchars($video); ?>">
             Your browser does not support the video tag.
         </video>
-        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
+        <h2 class="media-title" id="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <div class="nav-controls">
-            <?php if (!empty($prevUrl)): ?>
-                <a href="<?php echo htmlspecialchars($prevUrl); ?>" class="nav-button prev-button">&laquo; Previous</a>
-            <?php else: ?>
-                <span class="nav-button disabled">&laquo; Previous</span>
-            <?php endif; ?>
-
-            <?php if (!empty($nextUrl)): ?>
-                <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
-            <?php else: ?>
-                <span class="nav-button disabled">Next &raquo;</span>
-            <?php endif; ?>
+            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
+            <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
         </div>
 
-        <?php if (!empty($description)): ?>
-            <div class="media-description">
-                <?php echo $description; ?>
-            </div>
-        <?php endif; ?>
+        <div class="media-description" id="media-description" style="<?php echo empty($description) ? 'display:none;' : ''; ?>">
+            <?php echo $description; ?>
+        </div>
     </div>
 
     <script>
         const videoID = document.getElementById('video');
-        const videoFile = videoID.querySelector('source').getAttribute('src');
-        const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
-        const prevUrl = "<?php echo htmlspecialchars($prevUrl, ENT_QUOTES); ?>";
-        const mediaTitle = "<?php echo htmlspecialchars($title, ENT_QUOTES); ?>";
+        const titleEl = document.getElementById('media-title');
+        const descEl = document.getElementById('media-description');
+        const prevBtn = document.getElementById('prev-button');
+        const nextBtn = document.getElementById('next-button');
 
-        // Ensure playback always starts from 0 when link is clicked
-        videoID.currentTime = 0;
-        videoID.addEventListener('loadedmetadata', () => {
+        let videoFile = <?php echo json_encode($video); ?>;
+        let currentFileName = <?php echo json_encode($fileName); ?>;
+        let nextUrl = <?php echo json_encode($nextUrl); ?>;
+        let prevUrl = <?php echo json_encode($prevUrl); ?>;
+        let mediaTitle = <?php echo json_encode($title); ?>;
+
+        const supportedVideoExts = ['mp4', 'webm', 'ogv', 'mkv', 'mov'];
+
+        // Ensure playback starts from 0 without triggering a spurious seek event on metadata load
+        if (videoID.currentTime !== 0) {
             videoID.currentTime = 0;
-        });
+        }
+
+        function formatTime(seconds) {
+            const totalSeconds = Math.max(0, Math.round(seconds || 0));
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
 
         // --- Screen Wake Lock API ---
         let wakeLock = null;
@@ -202,7 +219,8 @@ $description = getMediaDescription($video);
         });
 
         // --- Media Session API ---
-        if ('mediaSession' in navigator) {
+        function updateMediaSession() {
+            if (!('mediaSession' in navigator)) return;
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: mediaTitle,
                 artist: 'DeFaria.com',
@@ -211,14 +229,11 @@ $description = getMediaDescription($video);
 
             navigator.mediaSession.setActionHandler('play', () => { videoID.play(); });
             navigator.mediaSession.setActionHandler('pause', () => { videoID.pause(); });
-
-            if (prevUrl) {
-                navigator.mediaSession.setActionHandler('previoustrack', () => { window.location.href = prevUrl; });
-            }
-            if (nextUrl) {
-                navigator.mediaSession.setActionHandler('nexttrack', () => { window.location.href = nextUrl; });
-            }
+            navigator.mediaSession.setActionHandler('previoustrack', prevUrl ? () => { navigateTrack(prevUrl, false); } : null);
+            navigator.mediaSession.setActionHandler('nexttrack', nextUrl ? () => { navigateTrack(nextUrl, false); } : null);
         }
+
+        updateMediaSession();
 
         let startTime = 0;
         let totalTimeWatched = 0;
@@ -227,18 +242,135 @@ $description = getMediaDescription($video);
         let videoEnded = false;
         let isSeeking = false;
         let seekTimeout = null;
+        let hasProgressed = false;
+        let bailLogged = false;
+
+        function resetTrackState() {
+            clearTimeout(seekTimeout);
+            startTime = 0;
+            totalTimeWatched = 0;
+            isPlaying = false;
+            videoStarted = false;
+            videoEnded = false;
+            isSeeking = false;
+            seekTimeout = null;
+            hasProgressed = false;
+            bailLogged = false;
+        }
+
+        function updateNavButtons() {
+            if (prevUrl) {
+                prevBtn.href = prevUrl;
+                prevBtn.classList.remove('disabled');
+            } else {
+                prevBtn.href = '#';
+                prevBtn.classList.add('disabled');
+            }
+            if (nextUrl) {
+                nextBtn.href = nextUrl;
+                nextBtn.classList.remove('disabled');
+            } else {
+                nextBtn.href = '#';
+                nextBtn.classList.add('disabled');
+            }
+        }
+
+        async function navigateTrack(monitorUrl, isAutoAdvance) {
+            if (!monitorUrl) return;
+            try {
+                const parsed = new URL(monitorUrl, window.location.origin);
+                const targetPath = parsed.searchParams.get('u');
+                if (targetPath) {
+                    const ext = targetPath.split('.').pop().toLowerCase();
+                    if (supportedVideoExts.includes(ext)) {
+                        if (!isAutoAdvance && videoStarted && !videoEnded && !bailLogged) {
+                            bailLogged = true;
+                            if (isPlaying) {
+                                totalTimeWatched += Math.max(0, videoID.currentTime - startTime);
+                            }
+                            logmsg('user bailed @ ' + formatTime(totalTimeWatched));
+                        }
+
+                        // Record access in monitorFile background mode without full page reload
+                        fetch(monitorUrl + '&bg=1', { keepalive: true }).catch(() => {});
+
+                        const resp = await fetch('/php/videoplayback.php?ajax=1&video=' + encodeURIComponent(targetPath));
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            resetTrackState();
+                            videoFile = data.video;
+                            currentFileName = data.fileName;
+                            nextUrl = data.nextUrl;
+                            prevUrl = data.prevUrl;
+                            mediaTitle = data.title;
+
+                            document.title = data.title;
+                            titleEl.textContent = data.title;
+                            if (data.description) {
+                                descEl.innerHTML = data.description;
+                                descEl.style.display = '';
+                            } else {
+                                descEl.innerHTML = '';
+                                descEl.style.display = 'none';
+                            }
+                            updateNavButtons();
+                            updateMediaSession();
+
+                            history.pushState({ video: data.video }, data.title, '/php/videoplayback.php?video=' + encodeURIComponent(data.video));
+
+                            // Reuse the same blessed <video> element so iOS Safari allows continuous autoplay
+                            const sourceEl = videoID.querySelector('source');
+                            if (sourceEl) {
+                                sourceEl.setAttribute('src', data.video);
+                            }
+                            videoID.src = data.video;
+                            videoID.load();
+                            videoID.play().catch(() => {});
+                            return;
+                        }
+                    }
+                }
+            } catch (err) {}
+
+            window.location.href = monitorUrl;
+        }
+
+        prevBtn.addEventListener('click', (e) => {
+            if (!prevUrl) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            navigateTrack(prevUrl, false);
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            if (!nextUrl) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            navigateTrack(nextUrl, false);
+        });
+
+        videoID.addEventListener('timeupdate', () => {
+            if (videoID.currentTime >= 1) {
+                hasProgressed = true;
+            }
+        });
 
         videoID.addEventListener('play', () => {
             isPlaying = true;
+            startTime = videoID.currentTime;
             requestWakeLock();
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.playbackState = 'playing';
             }
             if (!videoStarted) {
                 videoStarted = true;
-                logmsg('Started for the first time @ ' + Math.round(startTime) + ' seconds');
+                logmsg('Started ' + currentFileName);
             } else {
-                logmsg('Resumed @ ' + Math.round(videoID.currentTime) + ' seconds');
+                logmsg('Resumed @ ' + formatTime(videoID.currentTime));
             }
         });
 
@@ -247,9 +379,9 @@ $description = getMediaDescription($video);
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.playbackState = 'paused';
             }
-            if (isPlaying && !isSeeking && !videoEnded) {
-                totalTimeWatched = videoID.currentTime - startTime;
-                logmsg('Paused  @ ' + Math.round(totalTimeWatched) + ' seconds');
+            if (isPlaying && !isSeeking && !videoEnded && !videoID.ended) {
+                totalTimeWatched += Math.max(0, videoID.currentTime - startTime);
+                logmsg('Paused  @ ' + formatTime(videoID.currentTime));
             }
             isPlaying = false;
         });
@@ -263,9 +395,16 @@ $description = getMediaDescription($video);
             clearTimeout(seekTimeout);
             seekTimeout = setTimeout(() => {
                 isSeeking = false;
-                logmsg('Seeked to ' + Math.round(videoID.currentTime) + ' seconds');
+                const currentRounded = Math.round(videoID.currentTime);
+                if (currentRounded === 0 && !hasProgressed) {
+                    return;
+                }
+                if (currentRounded > 0) {
+                    hasProgressed = true;
+                }
+                logmsg('Seeked to ' + formatTime(videoID.currentTime));
                 if (isPlaying) {
-                    totalTimeWatched += videoID.currentTime - startTime;
+                    totalTimeWatched += Math.max(0, videoID.currentTime - startTime);
                     startTime = videoID.currentTime;
                 }
             }, 200);
@@ -277,15 +416,14 @@ $description = getMediaDescription($video);
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.playbackState = 'none';
             }
-            logmsg('Ended   @ ' + Math.round(videoID.currentTime) + ' seconds');
+            logmsg('Ended ' + currentFileName + ' @ ' + formatTime(videoID.currentTime));
             if (nextUrl) {
-                window.location.href = nextUrl;
+                navigateTrack(nextUrl, true);
             }
         });
 
         function logmsg(msg) {
             const fileType = 'Video';
-            const xhr = new XMLHttpRequest();
             const IPAddr = "<?php echo $displayIP; ?>";
             const data = {
                 IPAddr: IPAddr,
@@ -294,18 +432,36 @@ $description = getMediaDescription($video);
                 msg: msg,
             };
 
-            xhr.open('POST', '/php/log_action.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(data));
+            const payload = JSON.stringify(data);
+            if (navigator.sendBeacon) {
+                const blob = new Blob([payload], { type: 'application/json' });
+                if (navigator.sendBeacon('/php/log_action.php', blob)) {
+                    return;
+                }
+            }
+
+            fetch('/php/log_action.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: payload,
+                keepalive: true
+            }).catch(() => {});
         }
 
-        window.addEventListener('beforeunload', (event) => {
+        function handlePageUnload() {
+            if (bailLogged) return;
+            bailLogged = true;
             releaseWakeLock();
-            if (!videoEnded) {
-                totalTimeWatched += videoID.currentTime - startTime;
-                logmsg('user bailed @ ' + Math.round(totalTimeWatched) + ' seconds');
+            if (videoStarted && !videoEnded) {
+                if (isPlaying) {
+                    totalTimeWatched += Math.max(0, videoID.currentTime - startTime);
+                }
+                logmsg('user bailed @ ' + formatTime(totalTimeWatched));
             }
-        });
+        }
+
+        window.addEventListener('pagehide', handlePageUnload);
+        window.addEventListener('beforeunload', handlePageUnload);
     </script>
 </body>
 
