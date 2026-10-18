@@ -25,8 +25,8 @@ function determineType(string $filename): ?string
     $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
     $audioExtensions = ['mp3', 'wav', 'ogg', 'aac', 'flac', 'm4a'];
-    $videoExtensions = ['mp4', 'avi', 'mkv', 'mov', 'webm', 'flv', 'wmv'];
-    $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    $videoExtensions = ['mp4', 'avi', 'mkv', 'mov', 'webm', 'flv', 'wmv', 'ogv'];
+    $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
 
     if (in_array($extension, $audioExtensions)) {
         return audioImg;
@@ -357,12 +357,14 @@ EOF;
 
         $openLink = "/php/monitorFile.php?u=" . urlencode($itemPath);
 
+        $displayName = $isDir ? $item : stripMediaExtension($item);
+
         echo "<tr>";
         echo "<td>";
         if ($isDir) {
             echo '<a href=/php/downloaddir.php?dir=' . urlencode($dirPath) . ">$item</a>";
         } else {
-            echo "<a href='" . $openLink . "'>" . $item . "</a>";
+            echo "<a href='" . $openLink . "'>" . $displayName . "</a>";
         }
         echo "</td>";
 

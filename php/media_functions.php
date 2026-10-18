@@ -63,6 +63,26 @@ function getMediaTitle(string $url): string
 }
 
 /**
+ * Strip media extension if the file has a known media extension.
+ */
+function stripMediaExtension(string $filename): string
+{
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $mediaExtensions = [
+        'mp3', 'wav', 'ogg', 'aac', 'flac', 'm4a',
+        'mp4', 'avi', 'mkv', 'mov', 'webm', 'flv', 'wmv', 'ogv',
+        'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp',
+    ];
+
+    if (in_array($extension, $mediaExtensions, true)) {
+        return pathinfo($filename, PATHINFO_FILENAME);
+    }
+
+    return $filename;
+}
+
+
+/**
  * Get description HTML content if <mediafile>.html exists in the same directory.
  *
  * @param string $currentUrl Web-relative path (e.g., "/Media/Music/song1.mp3")
