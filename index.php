@@ -287,6 +287,10 @@
         page = '/professional.php' + queryString;
       } else if (route === 'projects') {
         page = '/projects.php' + queryString;
+      } else if (route === 'speak') {
+        page = '/speak.php' + queryString;
+      } else if (route === 'callbouncer') {
+        page = '/callbouncer.php' + queryString;
       } else if (route === 'blogs') {
         page = '/blogs.php' + queryString;
       } else if (route === 'misc') {
@@ -430,7 +434,7 @@
           } else if (tabPath === 'music') {
             if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0])) isActive = true;
           } else if (tabPath === 'projects') {
-            if (['upload', 'ytdownload', 'spleeter'].includes(route)) isActive = true;
+            if (['upload', 'ytdownload', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {
             if (['broadcom', 'ibm', 'sanmelia', 'wellsfargo', 'webmonitor'].includes(route)) isActive = true;
           }
