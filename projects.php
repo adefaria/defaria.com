@@ -2,6 +2,8 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $project_links = [
+    ['title' => 'Speak', 'url' => '/speak', 'target' => '_top', 'desc' => 'Hands-free notification & clipboard text-to-speech Android assistant in Lite and Pro editions.'],
+    ['title' => 'CallBouncer', 'url' => '/callbouncer', 'target' => '_top', 'desc' => '100% offline Android call firewall with wildcard, RegEx, and international country code blocking.'],
     ['title' => 'Upload', 'url' => '/upload', 'target' => '_top', 'desc' => 'File upload utility.'],
     ['title' => 'YouTube Download', 'url' => '/ytdownload', 'target' => '_top', 'desc' => 'Download videos from YouTube.'],
     ['title' => 'Spleeter', 'url' => '/spleeter', 'target' => '_top', 'desc' => 'AI source separation tool.']
