@@ -2,12 +2,12 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $hidden_links = [
-    ['title' => 'Temporary Files', 'url' => '/tmp', 'desc' => 'Temporary area for sharing files'], // Tmp might still need _top or special handling if it redirects? No, let's try encased.
-    ['title' => 'Broadcom', 'url' => '/Broadcom', 'desc' => 'A little issue I had while contracting at Broadcom'],
-    ['title' => 'IBM', 'url' => '/IBM', 'desc' => 'Problems with IBM support'],
+    ['title' => 'Temporary Files', 'url' => '/tmp', 'desc' => 'Temporary area for sharing files'],
+    ['title' => 'Web Monitor', 'url' => '/webmonitor', 'desc' => 'A little PHP app to see if people are viewing pictures and videos of the links I send them.'],
     ['title' => 'SanMelia', 'url' => '/SanMelia', 'desc' => 'Beautiful apartment complex with terrible management - KEEP AWAY!'],
+    ['title' => 'IBM', 'url' => '/IBM', 'desc' => 'Problems with IBM support'],
     ['title' => 'Wells Fargo', 'url' => '/wellsfargo', 'desc' => 'A bank to avoid (even though they later hired me as a contractor!)'],
-    ['title' => 'Web Monitor', 'url' => '/webmonitor', 'desc' => 'A little PHP app to see if people are viewing pictures and videos of the links I send them.']
+    ['title' => 'Wolters Kluwer', 'url' => '/wk', 'desc' => 'Back in the corporate world things are still messed up']
 ];
 ?>
 

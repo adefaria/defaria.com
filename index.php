@@ -311,7 +311,7 @@
         page = '/songbook/displayset.php?set=' + setParam + (queryString ? '&' + queryString.substring(1) : '');
       } else if (route === 'maps') {
         page = '/maps/php/main.php' + queryString + (queryString ? '&' : '?') + 'cb=' + new Date().getTime();
-      } else if (route === 'mapsmobile') {
+      } else if (route === 'mapsmobile' || route === 'mobile') {
         page = '/maps/mobile/?bypass=true&cb=' + new Date().getTime(); // Has its own query params
       } else if (route === 'clearscm') {
         page = '/clearscm/index.php' + queryString;
@@ -436,7 +436,7 @@
           } else if (tabPath === 'projects') {
             if (['upload', 'ytdownload', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {
-            if (['broadcom', 'ibm', 'sanmelia', 'wellsfargo', 'webmonitor'].includes(route)) isActive = true;
+            if (['broadcom', 'ibm', 'sanmelia', 'wellsfargo', 'webmonitor', 'wk'].includes(route)) isActive = true;
           }
         }
 
