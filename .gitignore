@@ -12,3 +12,5 @@ pm/playback.log
 tmp/
 downloads/
 violation.log
+etc/auth_config.json
+etc/auth_users.json

@@ -42,9 +42,8 @@
         </div>
     </div>
 
-    <!-- Theme Toggle (Moved) -->
-    <!-- Theme Toggle (Moved) -->
-    <div id="theme-toggle-wrapper" style="display: flex; align-items: center;">
+    <!-- Theme & Auth Controls -->
+    <div id="theme-toggle-wrapper" style="display: flex; align-items: center; gap: 8px;">
         <!-- Go to dark mode (Moon) - Visible in Light Mode -->
         <button id="btn-to-dark" aria-label="Switch to dark theme"
             class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors active:scale-95 focus:outline-none"
@@ -54,6 +53,31 @@
         <button id="btn-to-light" aria-label="Switch to light theme"
             class="nav-menu-item theme-toggle rounded-lg p-2 transition-colors active:scale-95 focus:outline-none"
             type="button" style="display:none;">☀️</button>
+
+        <!-- Auth Widget -->
+        <?php
+            require_once __DIR__ . '/../php/auth.php';
+            $currentUser = SiteAuth::getCurrentUser();
+        ?>
+        <?php if ($currentUser): ?>
+            <a href="/logout.php" id="auth-status-btn" class="nav-menu-item auth-btn" title="Logged in as <?php echo htmlspecialchars($currentUser['display_name']); ?> (Click to Log Out)"
+                style="display:inline-flex; align-items:center; gap:5px; padding:4px 8px; border-radius:6px; font-size:0.85rem; text-decoration:none; color:var(--text-color); background:var(--tab-active-bg);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="auth-username"><?php echo htmlspecialchars($currentUser['display_name']); ?></span>
+            </a>
+        <?php else: ?>
+            <a href="/login" id="auth-status-btn" class="nav-menu-item auth-btn" title="Log In"
+                style="display:inline-flex; align-items:center; gap:5px; padding:4px 8px; border-radius:6px; font-size:0.85rem; text-decoration:none; color:var(--muted-color); border:1px solid rgba(255,255,255,0.15);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>Login</span>
+            </a>
+        <?php endif; ?>
     </div>
 
     <!-- Search Widget -->

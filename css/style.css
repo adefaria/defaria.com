@@ -1089,3 +1089,19 @@ footer {
 .embedded .content {
   padding-bottom: 2rem !important;
 }
+
+/* Card Icons: External and Lock (Requires Login) */
+.lock-icon {
+  width: 0.85em;
+  height: 0.85em;
+  vertical-align: middle;
+  margin-left: 0.35em;
+  stroke: currentColor;
+  fill: none;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.link-card:hover .lock-icon {
+  transform: scale(1.15);
+}
