@@ -215,19 +215,24 @@ class SiteAuth {
             $allowlist = json_decode(file_get_contents(self::$allowlistFile), true) ?: [];
         }
 
+        $lowerPath = strtolower($path);
+
         // Check explicit private paths first (override)
         if (!empty($allowlist['explicit_private_paths'])) {
             foreach ($allowlist['explicit_private_paths'] as $privatePath) {
-                if ($path === $privatePath || str_starts_with($path, rtrim($privatePath, '/') . '/')) {
+                $lowerPrivate = strtolower($privatePath);
+                if ($path === $privatePath || $lowerPath === $lowerPrivate ||
+                    str_starts_with($path, rtrim($privatePath, '/') . '/') ||
+                    str_starts_with($lowerPath, rtrim($lowerPrivate, '/') . '/')) {
                     return false;
                 }
             }
         }
 
-        // Check public prefixes (e.g., /css/, /JavaScript/, /Icons/, /auth/)
+        // Check public prefixes (e.g., /css/, /JavaScript/, /Icons/, /auth/, /Media/, /Band/, /tmp/)
         if (!empty($allowlist['public_prefixes'])) {
             foreach ($allowlist['public_prefixes'] as $prefix) {
-                if (str_starts_with($path, $prefix)) {
+                if (str_starts_with($path, $prefix) || str_starts_with($lowerPath, strtolower($prefix))) {
                     return true;
                 }
             }
@@ -235,20 +240,25 @@ class SiteAuth {
 
         // Check exact public paths
         if (!empty($allowlist['public_exact_paths'])) {
+            static $lowerExactMap = null;
+            if ($lowerExactMap === null) {
+                $lowerExactMap = array_map('strtolower', $allowlist['public_exact_paths']);
+            }
+
             // Check exact, plus trailing slash variation, plus clean URL variations
-            if (in_array($path, $allowlist['public_exact_paths'], true)) {
+            if (in_array($path, $allowlist['public_exact_paths'], true) || in_array($lowerPath, $lowerExactMap, true)) {
                 return true;
             }
-            if (str_ends_with($path, '/') && in_array(rtrim($path, '/'), $allowlist['public_exact_paths'], true)) {
+            if (str_ends_with($path, '/') && (in_array(rtrim($path, '/'), $allowlist['public_exact_paths'], true) || in_array(rtrim($lowerPath, '/'), $lowerExactMap, true))) {
                 return true;
             }
-            if (!str_ends_with($path, '/') && in_array($path . '/', $allowlist['public_exact_paths'], true)) {
+            if (!str_ends_with($path, '/') && (in_array($path . '/', $allowlist['public_exact_paths'], true) || in_array($lowerPath . '/', $lowerExactMap, true))) {
                 return true;
             }
-            if (str_ends_with($path, '.php') && in_array(substr($path, 0, -4), $allowlist['public_exact_paths'], true)) {
+            if (str_ends_with($path, '.php') && (in_array(substr($path, 0, -4), $allowlist['public_exact_paths'], true) || in_array(substr($lowerPath, 0, -4), $lowerExactMap, true))) {
                 return true;
             }
-            if (!str_contains($path, '.') && in_array($path . '.php', $allowlist['public_exact_paths'], true)) {
+            if (!str_contains($path, '.') && (in_array($path . '.php', $allowlist['public_exact_paths'], true) || in_array($lowerPath . '.php', $lowerExactMap, true))) {
                 return true;
             }
         }
