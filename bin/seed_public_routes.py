@@ -27,6 +27,8 @@ DEFAULT_PUBLIC_PREFIXES = [
     "/JavaScript/",
     "/Icons/",
     "/icons/",
+    "/Images/",
+    "/images/",
     "/Logos/",
     "/auth/",
     "/tmp/",
