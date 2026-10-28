@@ -26,8 +26,10 @@ DEFAULT_PUBLIC_PREFIXES = [
     "/css/",
     "/JavaScript/",
     "/Icons/",
+    "/icons/",
     "/Logos/",
     "/auth/",
+    "/tmp/",
 ]
 
 # Standard exact files required for infrastructure/browsers
@@ -42,6 +44,22 @@ DEFAULT_PUBLIC_EXACT = [
     "/404.php",
     "/favicon.ico",
     "/robots.txt",
+    "/tmp",
+    "/tmp/",
+    "/tmp/index.php",
+    "/php/monitorFile.php",
+    "/monitorFile.php",
+    "/php/downloaddir.php",
+    "/downloaddir.php",
+    "/php/audioplayback.php",
+    "/audioplayback.php",
+    "/php/videoplayback.php",
+    "/videoplayback.php",
+    "/php/imageview.php",
+    "/imageview.php",
+    "/php/getImage.php",
+    "/getImage.php",
+    "/php/log_action.php",
 ]
 
 # Seed URLs to begin crawling
@@ -85,6 +103,8 @@ INITIAL_QUEUE = [
     "/clearscm",
     "/maps",
     "/mapsmobile",
+    "/tmp",
+    "/tmp/",
 ]
 
 # Explicit private directories and pages that must never be public without authentication
