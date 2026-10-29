@@ -266,6 +266,16 @@ a:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
+/* Prevent navigation links from triggering browser drag and split-view gestures */
+.sidebar,
+.tab-btn,
+.home-icon,
+.brand-text-col a,
+.brand-tagline a {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
 /* Sidebar (Vertical Tabs) */
 .sidebar {
   width: var(--sidebar-width);
