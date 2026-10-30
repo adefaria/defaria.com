@@ -381,7 +381,7 @@
         page = '/Recruiters/?bypass=true';
       } else if (route === 'upload') {
         page = '/upload.php' + queryString;
-      } else if (route === 'ytdownload') {
+      } else if (route === 'ytdownload' || route === 'yt') {
         page = '/yt/?bypass=true';
       } else if (route === 'spleeter') {
         page = 'https://spleeter.defariahome.com';
@@ -462,7 +462,7 @@
           } else if (tabPath === 'music') {
             if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0])) isActive = true;
           } else if (tabPath === 'projects') {
-            if (['upload', 'ytdownload', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
+            if (['upload', 'ytdownload', 'yt', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {
             if (['broadcom', 'ibm', 'sanmelia', 'wellsfargo', 'webmonitor', 'wk'].includes(route)) isActive = true;
           }
