@@ -163,7 +163,15 @@ function getMediaNavigation(string $currentUrl): array
         $webDir = '';
     }
 
-    $supported = getSupportedMediaExtensions();
+    $currentExt = strtolower(pathinfo($realPath, PATHINFO_EXTENSION));
+    if (in_array($currentExt, getSupportedImageExtensions(), true)) {
+        $supported = getSupportedImageExtensions();
+    } else {
+        $supported = array_merge(
+            getSupportedVideoExtensions(),
+            getSupportedAudioExtensions()
+        );
+    }
 
     $files = @scandir($dir);
     if (!$files) {
