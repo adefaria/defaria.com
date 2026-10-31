@@ -1,6 +1,6 @@
 <?php
 // imageview.php
-// Display images with theme support, filename header (no ext), navigation buttons, description, and slideshow auto-advance
+// Display images with theme support, filename header (no ext), navigation buttons, and description
 
 require_once realpath(__DIR__ . '/media_functions.php');
 
@@ -160,28 +160,6 @@ $description = getMediaDescription($image);
             </div>
         <?php endif; ?>
     </div>
-
-    <script>
-        const nextUrl = "<?php echo htmlspecialchars($nextUrl, ENT_QUOTES); ?>";
-
-        // Keep screen awake during slideshow
-        let wakeLock = null;
-        if ('wakeLock' in navigator && nextUrl) {
-            navigator.wakeLock.request('screen').then(lock => {
-                wakeLock = lock;
-            }).catch(() => {});
-        }
-
-        if (nextUrl) {
-            // Auto-advance slideshow to next media file after 5 seconds
-            setTimeout(() => {
-                if (wakeLock) {
-                    wakeLock.release().catch(() => {});
-                }
-                window.location.href = nextUrl;
-            }, 5000);
-        }
-    </script>
 </body>
 
 </html>
