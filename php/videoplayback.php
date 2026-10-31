@@ -80,8 +80,25 @@ if (isset($_GET['ajax'])) {
 
         .nav-controls {
             display: flex;
+            align-items: center;
             gap: 15px;
             margin: 10px 0 15px 0;
+        }
+
+        .autoadvance-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .autoadvance-label input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
         }
 
         .nav-button {
@@ -161,6 +178,10 @@ if (isset($_GET['ajax'])) {
 
         <div class="nav-controls">
             <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
+            <label class="autoadvance-label" for="autoadvance_toggle">
+                <input type="checkbox" id="autoadvance_toggle" name="autoadvance_toggle">
+                Auto-advance
+            </label>
             <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
         </div>
 
@@ -170,11 +191,40 @@ if (isset($_GET['ajax'])) {
     </div>
 
     <script>
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         const videoID = document.getElementById('video');
         const titleEl = document.getElementById('media-title');
         const descEl = document.getElementById('media-description');
         const prevBtn = document.getElementById('prev-button');
         const nextBtn = document.getElementById('next-button');
+        const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
+
+        if (autoAdvanceToggle) {
+            autoAdvanceToggle.checked = getCookie('media_autoadvance') !== 'false';
+            autoAdvanceToggle.addEventListener('change', (e) => {
+                setCookie('media_autoadvance', e.target.checked ? 'true' : 'false', 365);
+            });
+        }
 
         let videoFile = <?php echo json_encode($video); ?>;
         let currentFileName = <?php echo json_encode($fileName); ?>;
@@ -417,7 +467,8 @@ if (isset($_GET['ajax'])) {
                 navigator.mediaSession.playbackState = 'none';
             }
             logmsg('Ended ' + currentFileName + ' @ ' + formatTime(videoID.currentTime));
-            if (nextUrl) {
+            const autoAdvanceEnabled = autoAdvanceToggle ? autoAdvanceToggle.checked : (getCookie('media_autoadvance') !== 'false');
+            if (nextUrl && autoAdvanceEnabled) {
                 navigateTrack(nextUrl, true);
             }
         });

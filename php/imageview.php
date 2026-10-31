@@ -64,8 +64,25 @@ $description = getMediaDescription($image);
 
         .nav-controls {
             display: flex;
+            align-items: center;
             gap: 15px;
             margin: 10px 0 15px 0;
+        }
+
+        .autoadvance-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .autoadvance-label input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
         }
 
         .nav-button {
@@ -147,6 +164,11 @@ $description = getMediaDescription($image);
                 <span class="nav-button disabled">&laquo; Previous</span>
             <?php endif; ?>
 
+            <label class="autoadvance-label" for="autoadvance_toggle">
+                <input type="checkbox" id="autoadvance_toggle" name="autoadvance_toggle">
+                Auto-advance
+            </label>
+
             <?php if (!empty($nextUrl)): ?>
                 <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
             <?php else: ?>
@@ -160,6 +182,82 @@ $description = getMediaDescription($image);
             </div>
         <?php endif; ?>
     </div>
+
+    <script>
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        const nextUrl = <?php echo json_encode($nextUrl); ?>;
+        const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
+        let wakeLock = null;
+        let slideshowTimer = null;
+
+        function requestWakeLock() {
+            if ('wakeLock' in navigator && wakeLock === null) {
+                navigator.wakeLock.request('screen').then(lock => {
+                    wakeLock = lock;
+                }).catch(() => {});
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => { wakeLock = null; }).catch(() => {});
+            }
+        }
+
+        function startSlideshowTimer() {
+            clearTimeout(slideshowTimer);
+            if (!nextUrl) return;
+            requestWakeLock();
+            slideshowTimer = setTimeout(() => {
+                releaseWakeLock();
+                window.location.href = nextUrl;
+            }, 5000);
+        }
+
+        function stopSlideshowTimer() {
+            clearTimeout(slideshowTimer);
+            slideshowTimer = null;
+            releaseWakeLock();
+        }
+
+        const autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
+        if (autoAdvanceToggle) {
+            autoAdvanceToggle.checked = autoAdvanceEnabled;
+            autoAdvanceToggle.addEventListener('change', (e) => {
+                const isEnabled = e.target.checked;
+                setCookie('media_autoadvance', isEnabled ? 'true' : 'false', 365);
+                if (isEnabled) {
+                    startSlideshowTimer();
+                } else {
+                    stopSlideshowTimer();
+                }
+            });
+        }
+
+        if (autoAdvanceEnabled && nextUrl) {
+            startSlideshowTimer();
+        }
+    </script>
 </body>
 
 </html>
