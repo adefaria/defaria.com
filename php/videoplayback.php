@@ -82,23 +82,7 @@ if (isset($_GET['ajax'])) {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin: 10px 0 15px 0;
-        }
-
-        .autoadvance-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            user-select: none;
-        }
-
-        .autoadvance-label input[type="checkbox"] {
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            margin: 0;
+            margin: 15px 0 10px 0;
         }
 
         .nav-button {
@@ -107,14 +91,36 @@ if (isset($_GET['ajax'])) {
             background-color: #007bff;
             color: white;
             text-decoration: none;
+            border: none;
             border-radius: 4px;
             font-weight: bold;
             font-size: 0.95rem;
+            cursor: pointer;
             transition: background-color 0.2s;
         }
 
         .nav-button:hover:not(.disabled) {
             background-color: #0056b3;
+        }
+
+        .nav-button.stop-btn {
+            background-color: #dc3545;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .nav-button.stop-btn:hover {
+            background-color: #bd2130;
+        }
+
+        .nav-button.go-btn {
+            background-color: #28a745;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .nav-button.go-btn:hover {
+            background-color: #218838;
         }
 
         .nav-button.disabled {
@@ -170,20 +176,17 @@ if (isset($_GET['ajax'])) {
 
 <body>
     <div class="player-container">
+        <div class="nav-controls">
+            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
+            <button type="button" id="autoadvance_toggle" class="nav-button stop-btn">Stop</button>
+            <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
+        </div>
+
         <video id="video" controls autoplay playsinline>
             <source src="<?php echo htmlspecialchars($video); ?>">
             Your browser does not support the video tag.
         </video>
         <h2 class="media-title" id="media-title"><?php echo htmlspecialchars($title); ?></h2>
-
-        <div class="nav-controls">
-            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
-            <label class="autoadvance-label" for="autoadvance_toggle">
-                <input type="checkbox" id="autoadvance_toggle" name="autoadvance_toggle">
-                Auto-advance
-            </label>
-            <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
-        </div>
 
         <div class="media-description" id="media-description" style="<?php echo empty($description) ? 'display:none;' : ''; ?>">
             <?php echo $description; ?>
@@ -218,11 +221,32 @@ if (isset($_GET['ajax'])) {
         const prevBtn = document.getElementById('prev-button');
         const nextBtn = document.getElementById('next-button');
         const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
+        let autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
+
+        function updateAutoAdvanceButton() {
+            if (!autoAdvanceToggle) return;
+            if (autoAdvanceEnabled) {
+                autoAdvanceToggle.textContent = 'Stop';
+                autoAdvanceToggle.classList.remove('go-btn');
+                autoAdvanceToggle.classList.add('stop-btn');
+                autoAdvanceToggle.title = 'Auto-advance is ON (click to Stop)';
+            } else {
+                autoAdvanceToggle.textContent = 'Go';
+                autoAdvanceToggle.classList.remove('stop-btn');
+                autoAdvanceToggle.classList.add('go-btn');
+                autoAdvanceToggle.title = 'Auto-advance is OFF (click to Go)';
+            }
+        }
 
         if (autoAdvanceToggle) {
-            autoAdvanceToggle.checked = getCookie('media_autoadvance') !== 'false';
-            autoAdvanceToggle.addEventListener('change', (e) => {
-                setCookie('media_autoadvance', e.target.checked ? 'true' : 'false', 365);
+            updateAutoAdvanceButton();
+            autoAdvanceToggle.addEventListener('click', () => {
+                autoAdvanceEnabled = !autoAdvanceEnabled;
+                setCookie('media_autoadvance', autoAdvanceEnabled ? 'true' : 'false', 365);
+                updateAutoAdvanceButton();
+                if (autoAdvanceEnabled && videoEnded && nextUrl) {
+                    navigateTrack(nextUrl, true);
+                }
             });
         }
 
@@ -467,7 +491,6 @@ if (isset($_GET['ajax'])) {
                 navigator.mediaSession.playbackState = 'none';
             }
             logmsg('Ended ' + currentFileName + ' @ ' + formatTime(videoID.currentTime));
-            const autoAdvanceEnabled = autoAdvanceToggle ? autoAdvanceToggle.checked : (getCookie('media_autoadvance') !== 'false');
             if (nextUrl && autoAdvanceEnabled) {
                 navigateTrack(nextUrl, true);
             }

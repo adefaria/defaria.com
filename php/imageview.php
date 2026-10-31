@@ -66,23 +66,7 @@ $description = getMediaDescription($image);
             display: flex;
             align-items: center;
             gap: 15px;
-            margin: 10px 0 15px 0;
-        }
-
-        .autoadvance-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            user-select: none;
-        }
-
-        .autoadvance-label input[type="checkbox"] {
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            margin: 0;
+            margin: 15px 0 15px 0;
         }
 
         .nav-button {
@@ -91,14 +75,36 @@ $description = getMediaDescription($image);
             background-color: #007bff;
             color: white;
             text-decoration: none;
+            border: none;
             border-radius: 4px;
             font-weight: bold;
             font-size: 0.95rem;
+            cursor: pointer;
             transition: background-color 0.2s;
         }
 
         .nav-button:hover:not(.disabled) {
             background-color: #0056b3;
+        }
+
+        .nav-button.stop-btn {
+            background-color: #dc3545;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .nav-button.stop-btn:hover {
+            background-color: #bd2130;
+        }
+
+        .nav-button.go-btn {
+            background-color: #28a745;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .nav-button.go-btn:hover {
+            background-color: #218838;
         }
 
         .nav-button.disabled {
@@ -154,9 +160,6 @@ $description = getMediaDescription($image);
 
 <body>
     <div class="player-container">
-        <img src="<?php echo htmlspecialchars($image); ?>" alt="<?php echo htmlspecialchars($title); ?>">
-        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
-
         <div class="nav-controls">
             <?php if (!empty($prevUrl)): ?>
                 <a href="<?php echo htmlspecialchars($prevUrl); ?>" class="nav-button prev-button">&laquo; Previous</a>
@@ -164,10 +167,7 @@ $description = getMediaDescription($image);
                 <span class="nav-button disabled">&laquo; Previous</span>
             <?php endif; ?>
 
-            <label class="autoadvance-label" for="autoadvance_toggle">
-                <input type="checkbox" id="autoadvance_toggle" name="autoadvance_toggle">
-                Auto-advance
-            </label>
+            <button type="button" id="autoadvance_toggle" class="nav-button stop-btn">Stop</button>
 
             <?php if (!empty($nextUrl)): ?>
                 <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
@@ -175,6 +175,9 @@ $description = getMediaDescription($image);
                 <span class="nav-button disabled">Next &raquo;</span>
             <?php endif; ?>
         </div>
+
+        <img src="<?php echo htmlspecialchars($image); ?>" alt="<?php echo htmlspecialchars($title); ?>">
+        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <?php if (!empty($description)): ?>
             <div class="media-description">
@@ -207,6 +210,7 @@ $description = getMediaDescription($image);
 
         const nextUrl = <?php echo json_encode($nextUrl); ?>;
         const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
+        let autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
         let wakeLock = null;
         let slideshowTimer = null;
 
@@ -240,13 +244,28 @@ $description = getMediaDescription($image);
             releaseWakeLock();
         }
 
-        const autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
+        function updateAutoAdvanceButton() {
+            if (!autoAdvanceToggle) return;
+            if (autoAdvanceEnabled) {
+                autoAdvanceToggle.textContent = 'Stop';
+                autoAdvanceToggle.classList.remove('go-btn');
+                autoAdvanceToggle.classList.add('stop-btn');
+                autoAdvanceToggle.title = 'Auto-advance is ON (click to Stop)';
+            } else {
+                autoAdvanceToggle.textContent = 'Go';
+                autoAdvanceToggle.classList.remove('stop-btn');
+                autoAdvanceToggle.classList.add('go-btn');
+                autoAdvanceToggle.title = 'Auto-advance is OFF (click to Go)';
+            }
+        }
+
         if (autoAdvanceToggle) {
-            autoAdvanceToggle.checked = autoAdvanceEnabled;
-            autoAdvanceToggle.addEventListener('change', (e) => {
-                const isEnabled = e.target.checked;
-                setCookie('media_autoadvance', isEnabled ? 'true' : 'false', 365);
-                if (isEnabled) {
+            updateAutoAdvanceButton();
+            autoAdvanceToggle.addEventListener('click', () => {
+                autoAdvanceEnabled = !autoAdvanceEnabled;
+                setCookie('media_autoadvance', autoAdvanceEnabled ? 'true' : 'false', 365);
+                updateAutoAdvanceButton();
+                if (autoAdvanceEnabled) {
                     startSlideshowTimer();
                 } else {
                     stopSlideshowTimer();
