@@ -37,6 +37,7 @@ if (isset($_GET['ajax'])) {
 <html>
 
 <head>
+    <script src="/JavaScript/media_controls.js"></script>
     <title><?php echo htmlspecialchars($title); ?></title>
     <style>
         body {
@@ -148,6 +149,226 @@ if (isset($_GET['ajax'])) {
         body.dark-mode .media-description {
             border-top-color: #444;
         }
+
+        .loop-markers {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0 5px 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        body.dark-mode .loop-markers {
+            color: #aaa;
+        }
+
+        .mark-label {
+            font-weight: bold;
+        }
+
+        .mark-val {
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background-color: #eee;
+            color: #777;
+        }
+
+        .mark-val.set {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        body.dark-mode .mark-val {
+            background-color: #333;
+            color: #aaa;
+        }
+
+        body.dark-mode .mark-val.set {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .media-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .media-help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .media-help-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .media-help-card {
+            background: #fff;
+            color: #222;
+            border-radius: 8px;
+            padding: 20px 24px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .media-help-overlay.visible .media-help-card {
+            transform: scale(1);
+        }
+
+        body.dark-mode .media-help-card {
+            background: #1e1e1e;
+            color: #e0e0e0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+        }
+
+        .media-help-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        body.dark-mode .media-help-header {
+            border-bottom-color: #333;
+        }
+
+        .media-help-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .media-help-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: #888;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .media-help-close:hover {
+            color: #111;
+        }
+
+        body.dark-mode .media-help-close:hover {
+            color: #fff;
+        }
+
+        .media-help-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .media-help-table td {
+            padding: 6px 4px;
+            font-size: 0.95rem;
+        }
+
+        .media-help-table td:first-child {
+            width: 35%;
+            white-space: nowrap;
+        }
+
+        .media-help-table kbd {
+            display: inline-block;
+            padding: 2px 7px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        body.dark-mode .media-help-table kbd {
+            background-color: #2c2c2c;
+            border-color: #444;
+            color: #ddd;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        .help-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            color: #666;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            margin-left: 6px;
+            transition: all 0.2s;
+        }
+
+        .help-btn:hover {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        body.dark-mode .help-btn {
+            background: #2b2b2b;
+            color: #aaa;
+            border-color: #444;
+        }
+
+        body.dark-mode .help-btn:hover {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .media-toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(5px);
+        }
     </style>
     <script>
         function updateTheme() {
@@ -186,6 +407,11 @@ if (isset($_GET['ajax'])) {
             <source src="<?php echo htmlspecialchars($video); ?>">
             Your browser does not support the video tag.
         </video>
+        <div class="loop-markers" id="loop-markers">
+            <span><span class="mark-label">Mark A:</span> <span id="mark-a" class="mark-val">not set</span></span>
+            <span><span class="mark-label">Mark B:</span> <span id="mark-b" class="mark-val">not set</span></span>
+            <button type="button" id="help-button" class="help-btn" title="Keyboard Shortcuts (?)">?</button>
+        </div>
         <h2 class="media-title" id="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <div class="media-description" id="media-description" style="<?php echo empty($description) ? 'display:none;' : ''; ?>">
@@ -330,6 +556,9 @@ if (isset($_GET['ajax'])) {
             seekTimeout = null;
             hasProgressed = false;
             bailLogged = false;
+            if (window.mediaControls) {
+                window.mediaControls.resetLoop();
+            }
         }
 
         function updateNavButtons() {
@@ -533,6 +762,27 @@ if (isset($_GET['ajax'])) {
                 logmsg('user bailed @ ' + formatTime(totalTimeWatched));
             }
         }
+
+        function downloadCurrentMedia() {
+            if (!videoFile) return;
+            const a = document.createElement('a');
+            a.href = videoFile;
+            a.download = currentFileName || '';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        window.mediaControls = initMediaControls({
+            media: videoID,
+            markA: document.getElementById('mark-a'),
+            markB: document.getElementById('mark-b'),
+            helpButton: document.getElementById('help-button'),
+            skipSeconds: 10,
+            enableFullscreen: true,
+            enableMute: true,
+            onDownload: downloadCurrentMedia
+        });
 
         window.addEventListener('pagehide', handlePageUnload);
         window.addEventListener('beforeunload', handlePageUnload);
