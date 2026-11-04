@@ -104,24 +104,20 @@ if (isset($_GET['ajax'])) {
             background-color: #0056b3;
         }
 
-        .nav-button.stop-btn {
-            background-color: #dc3545;
-            min-width: 70px;
-            text-align: center;
+        .autoplay-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            user-select: none;
         }
 
-        .nav-button.stop-btn:hover {
-            background-color: #bd2130;
-        }
-
-        .nav-button.go-btn {
-            background-color: #28a745;
-            min-width: 70px;
-            text-align: center;
-        }
-
-        .nav-button.go-btn:hover {
-            background-color: #218838;
+        .autoplay-label input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
         }
 
         .nav-button.disabled {
@@ -399,7 +395,10 @@ if (isset($_GET['ajax'])) {
     <div class="player-container">
         <div class="nav-controls">
             <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
-            <button type="button" id="autoadvance_toggle" class="nav-button stop-btn">Stop</button>
+            <label class="autoplay-label" for="autoplay_toggle">
+                <input type="checkbox" id="autoplay_toggle" name="autoplay_toggle">
+                Autoplay
+            </label>
             <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
         </div>
 
@@ -446,33 +445,15 @@ if (isset($_GET['ajax'])) {
         const descEl = document.getElementById('media-description');
         const prevBtn = document.getElementById('prev-button');
         const nextBtn = document.getElementById('next-button');
-        const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
-        let autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
+        const autoplayToggle = document.getElementById('autoplay_toggle');
+        let autoplayEnabled = getCookie('media_autoplay') !== 'false' && getCookie('media_autoadvance') !== 'false';
 
-        function updateAutoAdvanceButton() {
-            if (!autoAdvanceToggle) return;
-            if (autoAdvanceEnabled) {
-                autoAdvanceToggle.textContent = 'Stop';
-                autoAdvanceToggle.classList.remove('go-btn');
-                autoAdvanceToggle.classList.add('stop-btn');
-                autoAdvanceToggle.title = 'Auto-advance is ON (click to Stop)';
-            } else {
-                autoAdvanceToggle.textContent = 'Go';
-                autoAdvanceToggle.classList.remove('stop-btn');
-                autoAdvanceToggle.classList.add('go-btn');
-                autoAdvanceToggle.title = 'Auto-advance is OFF (click to Go)';
-            }
-        }
-
-        if (autoAdvanceToggle) {
-            updateAutoAdvanceButton();
-            autoAdvanceToggle.addEventListener('click', () => {
-                autoAdvanceEnabled = !autoAdvanceEnabled;
-                setCookie('media_autoadvance', autoAdvanceEnabled ? 'true' : 'false', 365);
-                updateAutoAdvanceButton();
-                if (autoAdvanceEnabled && videoEnded && nextUrl) {
-                    navigateTrack(nextUrl, true);
-                }
+        if (autoplayToggle) {
+            autoplayToggle.checked = autoplayEnabled;
+            autoplayToggle.addEventListener('change', (e) => {
+                autoplayEnabled = e.target.checked;
+                setCookie('media_autoplay', autoplayEnabled ? 'true' : 'false', 365);
+                setCookie('media_autoadvance', autoplayEnabled ? 'true' : 'false', 365);
             });
         }
 
@@ -720,7 +701,7 @@ if (isset($_GET['ajax'])) {
                 navigator.mediaSession.playbackState = 'none';
             }
             logmsg('Ended ' + currentFileName + ' @ ' + formatTime(videoID.currentTime));
-            if (nextUrl && autoAdvanceEnabled) {
+            if (nextUrl && autoplayEnabled) {
                 navigateTrack(nextUrl, true);
             }
         });

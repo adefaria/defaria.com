@@ -87,24 +87,20 @@ $description = getMediaDescription($image);
             background-color: #0056b3;
         }
 
-        .nav-button.stop-btn {
-            background-color: #dc3545;
-            min-width: 70px;
-            text-align: center;
+        .autoplay-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            user-select: none;
         }
 
-        .nav-button.stop-btn:hover {
-            background-color: #bd2130;
-        }
-
-        .nav-button.go-btn {
-            background-color: #28a745;
-            min-width: 70px;
-            text-align: center;
-        }
-
-        .nav-button.go-btn:hover {
-            background-color: #218838;
+        .autoplay-label input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
         }
 
         .nav-button.disabled {
@@ -167,7 +163,10 @@ $description = getMediaDescription($image);
                 <span class="nav-button disabled">&laquo; Previous</span>
             <?php endif; ?>
 
-            <button type="button" id="autoadvance_toggle" class="nav-button stop-btn">Stop</button>
+            <label class="autoplay-label" for="autoplay_toggle">
+                <input type="checkbox" id="autoplay_toggle" name="autoplay_toggle">
+                Autoplay
+            </label>
 
             <?php if (!empty($nextUrl)): ?>
                 <a href="<?php echo htmlspecialchars($nextUrl); ?>" class="nav-button next-button">Next &raquo;</a>
@@ -209,8 +208,8 @@ $description = getMediaDescription($image);
         }
 
         const nextUrl = <?php echo json_encode($nextUrl); ?>;
-        const autoAdvanceToggle = document.getElementById('autoadvance_toggle');
-        let autoAdvanceEnabled = getCookie('media_autoadvance') !== 'false';
+        const autoplayToggle = document.getElementById('autoplay_toggle');
+        let autoplayEnabled = getCookie('media_autoplay') !== 'false' && getCookie('media_autoadvance') !== 'false';
         let wakeLock = null;
         let slideshowTimer = null;
 
@@ -244,28 +243,13 @@ $description = getMediaDescription($image);
             releaseWakeLock();
         }
 
-        function updateAutoAdvanceButton() {
-            if (!autoAdvanceToggle) return;
-            if (autoAdvanceEnabled) {
-                autoAdvanceToggle.textContent = 'Stop';
-                autoAdvanceToggle.classList.remove('go-btn');
-                autoAdvanceToggle.classList.add('stop-btn');
-                autoAdvanceToggle.title = 'Auto-advance is ON (click to Stop)';
-            } else {
-                autoAdvanceToggle.textContent = 'Go';
-                autoAdvanceToggle.classList.remove('stop-btn');
-                autoAdvanceToggle.classList.add('go-btn');
-                autoAdvanceToggle.title = 'Auto-advance is OFF (click to Go)';
-            }
-        }
-
-        if (autoAdvanceToggle) {
-            updateAutoAdvanceButton();
-            autoAdvanceToggle.addEventListener('click', () => {
-                autoAdvanceEnabled = !autoAdvanceEnabled;
-                setCookie('media_autoadvance', autoAdvanceEnabled ? 'true' : 'false', 365);
-                updateAutoAdvanceButton();
-                if (autoAdvanceEnabled) {
+        if (autoplayToggle) {
+            autoplayToggle.checked = autoplayEnabled;
+            autoplayToggle.addEventListener('change', (e) => {
+                autoplayEnabled = e.target.checked;
+                setCookie('media_autoplay', autoplayEnabled ? 'true' : 'false', 365);
+                setCookie('media_autoadvance', autoplayEnabled ? 'true' : 'false', 365);
+                if (autoplayEnabled) {
                     startSlideshowTimer();
                 } else {
                     stopSlideshowTimer();
@@ -273,7 +257,7 @@ $description = getMediaDescription($image);
             });
         }
 
-        if (autoAdvanceEnabled && nextUrl) {
+        if (autoplayEnabled && nextUrl) {
             startSlideshowTimer();
         }
     </script>

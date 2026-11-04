@@ -346,7 +346,52 @@
             }
         }
 
+        // --- Tap / Click on page to Play/Pause (matching Songbook behavior) ---
+        function handleBodyClick(e) {
+            const target = e.target;
+            const tagName = target.tagName ? target.tagName.toLowerCase() : '';
+
+            // Do NOT toggle if clicking interactive elements, controls, markers, or dialogs
+            if (tagName === 'a' ||
+                tagName === 'input' ||
+                tagName === 'button' ||
+                tagName === 'select' ||
+                tagName === 'textarea' ||
+                tagName === 'audio' ||
+                target.closest('.nav-controls') ||
+                target.closest('.loop-markers') ||
+                target.closest('#media-help-modal') ||
+                target.closest('.media-help-card') ||
+                target.closest('.media-toast')
+            ) {
+                return;
+            }
+
+            // For video elements: if clicking native controls area at the bottom, let native controls handle it
+            if (tagName === 'video') {
+                if (e.offsetY > target.clientHeight - 60) {
+                    return;
+                }
+            }
+
+            // If user has selected text on the page (e.g. title or description), don't toggle
+            const selection = window.getSelection ? window.getSelection().toString() : '';
+            if (selection && selection.length > 0) {
+                return;
+            }
+
+            if (media.paused) {
+                media.muted = false;
+                media.play().catch(() => {});
+                showToast('Play');
+            } else {
+                media.pause();
+                showToast('Pause');
+            }
+        }
+
         document.addEventListener('keydown', handleKeyDown);
+        document.body.addEventListener('click', handleBodyClick);
 
         updateMarkerUI();
 
@@ -356,6 +401,7 @@
             toggleHelp: toggleHelpModal,
             destroy: function () {
                 document.removeEventListener('keydown', handleKeyDown);
+                document.body.removeEventListener('click', handleBodyClick);
                 clearInterval(loopInterval);
             }
         };
