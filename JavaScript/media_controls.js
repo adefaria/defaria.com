@@ -23,6 +23,31 @@
         return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
     }
 
+    function parseTime(input) {
+        if (typeof input === 'number') return input;
+        if (!input) return null;
+        input = String(input).trim();
+        if (!input || input.toLowerCase() === 'not set') return null;
+
+        const parts = input.split(':').map(p => p.trim());
+        if (parts.length === 1) {
+            const secs = parseFloat(parts[0]);
+            return isNaN(secs) ? null : Math.max(0, secs);
+        } else if (parts.length === 2) {
+            const mins = parseFloat(parts[0]);
+            const secs = parseFloat(parts[1]);
+            if (isNaN(mins) || isNaN(secs)) return null;
+            return Math.max(0, mins * 60 + secs);
+        } else if (parts.length === 3) {
+            const hours = parseFloat(parts[0]);
+            const mins = parseFloat(parts[1]);
+            const secs = parseFloat(parts[2]);
+            if (isNaN(hours) || isNaN(mins) || isNaN(secs)) return null;
+            return Math.max(0, hours * 3600 + mins * 60 + secs);
+        }
+        return null;
+    }
+
     return function initMediaControls(options) {
         options = options || {};
         const media = options.media || document.querySelector('audio, video');
@@ -44,6 +69,8 @@
 
         let startTime = 0;
         let endTime = 0;
+        let isMarkASet = false;
+        let isMarkBSet = false;
         let loopInterval = null;
         let toastTimeout = null;
 
@@ -143,7 +170,8 @@
 
         function updateMarkerUI() {
             if (markAElement) {
-                if (startTime > 0) {
+                if (markAElement.querySelector('input')) return;
+                if (isMarkASet) {
                     markAElement.textContent = formatTime(startTime);
                     markAElement.classList.add('set');
                 } else {
@@ -152,7 +180,8 @@
                 }
             }
             if (markBElement) {
-                if (endTime > 0 && endTime < (media.duration || Infinity)) {
+                if (markBElement.querySelector('input')) return;
+                if (isMarkBSet && endTime > 0 && endTime <= (media.duration || Infinity)) {
                     markBElement.textContent = formatTime(endTime);
                     markBElement.classList.add('set');
                 } else {
@@ -163,8 +192,8 @@
         }
 
         function checkLoop() {
-            if (endTime > 0 && startTime < endTime && media.currentTime >= endTime) {
-                media.currentTime = startTime;
+            if (isMarkBSet && endTime > 0 && (!isMarkASet || startTime < endTime) && media.currentTime >= endTime) {
+                media.currentTime = isMarkASet ? startTime : 0;
             }
         }
 
@@ -186,21 +215,28 @@
         function resetLoop() {
             startTime = 0;
             endTime = media.duration || 0;
+            isMarkASet = false;
+            isMarkBSet = false;
             updateMarkerUI();
         }
 
-        function setMarkA() {
-            if (endTime !== (media.duration || 0) && endTime <= media.currentTime) {
+        function setMarkA(val) {
+            const newTime = typeof val === 'number' ? val : media.currentTime;
+            if (isMarkBSet && endTime <= newTime) {
                 endTime = media.duration || 0;
+                isMarkBSet = false;
             }
-            startTime = media.currentTime;
+            startTime = newTime;
+            isMarkASet = true;
             updateMarkerUI();
             showToast(`Mark A: ${formatTime(startTime)}`);
         }
 
-        function setMarkB() {
-            if (media.currentTime > startTime) {
-                endTime = media.currentTime;
+        function setMarkB(val) {
+            const newTime = typeof val === 'number' ? val : media.currentTime;
+            if (!isMarkASet || newTime > startTime) {
+                endTime = newTime;
+                isMarkBSet = true;
                 updateMarkerUI();
                 showToast(`Mark B: ${formatTime(endTime)}`);
             } else {
@@ -211,6 +247,89 @@
         function clearLoop() {
             resetLoop();
             showToast('A-B Loop cleared');
+        }
+
+        function startEditingMarker(isMarkerA) {
+            const el = isMarkerA ? markAElement : markBElement;
+            if (!el) return;
+            if (el.querySelector('input')) return;
+
+            let initialText = '';
+            if (isMarkerA) {
+                initialText = isMarkASet ? formatTime(startTime) : (media.currentTime > 0 ? formatTime(media.currentTime) : '00:00');
+            } else {
+                initialText = (isMarkBSet && endTime > 0 && endTime <= (media.duration || Infinity))
+                    ? formatTime(endTime)
+                    : (media.currentTime > 0 ? formatTime(media.currentTime) : '00:00');
+            }
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'mark-val-input';
+            input.value = initialText;
+            input.title = 'Enter time (e.g. 9, 0:09, 1:30)';
+
+            el.textContent = '';
+            el.appendChild(input);
+            input.focus();
+            input.select();
+
+            let committed = false;
+
+            function finish(save) {
+                if (committed) return;
+                committed = true;
+
+                if (save) {
+                    const parsed = parseTime(input.value);
+                    if (parsed !== null && !isNaN(parsed)) {
+                        const targetTime = Math.min(media.duration || Infinity, Math.max(0, parsed));
+                        if (isMarkerA) {
+                            setMarkA(targetTime);
+                        } else {
+                            setMarkB(targetTime);
+                        }
+                    }
+                }
+                updateMarkerUI();
+            }
+
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    finish(true);
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    finish(false);
+                }
+                e.stopPropagation();
+            });
+
+            input.addEventListener('blur', function () {
+                finish(true);
+            });
+
+            input.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+
+        if (markAElement) {
+            markAElement.title = 'Click to edit time';
+            markAElement.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                startEditingMarker(true);
+            });
+        }
+
+        if (markBElement) {
+            markBElement.title = 'Click to edit time';
+            markBElement.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                startEditingMarker(false);
+            });
         }
 
         if (markABtn) {
@@ -285,9 +404,9 @@
                     e.preventDefault();
                     media.muted = false;
                     if (media.paused) {
-                        if (startTime !== 0 && media.currentTime < startTime) {
+                        if (isMarkASet && media.currentTime < startTime) {
                             media.currentTime = startTime;
-                        } else if (media.ended || (media.duration && media.currentTime >= media.duration && startTime === 0)) {
+                        } else if (media.ended || (media.duration && media.currentTime >= media.duration && !isMarkASet)) {
                             media.currentTime = 0;
                         }
                         media.play().catch(() => {});
@@ -331,7 +450,7 @@
 
                 case 'KeyR': // Return to start
                     e.preventDefault();
-                    if (startTime !== 0) {
+                    if (isMarkASet) {
                         media.currentTime = startTime;
                         showToast(`Return to Mark A (${formatTime(startTime)})`);
                     } else {

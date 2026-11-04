@@ -222,6 +222,12 @@ if (isset($_GET['ajax'])) {
             border-radius: 3px;
             background-color: #eee;
             color: #777;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .mark-val:hover {
+            outline: 1px dashed #999;
         }
 
         .mark-val.set {
@@ -235,9 +241,34 @@ if (isset($_GET['ajax'])) {
             color: #aaa;
         }
 
+        body.dark-mode .mark-val:hover {
+            outline: 1px dashed #666;
+        }
+
         body.dark-mode .mark-val.set {
             background-color: #28a745;
             color: white;
+        }
+
+        .mark-val-input {
+            width: 55px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            padding: 1px 3px;
+            border: 1px solid #007bff;
+            border-radius: 3px;
+            text-align: center;
+            background: #fff;
+            color: #222;
+            outline: none;
+            box-sizing: border-box;
+            vertical-align: middle;
+        }
+
+        body.dark-mode .mark-val-input {
+            background: #2b2b2b;
+            color: #eee;
+            border-color: #4da3ff;
         }
 
         .media-toast {
