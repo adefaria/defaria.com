@@ -57,7 +57,7 @@ $description = getMediaDescription($image);
 
         .media-title {
             margin: 15px 20px 10px 20px;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             text-align: center;
             word-break: break-word;
         }
@@ -156,6 +156,8 @@ $description = getMediaDescription($image);
 
 <body>
     <div class="player-container">
+        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
+
         <div class="nav-controls">
             <?php if (!empty($prevUrl)): ?>
                 <a href="<?php echo htmlspecialchars($prevUrl); ?>" class="nav-button prev-button">&laquo; Previous</a>
@@ -176,7 +178,6 @@ $description = getMediaDescription($image);
         </div>
 
         <img src="<?php echo htmlspecialchars($image); ?>" alt="<?php echo htmlspecialchars($title); ?>">
-        <h2 class="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
         <?php if (!empty($description)): ?>
             <div class="media-description">
