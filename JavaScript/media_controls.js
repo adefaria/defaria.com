@@ -36,6 +36,9 @@
         const enableMute = !!options.enableMute;
         const markAElement = options.markA || document.getElementById('mark-a');
         const markBElement = options.markB || document.getElementById('mark-b');
+        const markABtn = options.markABtn || document.getElementById('btn-mark-a');
+        const markBBtn = options.markBBtn || document.getElementById('btn-mark-b');
+        const clearBtn = options.clearBtn || document.getElementById('clear-loop-button');
         const helpButton = options.helpButton || document.getElementById('help-button');
         const onDownload = typeof options.onDownload === 'function' ? options.onDownload : null;
 
@@ -186,6 +189,51 @@
             updateMarkerUI();
         }
 
+        function setMarkA() {
+            if (endTime !== (media.duration || 0) && endTime <= media.currentTime) {
+                endTime = media.duration || 0;
+            }
+            startTime = media.currentTime;
+            updateMarkerUI();
+            showToast(`Mark A: ${formatTime(startTime)}`);
+        }
+
+        function setMarkB() {
+            if (media.currentTime > startTime) {
+                endTime = media.currentTime;
+                updateMarkerUI();
+                showToast(`Mark B: ${formatTime(endTime)}`);
+            } else {
+                showToast('Mark B must be after Mark A');
+            }
+        }
+
+        function clearLoop() {
+            resetLoop();
+            showToast('A-B Loop cleared');
+        }
+
+        if (markABtn) {
+            markABtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                setMarkA();
+            });
+        }
+
+        if (markBBtn) {
+            markBBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                setMarkB();
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                clearLoop();
+            });
+        }
+
         // --- Keyboard Handler ---
         function handleKeyDown(e) {
             // Escape key closes help modal if open
@@ -268,29 +316,17 @@
 
                 case 'KeyA': // Set Mark A
                     e.preventDefault();
-                    if (endTime !== (media.duration || 0) && endTime <= media.currentTime) {
-                        endTime = media.duration || 0;
-                    }
-                    startTime = media.currentTime;
-                    updateMarkerUI();
-                    showToast(`Mark A: ${formatTime(startTime)}`);
+                    setMarkA();
                     break;
 
                 case 'KeyB': // Set Mark B
                     e.preventDefault();
-                    if (media.currentTime > startTime) {
-                        endTime = media.currentTime;
-                        updateMarkerUI();
-                        showToast(`Mark B: ${formatTime(endTime)}`);
-                    } else {
-                        showToast('Mark B must be after Mark A');
-                    }
+                    setMarkB();
                     break;
 
                 case 'KeyC': // Clear A-B Loop
                     e.preventDefault();
-                    resetLoop();
-                    showToast('A-B Loop cleared');
+                    clearLoop();
                     break;
 
                 case 'KeyR': // Return to start

@@ -163,6 +163,59 @@ if (isset($_GET['ajax'])) {
             font-weight: bold;
         }
 
+        .mark-link {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .mark-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        body.dark-mode .mark-link {
+            color: #4da3ff;
+        }
+
+        body.dark-mode .mark-link:hover {
+            color: #80bfff;
+        }
+
+        .clear-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 22px;
+            padding: 0 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #555;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        body.dark-mode .clear-btn {
+            background: #2b2b2b;
+            color: #aaa;
+            border-color: #444;
+        }
+
+        body.dark-mode .clear-btn:hover {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
         .mark-val {
             font-family: monospace;
             padding: 2px 6px;
@@ -406,8 +459,9 @@ if (isset($_GET['ajax'])) {
             Your browser does not support the audio tag.
         </audio>
         <div class="loop-markers" id="loop-markers">
-            <span><span class="mark-label">Mark A:</span> <span id="mark-a" class="mark-val">not set</span></span>
-            <span><span class="mark-label">Mark B:</span> <span id="mark-b" class="mark-val">not set</span></span>
+            <span><a href="#" class="mark-link" id="btn-mark-a" title="Set Mark A (A)"><span class="mark-label">Mark A:</span></a> <span id="mark-a" class="mark-val">not set</span></span>
+            <span><a href="#" class="mark-link" id="btn-mark-b" title="Set Mark B (B)"><span class="mark-label">Mark B:</span></a> <span id="mark-b" class="mark-val">not set</span></span>
+            <button type="button" id="clear-loop-button" class="clear-btn" title="Clear A-B Loop (C)">Clear</button>
             <button type="button" id="help-button" class="help-btn" title="Keyboard Shortcuts (?)">?</button>
         </div>
         <h2 class="media-title" id="media-title"><?php echo htmlspecialchars($title); ?></h2>
@@ -759,6 +813,9 @@ if (isset($_GET['ajax'])) {
             media: audioID,
             markA: document.getElementById('mark-a'),
             markB: document.getElementById('mark-b'),
+            markABtn: document.getElementById('btn-mark-a'),
+            markBBtn: document.getElementById('btn-mark-b'),
+            clearBtn: document.getElementById('clear-loop-button'),
             helpButton: document.getElementById('help-button'),
             skipSeconds: 10,
             enableFullscreen: false,
