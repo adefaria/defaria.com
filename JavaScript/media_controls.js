@@ -294,10 +294,10 @@
         }
 
         function startEditingMarker(isMarkerA) {
-            cancelActiveEdit();
-
             const el = isMarkerA ? markAElement : markBElement;
-            if (!el) return;
+            if (!el || el.querySelector('input')) return;
+
+            cancelActiveEdit();
 
             let initialText = '';
             if (isMarkerA) {
@@ -326,9 +326,13 @@
                 committed = true;
                 activeEditFinish = null;
 
+                const raw = input.value.trim();
+                if (input.parentNode) {
+                    input.parentNode.removeChild(input);
+                }
+
                 if (!wasCancelled) {
                     if (save) {
-                        const raw = input.value.trim();
                         if (!raw) {
                             if (isMarkerA) {
                                 isMarkASet = false;
