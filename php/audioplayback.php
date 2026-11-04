@@ -72,17 +72,25 @@ if (isset($_GET['ajax'])) {
         }
 
         .media-title {
-            margin: 15px 20px 10px 20px;
+            margin: 15px 20px 8px 20px;
             font-size: 2.5rem;
             text-align: center;
             word-break: break-word;
         }
 
+        .autoplay-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0 12px 0;
+        }
+
         .nav-controls {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 15px;
-            margin: 15px 0 15px 0;
+            margin: 0 0 15px 0;
         }
 
         .nav-button {
@@ -478,12 +486,15 @@ if (isset($_GET['ajax'])) {
     <div class="player-container">
         <h2 class="media-title" id="media-title"><?php echo htmlspecialchars($title); ?></h2>
 
-        <div class="nav-controls">
-            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
+        <div class="autoplay-container">
             <label class="autoplay-label" for="autoplay_toggle">
                 <input type="checkbox" id="autoplay_toggle" name="autoplay_toggle">
                 Autoplay
             </label>
+        </div>
+
+        <div class="nav-controls">
+            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
             <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
         </div>
 

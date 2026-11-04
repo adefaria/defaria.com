@@ -212,7 +212,17 @@
             clearInterval(loopInterval);
         });
 
+        let activeEditFinish = null;
+
+        function cancelActiveEdit() {
+            if (activeEditFinish) {
+                activeEditFinish(false, true);
+                activeEditFinish = null;
+            }
+        }
+
         function resetLoop() {
+            cancelActiveEdit();
             startTime = 0;
             endTime = media.duration || 0;
             isMarkASet = false;
@@ -222,9 +232,14 @@
 
         function setMarkA(val) {
             const newTime = typeof val === 'number' ? val : media.currentTime;
-            if (isMarkBSet && endTime <= newTime) {
-                endTime = media.duration || 0;
+            if (isMarkBSet && newTime >= endTime) {
+                isMarkASet = false;
+                startTime = 0;
                 isMarkBSet = false;
+                endTime = media.duration || 0;
+                updateMarkerUI();
+                showToast('Invalid range: Mark A & B unset');
+                return;
             }
             startTime = newTime;
             isMarkASet = true;
@@ -234,13 +249,42 @@
 
         function setMarkB(val) {
             const newTime = typeof val === 'number' ? val : media.currentTime;
-            if (!isMarkASet || newTime > startTime) {
-                endTime = newTime;
-                isMarkBSet = true;
+            if (isMarkASet && newTime <= startTime) {
+                isMarkASet = false;
+                startTime = 0;
+                isMarkBSet = false;
+                endTime = media.duration || 0;
                 updateMarkerUI();
-                showToast(`Mark B: ${formatTime(endTime)}`);
+                showToast('Invalid range: Mark A & B unset');
+                return;
+            }
+            endTime = newTime;
+            isMarkBSet = true;
+            updateMarkerUI();
+            showToast(`Mark B: ${formatTime(endTime)}`);
+        }
+
+        function toggleMarkA() {
+            cancelActiveEdit();
+            if (isMarkASet) {
+                isMarkASet = false;
+                startTime = 0;
+                updateMarkerUI();
+                showToast('Mark A unset');
             } else {
-                showToast('Mark B must be after Mark A');
+                setMarkA(media.currentTime);
+            }
+        }
+
+        function toggleMarkB() {
+            cancelActiveEdit();
+            if (isMarkBSet) {
+                isMarkBSet = false;
+                endTime = media.duration || 0;
+                updateMarkerUI();
+                showToast('Mark B unset');
+            } else {
+                setMarkB(media.currentTime);
             }
         }
 
@@ -250,9 +294,10 @@
         }
 
         function startEditingMarker(isMarkerA) {
+            cancelActiveEdit();
+
             const el = isMarkerA ? markAElement : markBElement;
             if (!el) return;
-            if (el.querySelector('input')) return;
 
             let initialText = '';
             if (isMarkerA) {
@@ -276,37 +321,65 @@
 
             let committed = false;
 
-            function finish(save) {
+            function finish(save, wasCancelled) {
                 if (committed) return;
                 committed = true;
+                activeEditFinish = null;
 
-                if (save) {
-                    const parsed = parseTime(input.value);
-                    if (parsed !== null && !isNaN(parsed)) {
-                        const targetTime = Math.min(media.duration || Infinity, Math.max(0, parsed));
-                        if (isMarkerA) {
-                            setMarkA(targetTime);
+                if (!wasCancelled) {
+                    if (save) {
+                        const raw = input.value.trim();
+                        if (!raw) {
+                            if (isMarkerA) {
+                                isMarkASet = false;
+                                startTime = 0;
+                                showToast('Mark A unset');
+                            } else {
+                                isMarkBSet = false;
+                                endTime = media.duration || 0;
+                                showToast('Mark B unset');
+                            }
                         } else {
-                            setMarkB(targetTime);
+                            const parsed = parseTime(raw);
+                            if (parsed !== null && !isNaN(parsed)) {
+                                const targetTime = Math.min(media.duration || Infinity, Math.max(0, parsed));
+                                if (isMarkerA) {
+                                    setMarkA(targetTime);
+                                } else {
+                                    setMarkB(targetTime);
+                                }
+                            } else {
+                                if (isMarkerA) {
+                                    isMarkASet = false;
+                                    startTime = 0;
+                                    showToast('Invalid time: Mark A unset');
+                                } else {
+                                    isMarkBSet = false;
+                                    endTime = media.duration || 0;
+                                    showToast('Invalid time: Mark B unset');
+                                }
+                            }
                         }
                     }
                 }
                 updateMarkerUI();
             }
 
+            activeEditFinish = finish;
+
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    finish(true);
+                    finish(true, false);
                 } else if (e.key === 'Escape') {
                     e.preventDefault();
-                    finish(false);
+                    finish(false, true);
                 }
                 e.stopPropagation();
             });
 
             input.addEventListener('blur', function () {
-                finish(true);
+                finish(true, false);
             });
 
             input.addEventListener('click', function (e) {
@@ -335,18 +408,21 @@
         if (markABtn) {
             markABtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                setMarkA();
+                toggleMarkA();
             });
         }
 
         if (markBBtn) {
             markBBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                setMarkB();
+                toggleMarkB();
             });
         }
 
         if (clearBtn) {
+            clearBtn.addEventListener('mousedown', function () {
+                clearLoop();
+            });
             clearBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 clearLoop();
@@ -433,14 +509,14 @@
                     showToast(`+${skipSeconds}s`);
                     break;
 
-                case 'KeyA': // Set Mark A
+                case 'KeyA': // Toggle Mark A
                     e.preventDefault();
-                    setMarkA();
+                    toggleMarkA();
                     break;
 
-                case 'KeyB': // Set Mark B
+                case 'KeyB': // Toggle Mark B
                     e.preventDefault();
-                    setMarkB();
+                    toggleMarkB();
                     break;
 
                 case 'KeyC': // Clear A-B Loop
