@@ -538,7 +538,12 @@
                         showToast('Return to start');
                     }
                     media.muted = false;
-                    media.play().catch(() => {});
+                    const playPromise = media.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch((err) => {
+                            console.warn('Playback on Return failed:', err);
+                        });
+                    }
                     break;
 
                 case 'KeyD': // Download

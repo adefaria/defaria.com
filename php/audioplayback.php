@@ -38,7 +38,7 @@ if (isset($_GET['ajax'])) {
 <html>
 
 <head>
-    <script src="/JavaScript/media_controls.js"></script>
+    <script src="/JavaScript/media_controls.js?v=<?php echo time(); ?>"></script>
     <title><?php echo htmlspecialchars($title); ?></title>
     <style>
         body {
