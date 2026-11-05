@@ -124,7 +124,7 @@
                                 <tr><td><kbd>A</kbd></td><td>Set Mark A (loop start)</td></tr>
                                 <tr><td><kbd>B</kbd></td><td>Set Mark B (loop end)</td></tr>
                                 <tr><td><kbd>C</kbd></td><td>Clear A-B loop markers</td></tr>
-                                <tr><td><kbd>R</kbd></td><td>Return to start (or Mark A)</td></tr>
+                                <tr><td><kbd>R</kbd></td><td>Return to start (or Mark A) &amp; play</td></tr>
                                 <tr><td><kbd>D</kbd></td><td>Download media file</td></tr>
                                 ${videoRows}
                                 ${muteRows}
@@ -528,7 +528,7 @@
                     clearLoop();
                     break;
 
-                case 'KeyR': // Return to start
+                case 'KeyR': // Return to start and play
                     e.preventDefault();
                     if (isMarkASet) {
                         media.currentTime = startTime;
@@ -537,6 +537,8 @@
                         media.currentTime = 0;
                         showToast('Return to start');
                     }
+                    media.muted = false;
+                    media.play().catch(() => {});
                     break;
 
                 case 'KeyD': // Download
