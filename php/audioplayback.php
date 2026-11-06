@@ -18,6 +18,8 @@ $fileName = basename($audio);
 $nav = getMediaNavigation($audio);
 $nextUrl = $nav['next'];
 $prevUrl = $nav['prev'];
+$nextFile = $nav['nextFile'] ?? '';
+$prevFile = $nav['prevFile'] ?? '';
 $description = getMediaDescription($audio);
 
 if (isset($_GET['ajax'])) {
@@ -29,6 +31,8 @@ if (isset($_GET['ajax'])) {
         'title' => $title,
         'nextUrl' => $nextUrl,
         'prevUrl' => $prevUrl,
+        'nextFile' => $nextFile,
+        'prevFile' => $prevFile,
         'description' => $description,
     ]);
     exit;
@@ -105,6 +109,11 @@ if (isset($_GET['ajax'])) {
             font-size: 0.95rem;
             cursor: pointer;
             transition: background-color 0.2s;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
         }
 
         .nav-button:hover:not(.disabled) {
@@ -494,8 +503,8 @@ if (isset($_GET['ajax'])) {
         </div>
 
         <div class="nav-controls">
-            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>">&laquo; Previous</a>
-            <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>">Next &raquo;</a>
+            <a id="prev-button" href="<?php echo !empty($prevUrl) ? htmlspecialchars($prevUrl) : '#'; ?>" class="nav-button prev-button<?php echo empty($prevUrl) ? ' disabled' : ''; ?>" title="<?php echo !empty($prevFile) ? 'Previous: ' . htmlspecialchars($prevFile) : 'No previous track'; ?>">&laquo; <?php echo !empty($prevFile) ? htmlspecialchars($prevFile) : 'Previous'; ?></a>
+            <a id="next-button" href="<?php echo !empty($nextUrl) ? htmlspecialchars($nextUrl) : '#'; ?>" class="nav-button next-button<?php echo empty($nextUrl) ? ' disabled' : ''; ?>" title="<?php echo !empty($nextFile) ? 'Next: ' . htmlspecialchars($nextFile) : 'No next track'; ?>"><?php echo !empty($nextFile) ? htmlspecialchars($nextFile) : 'Next'; ?> &raquo;</a>
         </div>
 
         <audio id="audio" controls autoplay>
@@ -557,6 +566,8 @@ if (isset($_GET['ajax'])) {
         let currentFileName = <?php echo json_encode($fileName); ?>;
         let nextUrl = <?php echo json_encode($nextUrl); ?>;
         let prevUrl = <?php echo json_encode($prevUrl); ?>;
+        let nextFile = <?php echo json_encode($nextFile); ?>;
+        let prevFile = <?php echo json_encode($prevFile); ?>;
         let mediaTitle = <?php echo json_encode($title); ?>;
 
         const supportedAudioExts = ['mp3', 'm4a', 'wav', 'ogg', 'flac', 'aac'];
@@ -642,16 +653,24 @@ if (isset($_GET['ajax'])) {
             if (prevUrl) {
                 prevBtn.href = prevUrl;
                 prevBtn.classList.remove('disabled');
+                prevBtn.textContent = '« ' + (prevFile || 'Previous');
+                prevBtn.title = 'Previous: ' + (prevFile || '');
             } else {
                 prevBtn.href = '#';
                 prevBtn.classList.add('disabled');
+                prevBtn.textContent = '« Previous';
+                prevBtn.title = 'No previous track';
             }
             if (nextUrl) {
                 nextBtn.href = nextUrl;
                 nextBtn.classList.remove('disabled');
+                nextBtn.textContent = (nextFile || 'Next') + ' »';
+                nextBtn.title = 'Next: ' + (nextFile || '');
             } else {
                 nextBtn.href = '#';
                 nextBtn.classList.add('disabled');
+                nextBtn.textContent = 'Next »';
+                nextBtn.title = 'No next track';
             }
         }
 
@@ -682,6 +701,8 @@ if (isset($_GET['ajax'])) {
                             currentFileName = data.fileName;
                             nextUrl = data.nextUrl;
                             prevUrl = data.prevUrl;
+                            nextFile = data.nextFile || '';
+                            prevFile = data.prevFile || '';
                             mediaTitle = data.title;
 
                             document.title = data.title;

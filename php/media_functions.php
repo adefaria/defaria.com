@@ -146,7 +146,7 @@ function isMediaDescriptionFile(string $directory, string $filename): bool
 function getMediaNavigation(string $currentUrl): array
 {
     $fsWebRoot = '/web';
-    $result = ['prev' => '', 'next' => ''];
+    $result = ['prev' => '', 'next' => '', 'prevFile' => '', 'nextFile' => ''];
 
     if (empty($currentUrl) || $currentUrl[0] !== '/') {
         return $result;
@@ -203,11 +203,13 @@ function getMediaNavigation(string $currentUrl): array
             $prevFile = $mediaFiles[$currentIndex - 1];
             $prevWebPath = ($webDir === '' ? '' : $webDir) . '/' . $prevFile;
             $result['prev'] = "/php/monitorFile.php?u=" . urlencode($prevWebPath);
+            $result['prevFile'] = $prevFile;
         }
         if (isset($mediaFiles[$currentIndex + 1])) {
             $nextFile = $mediaFiles[$currentIndex + 1];
             $nextWebPath = ($webDir === '' ? '' : $webDir) . '/' . $nextFile;
             $result['next'] = "/php/monitorFile.php?u=" . urlencode($nextWebPath);
+            $result['nextFile'] = $nextFile;
         }
     }
 
