@@ -36,6 +36,10 @@ DEFAULT_PUBLIC_PREFIXES = [
     "/media/",
     "/Band/",
     "/band/",
+    "/songs/",
+    "/songbook/",
+    "/sets/",
+    "/Music/",
 ]
 
 # Standard exact files required for infrastructure/browsers
@@ -75,6 +79,15 @@ DEFAULT_PUBLIC_EXACT = [
     "/cos",
     "/cos.php",
     "/cos/",
+    "/songs",
+    "/songs.php",
+    "/songs/",
+    "/songbook",
+    "/songbook/",
+    "/sets",
+    "/sets/",
+    "/Music",
+    "/Music/",
     "/php/monitorFile.php",
     "/monitorFile.php",
     "/php/downloaddir.php",
