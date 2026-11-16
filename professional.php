@@ -18,15 +18,15 @@ include 'includes/frame_header.php'; ?>
 <?php
 $professional_links = [
     [
-        'title' => 'ClearSCM',
-        'url' => '/clearscm',
-        'desc' => 'Advanced Software Configuration Management systems and tools.',
+        'title' => 'Computers',
+        'url' => '/computers',
+        'desc' => 'My history of computers owned.',
         'target' => '_top'
     ],
     [
-        'title' => 'AI Trader',
-        'url' => '/aitrader/',
-        'desc' => 'Autonomous paper-trading portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
+        'title' => 'Resume',
+        'url' => '/resume',
+        'desc' => 'My professional background and experience.',
         'target' => '_top'
     ],
     [
@@ -36,15 +36,9 @@ $professional_links = [
         'target' => '_blank'
     ],
     [
-        'title' => 'Resume',
-        'url' => '/resume',
-        'desc' => 'My professional background and experience.',
-        'target' => '_top'
-    ],
-    [
-        'title' => 'Computers',
-        'url' => '/computers',
-        'desc' => 'My history of computers owned.',
+        'title' => 'ClearSCM',
+        'url' => '/clearscm',
+        'desc' => 'Advanced Software Configuration Management systems and tools.',
         'target' => '_top'
     ],
     [
@@ -57,6 +51,12 @@ $professional_links = [
         'title' => 'MAPS Mobile',
         'url' => '/mapsmobile',
         'desc' => 'Mobile interface for the Mail Authorization and Permission System.',
+        'target' => '_top'
+    ],
+    [
+        'title' => 'AI Trader',
+        'url' => '/aitrader/',
+        'desc' => 'Autonomous paper-trading portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
         'target' => '_top'
     ],
     [
