@@ -74,7 +74,7 @@ $professional_links = [
         'url' => '/aitrader/',
         'desc' => 'Autonomous portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
         'target' => '_top',
-        'icon' => '/Icons/aitrader.svg'
+        'icon' => '/Icons/aitrader.svg?v=20261116b'
     ],
     [
         'title' => 'Job Hunt',
