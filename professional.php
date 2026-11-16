@@ -4,6 +4,22 @@ include 'includes/frame_header.php'; ?>
     /* Specific styling for Business cards */
     .link-card h3 {
         color: var(--google-red);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+    }
+
+    .link-card:hover .card-icon {
+        transform: scale(1.12);
     }
 
     .page-title {
@@ -57,21 +73,24 @@ $professional_links = [
         'title' => 'AI Trader',
         'url' => '/aitrader/',
         'desc' => 'Autonomous portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
-        'target' => '_top'
+        'target' => '_top',
+        'icon' => '/Icons/aitrader.svg'
     ],
     [
         'title' => 'Job Hunt',
         'url' => '/jobhunt',
         'desc' => 'Track and manage job opportunities, applications, and interview pipelines.',
         'target' => '_top',
-        'requires_login' => true
+        'requires_login' => true,
+        'icon' => '/Icons/jobhunt.svg'
     ],
     [
         'title' => 'Reach Out',
         'url' => '/reachout',
         'desc' => 'Professional networking, recruiter communications, and relationship management.',
         'target' => '_top',
-        'requires_login' => true
+        'requires_login' => true,
+        'icon' => '/Icons/reachout.svg'
     ],
 ];
 ?>
@@ -92,7 +111,10 @@ $professional_links = [
                 style="text-decoration: none; color: inherit; cursor: pointer;">
                 <div>
                     <h3>
-                        <?php echo $link['title']; ?>
+                        <?php if (!empty($link['icon'])): ?>
+                            <img src="<?php echo $link['icon']; ?>" alt="<?php echo htmlspecialchars($link['title']); ?> icon" class="card-icon">
+                        <?php endif; ?>
+                        <span><?php echo $link['title']; ?></span>
                         <?php if ($is_external): ?>
                             <svg class="external-icon"
                                 style="width: 0.8em; height: 0.8em; vertical-align: middle; fill: currentColor; margin-left: 0.3em;"
