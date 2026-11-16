@@ -56,7 +56,7 @@ $professional_links = [
     [
         'title' => 'AI Trader',
         'url' => '/aitrader/',
-        'desc' => 'Autonomous paper-trading portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
+        'desc' => 'Autonomous portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
         'target' => '_top'
     ],
     [
