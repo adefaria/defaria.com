@@ -10,12 +10,27 @@ include 'includes/frame_header.php'; ?>
     }
 
     .card-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 7px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         flex-shrink: 0;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         transition: transform 0.2s ease;
+    }
+
+    .card-icon-dark {
+        display: inline-block;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    .card-icon-light {
+        display: none;
+    }
+
+    [data-theme="light"] .card-icon-dark {
+        display: none !important;
+    }
+    [data-theme="light"] .card-icon-light {
+        display: inline-block !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .link-card:hover .card-icon {
@@ -74,7 +89,8 @@ $professional_links = [
         'url' => '/aitrader/',
         'desc' => 'Autonomous portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
         'target' => '_top',
-        'icon' => '/Icons/aitrader.svg?v=20261116b'
+        'icon_dark' => '/Icons/aitrader-dark.svg?v=20261116c',
+        'icon_light' => '/Icons/aitrader-light.svg?v=20261116c'
     ],
     [
         'title' => 'Job Hunt',
@@ -82,7 +98,8 @@ $professional_links = [
         'desc' => 'Track and manage job opportunities, applications, and interview pipelines.',
         'target' => '_top',
         'requires_login' => true,
-        'icon' => '/Icons/jobhunt.svg'
+        'icon_dark' => '/Icons/jobhunt-dark.svg?v=20261116c',
+        'icon_light' => '/Icons/jobhunt-light.svg?v=20261116c'
     ],
     [
         'title' => 'Reach Out',
@@ -90,7 +107,8 @@ $professional_links = [
         'desc' => 'Professional networking, recruiter communications, and relationship management.',
         'target' => '_top',
         'requires_login' => true,
-        'icon' => '/Icons/reachout.svg'
+        'icon_dark' => '/Icons/reachout-dark.svg?v=20261116c',
+        'icon_light' => '/Icons/reachout-light.svg?v=20261116c'
     ],
 ];
 ?>
@@ -111,8 +129,9 @@ $professional_links = [
                 style="text-decoration: none; color: inherit; cursor: pointer;">
                 <div>
                     <h3>
-                        <?php if (!empty($link['icon'])): ?>
-                            <img src="<?php echo $link['icon']; ?>" alt="<?php echo htmlspecialchars($link['title']); ?> icon" class="card-icon">
+                        <?php if (!empty($link['icon_dark'])): ?>
+                            <img src="<?php echo $link['icon_dark']; ?>" alt="<?php echo htmlspecialchars($link['title']); ?> (Dark)" class="card-icon card-icon-dark">
+                            <img src="<?php echo $link['icon_light']; ?>" alt="<?php echo htmlspecialchars($link['title']); ?> (Light)" class="card-icon card-icon-light">
                         <?php endif; ?>
                         <span><?php echo $link['title']; ?></span>
                         <?php if ($is_external): ?>
