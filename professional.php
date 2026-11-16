@@ -24,6 +24,12 @@ $professional_links = [
         'target' => '_top'
     ],
     [
+        'title' => 'AI Trader',
+        'url' => '/aitrader/',
+        'desc' => 'Autonomous paper-trading portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
+        'target' => '_top'
+    ],
+    [
         'title' => 'CPAN Modules',
         'url' => 'https://metacpan.org/author/DEFARIA',
         'desc' => 'Contributions to the Comprehensive Perl Archive Network.',
