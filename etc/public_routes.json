@@ -469,6 +469,7 @@
     "/Logos/",
     "/Media/",
     "/Music/",
+    "/Vette/",
     "/auth/",
     "/band/",
     "/clearscm/",
@@ -480,7 +481,8 @@
     "/sets/",
     "/songbook/",
     "/songs/",
-    "/tmp/"
+    "/tmp/",
+    "/vette/"
   ],
   "explicit_private_paths": [
     "/Dad",

@@ -1,0 +1,375 @@
+:root {
+  --bg-color: #121212;
+  --surface-color: #1e1e1e;
+  --surface-elevated: #262626;
+  --text-color: #e0e0e0;
+  --muted-color: #a0a0a0;
+  --card-border: rgba(255, 255, 255, 0.09);
+  --vette-red: #e53935;
+  --vette-red-glow: rgba(229, 57, 53, 0.25);
+  --google-blue: rgb(66, 133, 244);
+  --google-red: rgb(234, 67, 53);
+  --google-yellow: rgb(251, 188, 5);
+  --google-green: rgb(52, 168, 83);
+  --link-color: #8ab4f8;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+[data-theme="light"] {
+  --bg-color: #f4f6f9;
+  --surface-color: #ffffff;
+  --surface-elevated: #f8f9fa;
+  --text-color: #202124;
+  --muted-color: #5f6368;
+  --card-border: rgba(0, 0, 0, 0.09);
+  --vette-red: #d32f2f;
+  --vette-red-glow: rgba(211, 47, 47, 0.15);
+  --link-color: #1a73e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  font-family: var(--font-main) !important;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+  padding: 0 0 90px 0;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--vette-red);
+  text-decoration: underline;
+}
+
+/* Sub-navigation Header */
+.vette-header {
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.vette-header-inner {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.vette-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none !important;
+}
+
+.vette-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d50000, #ff5252);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 10px var(--vette-red-glow);
+  flex-shrink: 0;
+}
+
+.vette-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  display: block;
+  line-height: 1.15;
+}
+
+.vette-brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted-color);
+  font-weight: 500;
+}
+
+.vette-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vette-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.vette-nav a:hover,
+.vette-nav a.active {
+  background: var(--surface-elevated);
+  color: var(--vette-red);
+  text-decoration: none;
+}
+
+/* Main Container & Cards */
+.vette-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem;
+}
+
+.vette-card {
+  background: var(--surface-color);
+  border: 1px solid var(--card-border);
+  border-top: 3px solid var(--vette-red);
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.vette-card.accent-blue   { border-top-color: var(--google-blue); }
+.vette-card.accent-yellow { border-top-color: var(--google-yellow); }
+.vette-card.accent-green  { border-top-color: var(--google-green); }
+
+.vette-card h1,
+.vette-card h2,
+.vette-card h3 {
+  font-family: var(--font-heading);
+  margin-top: 0;
+  color: var(--vette-red);
+}
+
+.vette-card h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.vette-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.vette-card h3 {
+  font-size: 1.15rem;
+  color: var(--google-blue);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Hero Split Layout */
+.vette-hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.vette-hero-photo {
+  text-align: center;
+}
+
+.vette-hero-photo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--card-border);
+}
+
+.vette-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.vette-stat-box {
+  background: var(--surface-elevated);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.vette-stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-color);
+  font-weight: 600;
+}
+
+.vette-stat-value {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--vette-red);
+  margin-top: 0.15rem;
+}
+
+/* Maintenance Table */
+.vette-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  margin: 1.25rem 0;
+}
+
+.vette-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.vette-table thead th {
+  background: var(--surface-elevated);
+  color: var(--text-color);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.vette-table thead th.cost-col,
+.vette-table tbody td.cost-col,
+.vette-table tfoot td.cost-col {
+  text-align: right;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.vette-table tbody tr {
+  border-bottom: 1px solid var(--card-border);
+  transition: background-color 0.12s ease;
+}
+
+.vette-table tbody tr:hover {
+  background: var(--surface-elevated);
+}
+
+.vette-table tbody td {
+  padding: 0.65rem 1rem;
+  vertical-align: top;
+}
+
+.vette-table tbody td.date-col {
+  white-space: nowrap;
+  color: var(--muted-color);
+  font-weight: 500;
+  width: 170px;
+}
+
+.vette-table tfoot tr {
+  background: var(--surface-elevated);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.vette-table tfoot td {
+  padding: 0.85rem 1rem;
+  color: var(--vette-red);
+}
+
+/* Story & Gallery Grids */
+.vette-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.vette-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.vette-photo-card {
+  background: var(--surface-elevated);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.vette-photo-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.vette-photo-caption {
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.55;
+}
+
+.vette-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  background: var(--surface-elevated);
+  border: 1px solid var(--card-border);
+  color: var(--text-color) !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+.vette-btn:hover {
+  border-color: var(--vette-red);
+  color: var(--vette-red) !important;
+}
+
+@media (max-width: 860px) {
+  .vette-hero-grid,
+  .vette-grid-2,
+  .vette-photo-grid {
+    grid-template-columns: 1fr;
+  }
+  .vette-header-inner,
+  .vette-container {
+    padding: 1rem;
+  }
+  .vette-card {
+    padding: 1.25rem;
+  }
+}

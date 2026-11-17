@@ -361,10 +361,14 @@
         page = '/libertarian.php' + queryString;
       } else if (route === 'vette') {
         page = '/Vette/index.html' + queryString;
+      } else if (route.toLowerCase().startsWith('vette/')) {
+        page = '/Vette/' + route.substring(6) + queryString;
       } else if (route === 'computers') {
         page = '/Computers/index.php' + queryString;
       } else if (route === 'band' || route === 'cos') {
         page = '/Band/index.php' + queryString;
+      } else if (route.toLowerCase().startsWith('band/')) {
+        page = '/Band/' + route.substring(5) + queryString;
       } else if (route === 'bottomsup') {
         page = '/Band/BottomsUp.php' + queryString;
       } else if (route === 'bottomingout') {
@@ -464,9 +468,9 @@
           if (tabPath === 'professional') {
             if (['resume', 'clearscm', 'maps', 'computers'].includes(route.split('/')[0])) isActive = true;
           } else if (tabPath === 'personal') {
-            if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route)) isActive = true;
+            if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route.split('/')[0].toLowerCase())) isActive = true;
           } else if (tabPath === 'music') {
-            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0])) isActive = true;
+            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0].toLowerCase())) isActive = true;
           } else if (tabPath === 'projects') {
             if (['upload', 'ytdownload', 'yt', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {

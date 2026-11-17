@@ -2,258 +2,282 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast of Shadows - Musical Career</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Dancing+Script:wght@700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=2">
-
-    <?php include "../php/site-functions.php" ?>
-    <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
-
-    <style>
-        /* Page Specific Styles */
-        .band-body {
-            background-color: #000;
-            background-image: url('Images/CastOfShadowsBackdrop.jpg');
-            background-repeat: repeat;
-            /* Legacy behavior usually repeat */
-            color: #fff;
-        }
-
-        .band-content {
-            background: rgba(0, 0, 0, 0.7);
-            /* Darken text areas for readability against backdrop */
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-        }
-
-        .member-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: center;
-            margin: 2rem 0;
-        }
-
-        .songs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .songs-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .album-box {
-            background: rgba(51, 0, 51, 0.8);
-            /* Matches BGCOLOR="#330033" */
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 8px;
-        }
-
-        a {
-            color: #66FFFF;
-        }
-
-        /* match alink="#66FFFF" or similar bright color for dark bg */
-        a:hover {
-            color: #fff;
-        }
-
-        h2,
-        h3 {
-            font-family: 'Outfit', sans-serif;
-            color: #fff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 0.5rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cast of Shadows - Andrew DeFaria</title>
+  <meta name="last-modified" content="<?php echo date("F d Y @ g:i a", filemtime($_SERVER['SCRIPT_FILENAME'])); ?>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/Band/band.css">
+  <script src="/Band/band.js"></script>
 </head>
 
-<body class="iframe-body band-body">
+<body>
 
-    <div class="content-container">
-
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <img src="CastOfShadows.jpg" alt="Cast of Shadows" style="max-width: 100%; height: auto;">
+  <header class="band-header">
+    <div class="band-header-inner">
+      <a href="/Band/index.php" class="band-brand">
+        <div class="band-badge">&#9835;</div>
+        <div>
+          <span class="band-brand-title">Cast of Shadows</span>
+          <span class="band-brand-subtitle">Bay Area Progressive &amp; Modern Rock Trio (1991&ndash;1994)</span>
         </div>
-
-        <div class="band-content">
-            <div class="member-grid">
-                <div>
-                    <img src="Images/NewClothes.jpg" alt="Band Members" style="border-radius: 8px; max-width: 100%;">
-                </div>
-                <div style="text-align: center;">
-                    <h3>BAND MEMBERS</h3>
-                    <p>(from left to right)</p>
-                    <hr style="width: 50%; border-color: rgba(255,255,255,0.2);">
-                    <ul style="list-style: none; padding: 0; font-size: 1.2rem;">
-                        <li><a href="/">Andy DeFaria</a></li>
-                        <li><a href="/Music/index.php?q=f&f=%2FRock%2FMike+Fraser">Mike Fraser</a></li>
-                        <li><a href="http://www.webthumper.com/author.html">Scott Dinn</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <p style="text-align: center;">
-                Visit the <a href="/Music/index.php?q=f&f=%2FRock%2FCast+of+Shadows">Cast of Shadows Music Archive</a>.
-            </p>
-        </div>
-
-        <!-- MP3 Section -->
-        <div class="band-content">
-            <div class="songs-grid">
-                <div>
-                    <h3>Latest Work</h3>
-                    <p>Here are a few songs I've been working on lately.</p>
-                    <ul class="file-list" style="list-style: none; padding: 0;">
-                        <li><a href="Cryin' in the Rain (MIDI).mp3">Cryin' in the Rain</a> (Cast of Shadows) - 2.1 meg
-                        </li>
-                        <li><a href="Reelin in the Years.mp3">Reelin in the Years</a> (Steely Dan) - 2.2 meg</li>
-                        <li><a href="Boys Are Back in Town.mp3">Boys Are Back in Town</a> (Thin Lizzy) - 2.2 meg</li>
-                        <li><a href="Black Dog.mp3">Black Dog</a> (Led Zepplin) - 2.5 meg</li>
-                        <li><a href="The Wanton Song.mp3">The Wanton Song</a> (Led Zepplin) - 3.8 meg</li>
-                    </ul>
-                </div>
-                <div style="text-align: center;">
-                    <img src="Images/WithBunnies.jpg" alt="With Bunnies" style="border-radius: 8px; max-width: 100%;">
-                </div>
-            </div>
-        </div>
-
-        <!-- Face The Time Album -->
-        <div class="album-box band-content">
-            <div class="songs-grid">
-                <div style="text-align: center;">
-                    <img src="Images/FaceTheTimeCover.jpg" alt="Face The Time Cover"
-                        style="max-width: 100%; border-radius: 4px;">
-                </div>
-                <div>
-                    <h2 style="text-align: center; border: none;">Face the Time</h2>
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                <th style="padding: 0.5rem; text-align: left;">Title</th>
-                                <th style="padding: 0.5rem; text-align: right;">Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><a href="Street Magic.mp3">Street Magic</a></td>
-                                <td align="right">4:06</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Face the Time.mp3">Face The Time</a></td>
-                                <td align="right">5:30</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Drugstore Novels.mp3">Drugstore Novels</a></td>
-                                <td align="right">4:32</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Cryin' in the Rain.mp3">Cryin' in the Rain</a></td>
-                                <td align="right">4:30</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Remember.mp3">Remember</a></td>
-                                <td align="right">4:25</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Reach Beyond the Past.mp3">Reach Beyond the Past</a></td>
-                                <td align="right">4:38</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Lifeline.mp3">Lifeline</a></td>
-                                <td align="right">4:36</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Silent Rage.mp3">Silent Rage</a></td>
-                                <td align="right">4:42</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Breakaway.mp3">Breakaway</a></td>
-                                <td align="right">4:16</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Love Beyond Our Needs.mp3">Love Beyond Our Needs</a></td>
-                                <td align="right">3:59</td>
-                            </tr>
-                            <tr>
-                                <td><a href="The Reunion.mp3">The Reunion</a></td>
-                                <td align="right">3:57</td>
-                            </tr>
-                            <tr>
-                                <td><a href="Reach Beyond the Past (Remix).mp3">Reach Beyond the Past (Remix)</a></td>
-                                <td align="right">4:38</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p style="text-align: center; font-size: 0.9rem; margin-top: 1rem; color: #ccc;">All songs are
-                        &copy; Copyright Hop-A-Long Productions 1993</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="band-content">
-            <p style="text-align: center;">
-                If you would like to receive a copy of these songs on a tape, <a href="mailto:andrew@defaria.com">email
-                    me</a>.<br>
-                I have about 30 CD's left that I would be willing to sell for $15.<br>
-                The CD has a booklet of all the lyrics and pictures of the band.
-            </p>
-
-            <hr>
-
-            <p><b>Cast of Shadows</b> played Top 40 Modern Rock, but we have recently broken up. I'm proud to say that
-                as a band we had a number of accomplishments including:</p>
-            <ul>
-                <li>Wrote, recorded and produced our own CD called <i><a href="facethetime.html">Face the Time</a></i>.
-                </li>
-                <li>Played over 100 dates at local area clubs such as: Boswells, McNeil's, Pioneer Saloon, Carlos
-                    Murphy's, Sport's Page, Cheer's, Lord John's Inn, Toon's, Mountain Charlies, Britiania Arms,
-                    Cabaret, The Huddle, Doc Ricketts, Fanny & Alexander's, Foggs.</li>
-                <li>Made and sold T-shirts, stickers and buttons.</li>
-                <li>Bought our own PA and light show.</li>
-                <li>Integrated our 3 piece band with MIDI controlling 3 synthesizers as well as the light show.</li>
-                <li>Obtained management (Thrill Entertainment Group) and roadies.</li>
-                <li>Managed to get the band business in the black and draw a monthly salary!</li>
-            </ul>
-
-            <div style="text-align: center; margin: 2rem 0;">
-                <img src="Images/8X10Picture.jpg" alt="Band Picture" style="max-width: 100%; border-radius: 8px;">
-            </div>
-
-            <p>But, alas, all of this has fallen apart!</p>
-            <p>After Cast of Shadows I formed the band named <b><i><a href="BottomsUp.html">Bottoms Up</a></i></b>. We
-                gigged around for about a year. I am currently band less and available for hire!</p>
-
-            <h2>New Directions</h2>
-            <p>As always though, I'm looking for competent musicians to jam with. My interests are varied, ranging from
-                Heavy Metal to Top 40. I like artists from the jazzy (Spyra Gyra, Bela Fleck) to the guitar hero types
-                (Steve Morse, Steve Vai) to just Heavy Metal (Ozzy, Kings X) to various Top 40 and Modern Music (Oingo
-                Boingo, Gin Blossom, etc) as well as old 70's style progressive (Yes, Kansas, Floyd).</p>
-
-            <p>Ideally I'd like to join a working project because that's what I'm used to doing, but I've also
-                entertained thoughts of joining or forming a band with competent musicians who wish to perform songs
-                simply because they like the tunes.</p>
-
-            <p>I also sing but am more of a backup singer than a lead singer. I have good transportation, equipment and
-                I've been around. I know theory but am not a reader. If you got something interesting then contact me.
-            </p>
-        </div>
-
+      </a>
+      <ul class="band-nav">
+        <li><a href="/Band/index.php" class="active">Overview &amp; Album</a></li>
+        <li><a href="/Band/cosprofile.html">Band Profile</a></li>
+        <li><a href="/Band/andy.html">Andy</a></li>
+        <li><a href="/Band/mike.html">Mike</a></li>
+        <li><a href="/Band/scott.html">Scott</a></li>
+        <li><a href="/Band/BottomsUp.php">Bottoms Up</a></li>
+      </ul>
     </div>
+  </header>
+
+  <main class="band-container">
+
+    <!-- Hero & Band Lineup Card -->
+    <div class="band-card">
+      <div style="text-align: center;">
+        <div class="band-logo-banner">
+          <img src="/Band/CastOfShadows.jpg" alt="Cast of Shadows">
+        </div>
+      </div>
+
+      <div class="band-grid-2" style="align-items: center; margin-bottom: 1.5rem;">
+        <div style="text-align: center;">
+          <img src="/Band/Images/NewClothes.jpg" alt="Cast of Shadows Band Members" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--card-border); box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+          <div style="font-size: 0.82rem; color: var(--muted-color); margin-top: 0.4rem;">Left to right: Andy DeFaria, Mike Fraser, and Scott Dinn</div>
+        </div>
+        <div>
+          <h2 style="margin-top: 0;">The Band</h2>
+          <p><b>Cast of Shadows</b> was formed in October 1991 and performed Top 40 Modern Rock and original compositions across the San Francisco Bay Area club circuit until April 1994. As a high-tech power trio, we integrated live guitar, bass, and drums with an Atari STacy MIDI sequencer driving three synthesizers, samplers, and an automated light show.</p>
+          <p style="margin-bottom: 0;">Click any band member below to view their profile and stage gear:</p>
+        </div>
+      </div>
+
+      <div class="band-trio-grid">
+        <div class="band-member-card">
+          <img src="/Band/Images/andy.jpg" alt="Andy DeFaria">
+          <div class="band-member-name">Andy DeFaria</div>
+          <div class="band-member-role">Electric &amp; Acoustic Guitars, Backing Vocals</div>
+          <a class="band-btn" href="/Band/andy.html" style="margin-top: auto;">View Profile &rarr;</a>
+        </div>
+
+        <div class="band-member-card">
+          <img src="/Band/Images/Mike.jpg" alt="Mike Fraser">
+          <div class="band-member-name">Mike Fraser</div>
+          <div class="band-member-role">Bass, Keyboards, Acoustic Guitar, Lead Vocals</div>
+          <a class="band-btn" href="/Band/mike.html" style="margin-top: auto;">View Profile &rarr;</a>
+        </div>
+
+        <div class="band-member-card">
+          <img src="/Band/Images/scott.jpg" alt="Scott Dinn">
+          <div class="band-member-name">Scott Dinn</div>
+          <div class="band-member-role">Drums, Electronic Percussion, Backing Vocals</div>
+          <a class="band-btn" href="/Band/scott.html" style="margin-top: auto;">View Profile &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Face the Time Album + Interactive Audio Player -->
+    <div id="album" class="band-card accent-yellow">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+        <h2 style="margin: 0;">Face the Time &mdash; Original Album (1993)</h2>
+        <span style="font-size: 0.85rem; color: var(--muted-color);">&copy; 1993 Hop-A-Long Productions &bull; Click any track to play</span>
+      </div>
+
+      <!-- Sticky Audio Player Bar -->
+      <div class="band-player-bar">
+        <div class="band-now-playing">
+          <span class="band-now-label">&#9654; Now Playing</span>
+          <span class="band-now-title" id="band-now-playing-title">Street Magic &mdash; Cast of Shadows</span>
+        </div>
+        <audio id="band-audio-player" class="band-audio-el" controls preload="none" src="/Band/Street%20Magic.mp3"></audio>
+      </div>
+
+      <div class="band-album-layout">
+        <div class="band-covers">
+          <img src="/Band/Images/FaceTheTimeCover.jpg" alt="Face the Time Front Cover">
+          <img src="/Band/Images/FaceTheTimeBack.jpg" alt="Face the Time Back Cover">
+        </div>
+
+        <div>
+          <table class="band-track-table">
+            <thead>
+              <tr>
+                <th class="band-track-num">#</th>
+                <th>Track Title</th>
+                <th class="band-track-time">Length</th>
+                <th class="band-track-dl">MP3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="band-track-row playing" onclick="playBandTrack('/Band/Street%20Magic.mp3', 'Street Magic — Cast of Shadows', this)">
+                <td class="band-track-num">01</td>
+                <td><b>Street Magic</b></td>
+                <td class="band-track-time">4:06</td>
+                <td class="band-track-dl"><a href="/Band/Street%20Magic.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Face%20the%20Time.mp3', 'Face the Time — Cast of Shadows', this)">
+                <td class="band-track-num">02</td>
+                <td><b>Face the Time</b></td>
+                <td class="band-track-time">5:30</td>
+                <td class="band-track-dl"><a href="/Band/Face%20the%20Time.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Drugstore%20Novels.mp3', 'Drugstore Novels — Cast of Shadows', this)">
+                <td class="band-track-num">03</td>
+                <td><b>Drugstore Novels</b></td>
+                <td class="band-track-time">4:32</td>
+                <td class="band-track-dl"><a href="/Band/Drugstore%20Novels.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Cryin%27%20in%20the%20Rain.mp3', 'Cryin\' in the Rain — Cast of Shadows', this)">
+                <td class="band-track-num">04</td>
+                <td><b>Cryin' in the Rain</b></td>
+                <td class="band-track-time">4:30</td>
+                <td class="band-track-dl"><a href="/Band/Cryin%27%20in%20the%20Rain.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Remember.mp3', 'Remember — Cast of Shadows', this)">
+                <td class="band-track-num">05</td>
+                <td><b>Remember</b></td>
+                <td class="band-track-time">4:25</td>
+                <td class="band-track-dl"><a href="/Band/Remember.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Reach%20Beyond%20the%20Past.mp3', 'Reach Beyond the Past — Cast of Shadows', this)">
+                <td class="band-track-num">06</td>
+                <td><b>Reach Beyond the Past</b></td>
+                <td class="band-track-time">4:38</td>
+                <td class="band-track-dl"><a href="/Band/Reach%20Beyond%20the%20Past.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Lifeline.mp3', 'Lifeline — Cast of Shadows', this)">
+                <td class="band-track-num">07</td>
+                <td><b>Lifeline</b></td>
+                <td class="band-track-time">4:36</td>
+                <td class="band-track-dl"><a href="/Band/Lifeline.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Silent%20Rage.mp3', 'Silent Rage — Cast of Shadows', this)">
+                <td class="band-track-num">08</td>
+                <td><b>Silent Rage</b></td>
+                <td class="band-track-time">4:42</td>
+                <td class="band-track-dl"><a href="/Band/Silent%20Rage.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Breakaway.mp3', 'Breakaway — Cast of Shadows', this)">
+                <td class="band-track-num">09</td>
+                <td><b>Breakaway</b></td>
+                <td class="band-track-time">4:16</td>
+                <td class="band-track-dl"><a href="/Band/Breakaway.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Love%20Beyond%20Our%20Needs.mp3', 'Love Beyond Our Needs — Cast of Shadows', this)">
+                <td class="band-track-num">10</td>
+                <td><b>Love Beyond Our Needs</b></td>
+                <td class="band-track-time">3:59</td>
+                <td class="band-track-dl"><a href="/Band/Love%20Beyond%20Our%20Needs.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/The%20Reunion.mp3', 'The Reunion — Cast of Shadows', this)">
+                <td class="band-track-num">11</td>
+                <td><b>The Reunion</b></td>
+                <td class="band-track-time">3:57</td>
+                <td class="band-track-dl"><a href="/Band/The%20Reunion.mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Reach%20Beyond%20the%20Past%20(Remix).mp3', 'Reach Beyond the Past (Remix) — Cast of Shadows', this)">
+                <td class="band-track-num">12</td>
+                <td><b>Reach Beyond the Past (Remix)</b></td>
+                <td class="band-track-time">4:38</td>
+                <td class="band-track-dl"><a href="/Band/Reach%20Beyond%20the%20Past%20(Remix).mp3" download onclick="event.stopPropagation();" title="Download MP3">&#11015;</a></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p style="font-size: 0.88rem; color: var(--muted-color); margin-top: 1rem;">
+            If you would like a physical copy of the CD (complete with full lyric booklet and band photos), <a href="mailto:andrew@defaria.com">email me</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest Work & Bunnies Photo Card -->
+    <div class="band-card accent-blue">
+      <div class="band-grid-2" style="align-items: center;">
+        <div>
+          <h2>Latest Work &amp; Studio Covers</h2>
+          <p>Here are several studio cover recordings and MIDI arrangements I worked on (click any track to play in the player above):</p>
+          <table class="band-track-table">
+            <tbody>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Cryin%27%20in%20the%20Rain%20(MIDI).mp3', 'Cryin\' in the Rain (MIDI) — Cast of Shadows', this)">
+                <td><b>Cryin' in the Rain (MIDI)</b> <span style="color:var(--muted-color);">(Cast of Shadows)</span></td>
+                <td class="band-track-time">2.1 MB</td>
+                <td class="band-track-dl"><a href="/Band/Cryin%27%20in%20the%20Rain%20(MIDI).mp3" download onclick="event.stopPropagation();">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Reelin%20in%20the%20Years.mp3', 'Reelin\' in the Years (Steely Dan Cover)', this)">
+                <td><b>Reelin' in the Years</b> <span style="color:var(--muted-color);">(Steely Dan)</span></td>
+                <td class="band-track-time">2.2 MB</td>
+                <td class="band-track-dl"><a href="/Band/Reelin%20in%20the%20Years.mp3" download onclick="event.stopPropagation();">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Boys%20Are%20Back%20in%20Town.mp3', 'The Boys Are Back in Town (Thin Lizzy Cover)', this)">
+                <td><b>Boys Are Back in Town</b> <span style="color:var(--muted-color);">(Thin Lizzy)</span></td>
+                <td class="band-track-time">2.2 MB</td>
+                <td class="band-track-dl"><a href="/Band/Boys%20Are%20Back%20in%20Town.mp3" download onclick="event.stopPropagation();">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/Black%20Dog.mp3', 'Black Dog (Led Zeppelin Cover)', this)">
+                <td><b>Black Dog</b> <span style="color:var(--muted-color);">(Led Zeppelin)</span></td>
+                <td class="band-track-time">2.5 MB</td>
+                <td class="band-track-dl"><a href="/Band/Black%20Dog.mp3" download onclick="event.stopPropagation();">&#11015;</a></td>
+              </tr>
+              <tr class="band-track-row" onclick="playBandTrack('/Band/The%20Wanton%20Song.mp3', 'The Wanton Song (Led Zeppelin Cover)', this)">
+                <td><b>The Wanton Song</b> <span style="color:var(--muted-color);">(Led Zeppelin)</span></td>
+                <td class="band-track-time">3.8 MB</td>
+                <td class="band-track-dl"><a href="/Band/The%20Wanton%20Song.mp3" download onclick="event.stopPropagation();">&#11015;</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="text-align: center;">
+          <img src="/Band/Images/WithBunnies.jpg" alt="Cast of Shadows with Playboy Bunnies" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--card-border); box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+        </div>
+      </div>
+    </div>
+
+    <!-- Accomplishments & New Directions Grid -->
+    <div class="band-grid-2">
+      <div class="band-card accent-green" style="margin-bottom: 0;">
+        <h2>Band Accomplishments</h2>
+        <p><b>Cast of Shadows</b> played Top 40 Modern Rock, and as a working band we achieved a number of proud milestones:</p>
+        <ul>
+          <li>Wrote, recorded, and produced our own 12-track CD, <i><a href="/Band/facethetime.html">Face the Time</a></i>.</li>
+          <li>Played over 100 dates at Bay Area clubs including Boswells, McNeil's, Pioneer Saloon, Carlos Murphy's, Sports Page, Cheers, Lord John's Inn, Toon's, Mountain Charley's, Britannia Arms, Cabaret, The Huddle, Doc Ricketts, Fanny &amp; Alexander's, and Fogg's.</li>
+          <li>Made and sold custom band T-shirts, stickers, and buttons.</li>
+          <li>Purchased our own full PA system and stage lighting rig.</li>
+          <li>Integrated our 3-piece band with MIDI controlling 3 synthesizers as well as the automated light show.</li>
+          <li>Obtained professional management (Thrill Entertainment Group) and roadies.</li>
+          <li>Managed to get the band business in the black and draw a monthly salary!</li>
+        </ul>
+        <div style="text-align: center; margin-top: 1rem;">
+          <img src="/Band/Images/8X10Picture.jpg" alt="Cast of Shadows 8x10 Promo Photo" style="max-width: 100%; border-radius: 10px; border: 1px solid var(--card-border);">
+        </div>
+      </div>
+
+      <div class="band-card accent-red" style="margin-bottom: 0; display: flex; flex-direction: column;">
+        <h2>After Cast of Shadows &amp; New Directions</h2>
+        <p>After Cast of Shadows broke up, Scott Dinn and I teamed up with Steve Sampson and Steve Burgio to form the high-energy rock dance band <b><i><a href="/Band/BottomsUp.php">Bottoms Up</a></i></b>, gigging around the Bay Area for about a year.</p>
+        <p>As always, I enjoy connecting with competent musicians to jam and collaborate with. My musical interests span a wide range:</p>
+        <ul>
+          <li><b>Jazz Fusion &amp; Instrumental:</b> Spyro Gyra, Béla Fleck, Steve Morse, Steve Vai</li>
+          <li><b>Hard Rock &amp; Metal:</b> Ozzy Osbourne, King's X, Led Zeppelin</li>
+          <li><b>70s Progressive Rock:</b> Yes, Kansas, Pink Floyd, Rush</li>
+          <li><b>Modern &amp; Alternative Rock:</b> Oingo Boingo, Gin Blossoms, Thin Lizzy, Steely Dan</li>
+        </ul>
+        <p>I play electric and acoustic guitar and sing backing vocals, with pro gear, reliable transportation, and decades of live stage experience.</p>
+        <div style="margin-top: auto; padding-top: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <a class="band-btn" href="/Band/BottomsUp.php">Explore Bottoms Up &rarr;</a>
+          <a class="band-btn" href="/music" target="_top">Back to Music Hub &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
 </body>
 
 </html>

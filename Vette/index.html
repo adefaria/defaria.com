@@ -1,360 +1,221 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="Author" content="Andrew DeFaria">
-   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
-   <title>Vette - Andrew DeFaria</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="Author" content="Andrew DeFaria">
+  <title>Vette - Andrew DeFaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/Vette/vette.css">
+  <script src="/Vette/vette.js"></script>
 </head>
-<body text="#FFFFFF" bgcolor="#D70000" link="#FFFF99" vlink="#66FF99" alink="#FFCCFF">
+<body>
 
-<center>
-<h1>
-<font face="Comic Sans MS">My little "Give me a Ticket Red" 1985 Corvette</font></h1></center>
+  <header class="vette-header">
+    <div class="vette-header-inner">
+      <a href="/Vette/index.html" class="vette-brand">
+        <div class="vette-badge">C4</div>
+        <div>
+          <span class="vette-brand-title">1985 &amp; 1991 Corvettes</span>
+          <span class="vette-brand-subtitle">"Give Me a Ticket Red" C4 Corvette Chronicles</span>
+        </div>
+      </a>
+      <ul class="vette-nav">
+        <li><a href="/Vette/index.html" class="active">Overview</a></li>
+        <li><a href="/Vette/Damage.html">Fender Bender</a></li>
+        <li><a href="/Vette/TheCrash.html">The Crash</a></li>
+        <li><a href="/Vette/Gears.html">Gears &amp; Performance</a></li>
+        <li><a href="/Vette/4sale.html">1991 6-Speed</a></li>
+      </ul>
+    </div>
+  </header>
 
-<center><img SRC="CorvetteBar.gif" height=50 width=612></center>
-<font face="Comic Sans MS"><font size=+1>I finally managed to get a Corvette!
-I've always wanted one. I saw a 1985 on sale for $10K. I had been saving
-for a new car and had ~$4K in cash. Dipping slightly into my house savings
-I bought this one on September 12, 1998 for $8879.27.</font></font>
-<br>&nbsp;
-<center><table BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=1 WIDTH="40%" >
-<tr>
-<td><img SRC="/Images/Vette/1985.jpg" BORDER=0 height=195 width=409></td>
-</tr>
-</table></center>
+  <main class="vette-container">
 
-<p><font face="Comic Sans MS"><font size=+1>One could say that I've had
-my share of problems with this car but what do you want for a vehicle that's
-14 years old! Since getting the car I have:</font></font>
-<blockquote>&nbsp;
-<table BORDER=0 CELLSPACING=0 CELLPADDING=4 COLS=1 WIDTH="90%" BGCOLOR="#000000" >
-<tr>
-<td>
-<center><table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" BGCOLOR="#FFFFFF" >
-<tr BGCOLOR="#000099">
-<th><font face="Comic Sans MS">Date</font></th>
+    <!-- Hero Overview Card -->
+    <div class="vette-card">
+      <div class="vette-hero-grid">
+        <div>
+          <h1>My Little "Give Me a Ticket Red" 1985 Corvette</h1>
+          <p>I finally managed to get a Corvette! I've always wanted one. I saw a 1985 on sale for $10K. I had been saving for a new car and had ~$4K in cash. Dipping slightly into my house savings, I bought this one on September 12, 1998 for <b>$8,879.27</b>.</p>
+          <p>One could say that I've had my share of problems with this car, but what do you want for a vehicle that's 14 years old!</p>
 
-<th><font face="Comic Sans MS">Item</font></th>
+          <div class="vette-stats-row">
+            <div class="vette-stat-box">
+              <div class="vette-stat-label">Purchased</div>
+              <div class="vette-stat-value">Sept 12, 1998</div>
+            </div>
+            <div class="vette-stat-box">
+              <div class="vette-stat-label">Purchase Price</div>
+              <div class="vette-stat-value">$8,879.27</div>
+            </div>
+            <div class="vette-stat-box">
+              <div class="vette-stat-label">Repairs &amp; Upgrades</div>
+              <div class="vette-stat-value">$8,821.23</div>
+            </div>
+          </div>
+        </div>
+        <div class="vette-hero-photo">
+          <img src="/Images/Vette/1985.jpg" alt="1985 Red Corvette" width="409" height="195">
+        </div>
+      </div>
+    </div>
 
-<th>
-<center><font face="Comic Sans MS">Cost</font></center>
-</th>
-</tr>
+    <!-- Maintenance & Upgrades Table Card -->
+    <div class="vette-card accent-blue">
+      <h2>Maintenance, Repairs &amp; Upgrades Log</h2>
+      <p>Since getting the car, here is everything I've put into keeping it on the road and upgrading it:</p>
 
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">September 15,
-1998</font></font></center>
-</td>
+      <div class="vette-table-wrap">
+        <table class="vette-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Item / Service</th>
+              <th class="cost-col">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="date-col">September 15, 1998</td>
+              <td>Installed a CD player and alarm</td>
+              <td class="cost-col">$756.57</td>
+            </tr>
+            <tr>
+              <td class="date-col">October 13, 1998</td>
+              <td>Replaced rear wheel bearings and U-joints</td>
+              <td class="cost-col">$1,062.38</td>
+            </tr>
+            <tr>
+              <td class="date-col">October 23, 1998</td>
+              <td>Replaced torque converter, installed upgrade for transmission (better gears and parts for better lubrication) and shift kit</td>
+              <td class="cost-col">$2,117.63</td>
+            </tr>
+            <tr>
+              <td class="date-col">December 13, 1998</td>
+              <td>Corvette license plate frame</td>
+              <td class="cost-col">$34.04</td>
+            </tr>
+            <tr>
+              <td class="date-col"><i>Unknown</i></td>
+              <td>New wiper blades</td>
+              <td class="cost-col">$15.95</td>
+            </tr>
+            <tr>
+              <td class="date-col">January 6, 1999</td>
+              <td>Replaced dashboard light</td>
+              <td class="cost-col">$20.92</td>
+            </tr>
+            <tr>
+              <td class="date-col">January 7, 1999</td>
+              <td>Replaced headlights</td>
+              <td class="cost-col">$41.11</td>
+            </tr>
+            <tr>
+              <td class="date-col">January 8, 1999</td>
+              <td>Replaced rear view mirror</td>
+              <td class="cost-col">$54.95</td>
+            </tr>
+            <tr>
+              <td class="date-col">January 12, 1999</td>
+              <td>Replaced battery</td>
+              <td class="cost-col">$49.99</td>
+            </tr>
+            <tr>
+              <td class="date-col">January 13, 1999</td>
+              <td>Replaced oil sending unit and oil</td>
+              <td class="cost-col">$155.79</td>
+            </tr>
+            <tr>
+              <td class="date-col">February 12, 1999</td>
+              <td>Repaired hood and bumper, paint job</td>
+              <td class="cost-col">$628.92</td>
+            </tr>
+            <tr>
+              <td class="date-col">April 8, 1999</td>
+              <td>Replaced alternator and belt</td>
+              <td class="cost-col">$408.87</td>
+            </tr>
+            <tr>
+              <td class="date-col">May 13, 1999</td>
+              <td>Replaced fan motor and relay, IAC motor, cleaned throttle body, installed HyperTech computer chip</td>
+              <td class="cost-col">$925.54</td>
+            </tr>
+            <tr>
+              <td class="date-col">June 8, 1999</td>
+              <td>Brake job (front): New rotors &amp; pads</td>
+              <td class="cost-col">$371.65</td>
+            </tr>
+            <tr>
+              <td class="date-col">June 26, 1999</td>
+              <td>Woodgrain Kit</td>
+              <td class="cost-col">$86.55</td>
+            </tr>
+            <tr>
+              <td class="date-col">November 2, 1999</td>
+              <td>Wipers — motor/arm/etc.</td>
+              <td class="cost-col">$672.20</td>
+            </tr>
+            <tr>
+              <td class="date-col">December 7, 1999</td>
+              <td>Radiator flush, heavy duty fan switch connector, flush power steering fluid, air foil performance modification, modify air filter lid, cleaned K&amp;N air filter</td>
+              <td class="cost-col">$473.98</td>
+            </tr>
+            <tr>
+              <td class="date-col">February 23, 2000</td>
+              <td>Targa Top</td>
+              <td class="cost-col">$947.19</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">Total so far</td>
+              <td class="cost-col">$8,821.23</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-<td><font face="Comic Sans MS"><font color="#000000">Installed a CD player
-and alarm</font></font></td>
+      <p style="margin-bottom: 0;">You could say I've been busy with this! Some things were just bad luck and an old car, like the torque converter blowing out, the need for wheel bearings and U-joints, headlights, and the battery. Others were things that wear out that on other cars you might delay or not repair—like wiper blades, dashboard light, rear view mirror, oil sending unit, and alternator. And others are just things that one does to improve a car probably only because one really likes the car they have, like the CD player and alarm, upgrading the transmission, shift kit, and license plate frame.</p>
+    </div>
 
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$756.57</font></font></div>
-</td>
-</tr>
+    <!-- Stories Grid -->
+    <div class="vette-grid-2">
+      <div id="The Fender Bender" class="vette-card accent-yellow" style="margin-bottom: 0; display: flex; flex-direction: column;">
+        <h2>The Fender Bender</h2>
+        <p>On Thanksgiving Day, while heading out to Las Vegas for my yearly pilgrimage, I stopped into Jack in the Box for some hamburgers for the road. I was preoccupied trying to determine if the drive-through would be selling hamburgers at this early hour when a lady pulled out of her parking stall in front of me. I didn't see her at all nor she me, and I hit her without even applying my brakes. Argh! What a way to start my Vegas trip with my new Vette! (Vegas was not very good to me this year!)</p>
+        <p>Anyway, the lady's husband came out and we started exchanging information. He asked his wife several times if she was OK, once saying "Are you sure you don't have whiplash or something?". I just rolled my eyes. I didn't have comp &amp; collision insurance so I figured I was in for a big repair bill. This guy was reluctant to give me his insurance info saying "Why do you need that? You hit us?" and I had to follow him to his house to get the information.</p>
+        <p>Come to find out later that this guy had the nerve to claim injury to my insurance company. My insurance company, <a href="https://www.nationwide.com" target="_blank">Nationwide</a>, saw through this jerk's lies and had him sign a release form and gave him $50. Later we found out that this nimrod didn't even have insurance on the day of the accident, but renewed it a few days later! Some people!</p>
+        <p>Anyway, this allowed my damages to be paid for by my insurance under my uninsured motorist coverage. I had to pay 20% however. So I got everything fixed and ended up paying ~$800 for a $4,000 repair job! The car looked better than ever!</p>
+        <div style="margin-top: auto; padding-top: 0.75rem;">
+          <a class="vette-btn" href="/Vette/Damage.html">View Fender Bender Damage Photos &rarr;</a>
+        </div>
+      </div>
 
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">&nbsp;October
-13, 1998</font></font></center>
-</td>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="vette-card" style="margin-bottom: 0; flex: 1; display: flex; flex-direction: column;">
+          <h2>The Crash</h2>
+          <p>Recently I got sideswiped by an industrial garbage truck on Highway 17. Totally ruined the car. The estimate was $8,200! Luckily the front bumper and hood were not damaged—remember those were replaced after <a href="#The Fender Bender">The Fender Bender</a>.</p>
+          <p>The car appears to have held up internally, but every other piece of the exterior body was damaged and needed to be replaced! :-(</p>
+          <div style="margin-top: auto; padding-top: 0.75rem;">
+            <a class="vette-btn" href="/Vette/TheCrash.html">Read the Full Story &amp; See Crash Photos &rarr;</a>
+          </div>
+        </div>
 
-<td><font face="Comic Sans MS"><font color="#000000">Replaced rear wheel
-bearings and U joints</font></font></td>
+        <div class="vette-card accent-green" style="margin-bottom: 0; flex: 1; display: flex; flex-direction: column;">
+          <h2>Getting the Most Out of Your Gears</h2>
+          <p>Meantime I took a posting to <code>alt.autos.corvette</code> made by <a href="mailto:fans@3dfxcool.com">Bart Lane</a> and adapted it for publication in the Santa Clara Corvette Club's Newsletter—covering high-stall torque converters, TransGo shift kits, and rear axle ratios.</p>
+          <div style="margin-top: auto; padding-top: 0.75rem;">
+            <a class="vette-btn" href="/Vette/Gears.html">Read "Getting the Most Out of Your Gears" &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$1062.38</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">October 23, 1998</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced torque converter,
-installed upgrade for transmission (better gears and other parts for better
-lubrication) and shift kit</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$2117.63</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">December 13, 1998</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Corvette license plate
-frame</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$34.04</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">&nbsp;&lt;<i>Unknown</i>></font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">New wiper blades</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$15.95</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">January 6, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced dashboard
-light</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$20.92</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">January 7, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced headlights</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$41.11</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">January 8, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced rear view
-mirror</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$54.95</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">January 12,1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced battery</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$49.99</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">January 13, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced oil sending
-unit and oil</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$155.79</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">February 12, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Repaired hood and
-bumper, paintjob</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$628.92</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">April 8, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced altenator
-and belt</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$408.87</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">May 13, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Replaced fan motor
-and relay, IAC motor, cleaned throttle body, installed HyperTech computer
-chip</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$925.54</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">June 8, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Break job (front):
-New rotors &amp; pads</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$371.65</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">June 26, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Woodgrain Kit</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$86.55</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">November 2, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Wipers - motor/arm/etc</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$672.20</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">December 7, 1999</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Radiator flush, heavy
-duty fan switch connector, flush power steering fluid, air foil performance
-modification, modify air filter lid, cleaned K&amp;N air filter</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$473.98</font></font></div>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><font face="Comic Sans MS"><font color="#000000">February 23, 2000</font></font></center>
-</td>
-
-<td><font face="Comic Sans MS"><font color="#000000">Targa Top</font></font></td>
-
-<td>
-<div align=right><font face="Comic Sans MS"><font color="#000000">$947.19</font></font></div>
-</td>
-</tr>
-
-<tr BGCOLOR="#3333FF">
-<td><b><font face="Comic Sans MS"><font color="#FFFFFF"><font size=+1>Total
-so far:</font></font></font></b></td>
-
-<td>&nbsp;</td>
-
-<td>
-<div align=right><b><font face="Comic Sans MS"><font color="#FFFFFF"><font size=+1>$8821.23</font></font></font></b></div>
-</td>
-</tr>
-</table></center>
-</td>
-</tr>
-</table>
-</blockquote>
-<font face="Comic Sans MS"><font size=+1>You could say I've been busy with
-this! Somethings were just bad luck and an old car, like the torque converter
-blowing out, the need for wheel bearings and U joints, headlights and the
-battery. Others were things that wear out that on other cars you might
-delay or not repair them like, wiper blades, dashboard light, rear view
-mirror, oil sending unit and altenator. And others are just things that
-one does to improve a car probably only because one really likes the car
-they have like CD player and alarm, upgrading the transmission, shift kit,
-license plate frame.</font></font>
-<h2>
-<a NAME="The Fender Bender"></a><font face="Comic Sans MS"><font size=+3>The
-Fender Bender</font></font></h2>
-<font face="Comic Sans MS"><font size=+1>On Thanksgiving day, while heading
-out to Las Vegas for my yearly pilgrimage I stopped into Jack in the Box
-for some hamburgers for the road. I was preoccupied trying to determine
-if the drive through would but selling hamburgers at this early hour when
-a lady pulled out of her parking stall in front of me. I didn't see her
-at all nor she me and I hit her without even applying my brakes. Here's
-the <a href="Damage.html">damage</a>!
-Argh! What a way to start my Vegas trip with my new Vette! (Vegas was not
-very good to me this year!).</font></font>
-<p><font face="Comic Sans MS"><font size=+1>Anyway the lady's husband came
-out and we started exchanging information. He asked his wife several times
-if she was OK, once saying "Are you sure you don't have whiplash or something?".
-I just rolled my eyes. I don't have comp &amp; collision insurance so I
-figured I was in for a big repair bill. This guy was relucant to give me
-his insurance info saying "Why do you need that? You hit us?" and I had
-to follow him to his house to get the information.</font></font>
-<p><font face="Comic Sans MS"><font size=+1>Come to find out later that
-this guy had the nerve to claim injury to my insurance company. My insurance
-company, <a href="http://www.nationwide.com">Nationwide</a>, saw through
-this jerk's lies and had him sign a release form and gave him $50. Later
-we find out that this nimrod didn't even have insurance on the day of the
-accident but renewed it a few days later! Some people!</font></font>
-<p><font face="Comic Sans MS"><font size=+1>Anyway this allowed my damages
-to be paid for by my insurance under my uninsured motorist insurance. I
-had to pay 20% however. So I got everything fixed and ended up paying ~$800
-for a $4000 repair job! Pictures forth coming. The car looks better than
-ever!</font></font>
-<center><img SRC="CorvetteBar.gif" height=50 width=612></center>
-<font face="Comic Sans MS"><font size=+1>Meantime I took a posting to <a href="news:alt.autos.corvette">alt.autos.corvette</a>
-made by <a href="mailto:fans@3dfxcool.com">Bart Lane</a> and HTML'ized
-it for publication to the Santa Clara Corvette Club's Newsletter. Read
-<a href="Gears.html">Getting
-the Most Out of Your Gears</a>.</font></font>
-<center><img SRC="CorvetteBar.gif" height=50 width=612></center>
-
-<h2>
-<font face="Comic Sans MS">The Crash</font></h2>
-<font face="Comic Sans MS">Recently I got side swiped by an industrial
-garbage truck. Totally ruined the car. So far the estimate is $8200! Luckily
-the front bumper and hood have not be damaged. Remember those were replaced
-after <a href="#The Fender Bender">The Fender Bender</a>. The car appears
-to have held up internally, but ever other piece of the exterior body has
-been damaged and needs to be replaced! :-(. Details and pictures are <a href="TheCrash.html">here</a>.</font>
-<br>&nbsp;
-<br>&nbsp;
-<br>
-<center>
-<p><i><font face="EngraversGothic BT"><font size=-1>Copyright &copy; 1997-2000
-<a href="/" target="_top">Andrew DeFaria</a></font></font></i></center>
-<script>
-document.write ("<center><font face=\"EngraversGothic BT\" size=-1><i>Last updated: " + 
-document.lastModified + "</i></font></center>")
-</script>
+  </main>
 
 </body>
 </html>
