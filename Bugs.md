@@ -2,12 +2,12 @@
 
 Use this file to track bugs, issues, and feature requests.
 
-- [ ] ClearSCM needs to be internalized
 - [ ] Upload page has a dark mode and light mode. Can we set it to agree with our current light/dark mode setting?
 - [ ] Top 20 displays extra copyright and doesn't display prev/next arrows properly
 
 
 ## Closed
+- [x] ClearSCM needs to be internalized
 - [x] Search in MAPS dialog dismissal (Enter/Escape) and message typo
 - [x] Quotes should be single spaced and not as colorful
 - [x] Add back/forward buttons to the bottom of the page

@@ -339,6 +339,12 @@
         page = '/maps/mobile/?bypass=true&cb=' + new Date().getTime(); // Has its own query params
       } else if (route === 'clearscm') {
         page = '/clearscm/index.php' + queryString;
+      } else if (route.startsWith('clearscm/')) {
+        if (!/\.[a-zA-Z0-9]+$/.test(route)) {
+          page = '/' + route + '/index.php' + queryString;
+        } else {
+          page = '/' + route + queryString;
+        }
       } else if (route === 'jobhunt') {
         page = '/jobhunt/index.php' + queryString;
       } else if (route === 'reachout') {
@@ -456,7 +462,7 @@
         } else {
           // Child mappings
           if (tabPath === 'professional') {
-            if (['resume', 'clearscm', 'maps', 'computers'].includes(route)) isActive = true;
+            if (['resume', 'clearscm', 'maps', 'computers'].includes(route.split('/')[0])) isActive = true;
           } else if (tabPath === 'personal') {
             if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route)) isActive = true;
           } else if (tabPath === 'music') {
