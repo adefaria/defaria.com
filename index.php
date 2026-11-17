@@ -360,15 +360,15 @@
       } else if (route === 'quotes') {
         page = '/libertarian.php' + queryString;
       } else if (route === 'vette') {
-        page = '/Vette/index.html' + queryString;
+        page = '/Vette/index.html' + (queryString ? queryString + '&v=20261117' : '?v=20261117');
       } else if (route.toLowerCase().startsWith('vette/')) {
-        page = '/Vette/' + route.substring(6) + queryString;
+        page = '/Vette/' + route.substring(6) + (queryString ? queryString + '&v=20261117' : '?v=20261117');
       } else if (route === 'computers') {
         page = '/Computers/index.php' + queryString;
       } else if (route === 'band' || route === 'cos') {
-        page = '/Band/index.php' + queryString;
+        page = '/Band/index.php' + (queryString ? queryString + '&v=20261117' : '?v=20261117');
       } else if (route.toLowerCase().startsWith('band/')) {
-        page = '/Band/' + route.substring(5) + queryString;
+        page = '/Band/' + route.substring(5) + (queryString ? queryString + '&v=20261117' : '?v=20261117');
       } else if (route === 'bottomsup') {
         page = '/Band/BottomsUp.php' + queryString;
       } else if (route === 'bottomingout') {
