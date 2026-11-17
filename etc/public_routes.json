@@ -515,6 +515,8 @@
     "/jobhunt",
     "/jobhunt/",
     "/reachout",
-    "/reachout/"
+    "/reachout/",
+    "/aitrader",
+    "/aitrader/"
   ]
 }

@@ -186,6 +186,8 @@ EXPLICIT_PRIVATE_PATHS = [
     "/jobhunt/",
     "/reachout",
     "/reachout/",
+    "/aitrader",
+    "/aitrader/",
 ]
 
 def is_explicit_private(path):

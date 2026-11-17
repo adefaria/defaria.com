@@ -89,6 +89,7 @@ $professional_links = [
         'url' => '/aitrader/',
         'desc' => 'Autonomous portfolio management driven by AI catalyst analysis and systematic risk guardrails.',
         'target' => '_top',
+        'requires_login' => true,
         'icon_dark' => '/Icons/aitrader-dark.svg?v=20261116c',
         'icon_light' => '/Icons/aitrader-light.svg?v=20261116c'
     ],
