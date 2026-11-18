@@ -188,6 +188,9 @@ EXPLICIT_PRIVATE_PATHS = [
     "/reachout/",
     "/aitrader",
     "/aitrader/",
+    "/users",
+    "/users/",
+    "/users.php",
 ]
 
 def is_explicit_private(path):

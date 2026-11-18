@@ -2,6 +2,7 @@
 include 'includes/frame_header.php'; ?>
 <?php
 $hidden_links = [
+    ['title' => 'Admin Users', 'url' => '/users', 'desc' => 'Manage authorized users, change passwords, and create accounts (Administrator only).', 'requires_login' => true],
     ['title' => 'Temporary Files', 'url' => '/tmp', 'desc' => 'Temporary area for sharing files'],
     ['title' => 'Web Monitor', 'url' => '/webmonitor', 'desc' => 'A little PHP app to see if people are viewing pictures and videos of the links I send them.', 'requires_login' => true],
     ['title' => 'SanMelia', 'url' => '/SanMelia', 'desc' => 'Beautiful apartment complex with terrible management - KEEP AWAY!'],

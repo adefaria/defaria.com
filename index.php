@@ -376,6 +376,8 @@
         page = '/rockready/?bypass=true';
       } else if (route === 'webmonitor' || route === 'wm') {
         page = '/php/logviewer.php' + queryString;
+      } else if (route === 'users' || route === 'users.php') {
+        page = '/users.php' + queryString;
       } else if (route.toLowerCase() === 'tmp') {
         page = '/tmp/?bypass=true';
       } else {

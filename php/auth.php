@@ -46,15 +46,27 @@ class SiteAuth {
 
     /**
      * Add or update a user account.
+     * If password is null or empty string, existing password hash is preserved.
      */
-    public static function saveUser($username, $password, $displayName = '') {
+    public static function saveUser($username, $password = null, $displayName = '') {
         $users = self::getUsers();
         $username = strtolower(trim($username));
-        $hash = password_hash($password, PASSWORD_ARGON2ID);
+        if (empty($username)) {
+            return false;
+        }
+
+        $existing = $users[$username] ?? null;
+        if (!empty($password)) {
+            $hash = password_hash($password, PASSWORD_ARGON2ID);
+        } elseif ($existing && !empty($existing['password_hash'])) {
+            $hash = $existing['password_hash'];
+        } else {
+            return false;
+        }
         
         $users[$username] = [
             'username' => $username,
-            'display_name' => $displayName ?: ucfirst($username),
+            'display_name' => $displayName ?: ($existing['display_name'] ?? ucfirst($username)),
             'password_hash' => $hash,
             'updated_at' => date('c')
         ];
@@ -189,6 +201,21 @@ class SiteAuth {
             return null;
         }
         return self::verifyCookie($cookie) ?: null;
+    }
+
+    /**
+     * Check if currently authenticated user is an administrator.
+     * Only 'andrew' has administrative privileges.
+     */
+    public static function isAdmin($user = null) {
+        if ($user === null) {
+            $user = self::getCurrentUser();
+        }
+        if (!$user) {
+            return false;
+        }
+        $username = is_array($user) ? ($user['username'] ?? '') : (string)$user;
+        return strtolower(trim($username)) === 'andrew';
     }
 
     /**
