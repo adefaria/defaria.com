@@ -219,6 +219,7 @@ $description = getMediaDescription($image);
         }
 
         const nextUrl = <?php echo json_encode($nextUrl); ?>;
+        const prevUrl = <?php echo json_encode($prevUrl); ?>;
         const autoplayToggle = document.getElementById('autoplay_toggle');
         let autoplayEnabled = getCookie('media_autoplay') !== 'false' && getCookie('media_autoadvance') !== 'false';
         let wakeLock = null;
@@ -271,6 +272,26 @@ $description = getMediaDescription($image);
         if (autoplayEnabled && nextUrl) {
             startSlideshowTimer();
         }
+
+        document.addEventListener('keydown', (e) => {
+            const target = e.target;
+            const tag = target && target.tagName ? target.tagName.toLowerCase() : '';
+            if (tag === 'input' || tag === 'textarea' || tag === 'select' || (target && target.isContentEditable)) {
+                return;
+            }
+            if (e.ctrlKey || e.altKey || e.metaKey) {
+                return;
+            }
+            if (e.code === 'KeyN' && nextUrl) {
+                e.preventDefault();
+                stopSlideshowTimer();
+                window.location.href = nextUrl;
+            } else if (e.code === 'KeyP' && prevUrl) {
+                e.preventDefault();
+                stopSlideshowTimer();
+                window.location.href = prevUrl;
+            }
+        });
     </script>
 </body>
 

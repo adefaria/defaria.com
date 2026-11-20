@@ -884,7 +884,17 @@ if (isset($_GET['ajax'])) {
             skipSeconds: 10,
             enableFullscreen: false,
             enableMute: true,
-            onDownload: downloadCurrentMedia
+            onDownload: downloadCurrentMedia,
+            onNext: () => {
+                if (!nextUrl) return false;
+                navigateTrack(nextUrl, false);
+                return true;
+            },
+            onPrev: () => {
+                if (!prevUrl) return false;
+                navigateTrack(prevUrl, false);
+                return true;
+            }
         });
 
         window.addEventListener('pagehide', handlePageUnload);

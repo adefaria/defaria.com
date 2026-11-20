@@ -66,6 +66,8 @@
         const clearBtn = options.clearBtn || document.getElementById('clear-loop-button');
         const helpButton = options.helpButton || document.getElementById('help-button');
         const onDownload = typeof options.onDownload === 'function' ? options.onDownload : null;
+        const onNext = typeof options.onNext === 'function' ? options.onNext : null;
+        const onPrev = typeof options.onPrev === 'function' ? options.onPrev : null;
 
         let startTime = 0;
         let endTime = 0;
@@ -108,6 +110,10 @@
 
             const videoRows = enableFullscreen ? '<tr><td><kbd>F</kbd></td><td>Toggle Fullscreen</td></tr>' : '';
             const muteRows = enableMute ? '<tr><td><kbd>M</kbd></td><td>Toggle Mute</td></tr>' : '';
+            const hasNav = !!(onNext || onPrev || document.getElementById('next-button') || document.getElementById('prev-button'));
+            const navRows = hasNav
+                ? '<tr><td><kbd>N</kbd></td><td>Next track</td></tr><tr><td><kbd>P</kbd></td><td>Previous track</td></tr>'
+                : '';
 
             helpModal.innerHTML = `
                 <div class="media-help-card" role="dialog" aria-modal="true" aria-labelledby="media-help-title">
@@ -126,6 +132,7 @@
                                 <tr><td><kbd>C</kbd></td><td>Clear A-B loop markers</td></tr>
                                 <tr><td><kbd>R</kbd></td><td>Return to start (or Mark A) &amp; play</td></tr>
                                 <tr><td><kbd>D</kbd></td><td>Download media file</td></tr>
+                                ${navRows}
                                 ${videoRows}
                                 ${muteRows}
                                 <tr><td><kbd>?</kbd></td><td>Toggle this Help screen</td></tr>
@@ -583,6 +590,44 @@
                         e.preventDefault();
                         media.muted = !media.muted;
                         showToast(media.muted ? 'Muted' : 'Unmuted');
+                    }
+                    break;
+
+                case 'KeyN': // Next track
+                    if (onNext) {
+                        e.preventDefault();
+                        if (onNext() === false) {
+                            showToast('No next track');
+                        }
+                    } else {
+                        const nextBtn = document.getElementById('next-button');
+                        if (nextBtn) {
+                            e.preventDefault();
+                            if (!nextBtn.classList.contains('disabled') && nextBtn.getAttribute('href') !== '#') {
+                                nextBtn.click();
+                            } else {
+                                showToast('No next track');
+                            }
+                        }
+                    }
+                    break;
+
+                case 'KeyP': // Previous track
+                    if (onPrev) {
+                        e.preventDefault();
+                        if (onPrev() === false) {
+                            showToast('No previous track');
+                        }
+                    } else {
+                        const prevBtn = document.getElementById('prev-button');
+                        if (prevBtn) {
+                            e.preventDefault();
+                            if (!prevBtn.classList.contains('disabled') && prevBtn.getAttribute('href') !== '#') {
+                                prevBtn.click();
+                            } else {
+                                showToast('No previous track');
+                            }
+                        }
                     }
                     break;
             }
