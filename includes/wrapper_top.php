@@ -62,7 +62,7 @@
             <input type="hidden" name="sitesearch" value="defaria.com">
             <input type="text" name="q" id="q" maxlength="255" placeholder="Search my website..." aria-label="Search"
                 onfocus="this.placeholder = ''; this.value = '';" onblur="this.placeholder = 'Search my website...'"
-                onclick="this.value = '';">
+                onclick="this.value = '';" data-bwignore="true" autocomplete="off">
         </form>
     </div>
 
