@@ -210,14 +210,88 @@
             }
         });
 
+        // Cast keepalive indicator: draws a tiny 30fps equalizer in the corner while
+        // audio plays so tab-casting receives continuous video frames for A/V sync.
+        let castKeepaliveRaf = null;
+        let castKeepaliveCanvas = null;
+        let castKeepaliveLastFrame = 0;
+
+        function ensureCastKeepaliveCanvas() {
+            if (castKeepaliveCanvas) return castKeepaliveCanvas;
+            const canvas = document.createElement('canvas');
+            canvas.id = 'cast_keepalive_indicator';
+            canvas.width = 16;
+            canvas.height = 14;
+            canvas.title = 'Audio playing';
+            canvas.style.cssText =
+                'position:fixed;bottom:8px;right:8px;width:16px;height:14px;' +
+                'pointer-events:none;z-index:9999;opacity:0.45;display:none;';
+            document.body.appendChild(canvas);
+            castKeepaliveCanvas = canvas;
+            return canvas;
+        }
+
+        function renderCastKeepaliveFrame(timestamp) {
+            if (!media || media.paused || media.ended) {
+                stopCastKeepalive();
+                return;
+            }
+            if (timestamp - castKeepaliveLastFrame >= 33) {
+                castKeepaliveLastFrame = timestamp;
+                const canvas = ensureCastKeepaliveCanvas();
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = '#4a9eff';
+                    const t = timestamp * 0.008;
+                    const barWidth = 3;
+                    const gap = 3;
+                    for (let i = 0; i < 3; i++) {
+                        const h = Math.max(3, Math.round(7 + 6 * Math.sin(t + i * 1.7)));
+                        ctx.fillRect(1 + i * (barWidth + gap), canvas.height - h, barWidth, h);
+                    }
+                }
+            }
+            castKeepaliveRaf = requestAnimationFrame(renderCastKeepaliveFrame);
+        }
+
+        function startCastKeepalive() {
+            if (media.tagName !== 'AUDIO' && media.videoWidth > 0) return;
+            if (castKeepaliveRaf !== null) return;
+            const canvas = ensureCastKeepaliveCanvas();
+            canvas.style.display = 'block';
+            castKeepaliveLastFrame = 0;
+            castKeepaliveRaf = requestAnimationFrame(renderCastKeepaliveFrame);
+        }
+
+        function stopCastKeepalive() {
+            if (castKeepaliveRaf !== null) {
+                cancelAnimationFrame(castKeepaliveRaf);
+                castKeepaliveRaf = null;
+            }
+            if (castKeepaliveCanvas) {
+                castKeepaliveCanvas.style.display = 'none';
+            }
+        }
+
         media.addEventListener('play', function () {
             clearInterval(loopInterval);
             loopInterval = setInterval(checkLoop, 200);
+            startCastKeepalive();
         });
 
         media.addEventListener('pause', function () {
             clearInterval(loopInterval);
+            stopCastKeepalive();
         });
+
+        media.addEventListener('ended', function () {
+            stopCastKeepalive();
+        });
+
+        if (!media.paused) {
+            startCastKeepalive();
+        }
 
         let activeEditFinish = null;
 
