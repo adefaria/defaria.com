@@ -16,6 +16,12 @@ if (in_array($redirectPath, ['/login.php', '/login', '/logout.php', '/logout']))
 
 $currentUser = SiteAuth::getCurrentUser();
 
+// If redirected to login for a route that is now public, forward immediately
+if (in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true) && isset($_GET['redirect']) && !$currentUser && $safeRedirect !== '/' && SiteAuth::isPublicPath($safeRedirect)) {
+    header("Location: " . $safeRedirect);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'login';
 

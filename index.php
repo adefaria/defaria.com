@@ -350,6 +350,8 @@
         page = '/Media/Bottoming%20Out%20in%20Monterey/?bypass=true';
       } else if (route === 'arm') {
         page = '/Media/ARM/?bypass=true';
+      } else if (route.toLowerCase() === 'nj80') {
+        page = '/NJ80/?bypass=true';
       } else if (route.toLowerCase() === 'media') {
         page = '/Media/?bypass=true';
       } else if (route.toLowerCase() === 'wk') {
@@ -447,7 +449,7 @@
           } else if (tabPath === 'personal') {
             if (['contact', 'addresses', 'family', 'jokes', 'quotes', 'vette'].includes(route.split('/')[0].toLowerCase())) isActive = true;
           } else if (tabPath === 'music') {
-            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs'].includes(route.split('/')[0].toLowerCase())) isActive = true;
+            if (['band', 'cos', 'bottomsup', 'bottomingout', 'arm', 'songbook', 'songs', 'nj80'].includes(route.split('/')[0].toLowerCase())) isActive = true;
           } else if (tabPath === 'projects') {
             if (['upload', 'ytdownload', 'yt', 'spleeter', 'speak', 'callbouncer'].includes(route)) isActive = true;
           } else if (tabPath === 'misc') {

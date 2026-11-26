@@ -40,6 +40,8 @@ DEFAULT_PUBLIC_PREFIXES = [
     "/songbook/",
     "/sets/",
     "/Music/",
+    "/NJ80/",
+    "/nj80/",
 ]
 
 # Standard exact files required for infrastructure/browsers
@@ -88,6 +90,15 @@ DEFAULT_PUBLIC_EXACT = [
     "/sets/",
     "/Music",
     "/Music/",
+    "/NJ80",
+    "/NJ80/",
+    "/NJ80/index.php",
+    "/nj80",
+    "/nj80/",
+    "/nj80s",
+    "/nj80s/",
+    "/sfth",
+    "/sfth/",
     "/php/monitorFile.php",
     "/monitorFile.php",
     "/php/downloaddir.php",
@@ -165,8 +176,6 @@ EXPLICIT_PRIVATE_PATHS = [
     "/GD/",
     "/cvsadm",
     "/cvsadm/",
-    "/NJ80",
-    "/NJ80/",
     "/downloads",
     "/downloads/",
     "/privacy",
